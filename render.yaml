@@ -33,6 +33,18 @@ services:
         value: "true"
       - key: SHOW_DEMO_CREDENTIALS
         value: "true"
+      # Optional: set these on Render to force-create your own admin/officer
+      # - key: ADMIN_EMAIL
+      #   value: you@email.com
+      # - key: ADMIN_PASSWORD
+      #   generateValue: true
+      # - key: OFFICER_EMAIL
+      #   value: officer@email.com
+      # - key: OFFICER_PASSWORD
+      #   generateValue: true
+      # Staff setup page: /auth/setup?key=...
+      - key: SETUP_SECRET
+        generateValue: true
       - key: SECRET_KEY
         generateValue: true
       # Used only when SEED_DEMO_DATA=false and DB is empty

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Create staff account - WasteTrack{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Create admin or officer</h2>
+    </div>
+    <div class="panel-body">
+      <p class="text-secondary small mb-3">
+        Residents register on the public Register page. Use this form for
+        <strong>admin</strong> and <strong>officer</strong> accounts only.
+      </p>
+      <form method="post" novalidate>
+        {% if needs_key and not open_bootstrap %}
+        <div class="mb-3">
+          <label class="form-label" for="setup_key">Setup secret</label>
+          <input type="password" class="form-control" id="setup_key" name="setup_key"
+            value="{{ request.args.get('key', '') }}" required
+            placeholder="Same as SETUP_SECRET on Render">
+        </div>
+        {% endif %}
+        <div class="mb-3">
+          <label class="form-label" for="role">Role</label>
+          <select class="form-select" id="role" name="role" required>
+            <option value="admin">Administrator</option>
+            <option value="officer">Collection officer</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="name">Full name</label>
+          <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="email">Email</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" class="form-control" id="password" name="password" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-wm w-100">Create / update account</button>
+      </form>
+      <p class="text-center text-secondary small mt-3 mb-0">
+        <a href="{{ url_for('auth.login') }}">Back to sign in</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

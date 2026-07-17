@@ -139,6 +139,10 @@ def _apply_runtime_env(app: Flask) -> None:
         "ADMIN_PASSWORD", app.config.get("ADMIN_PASSWORD") or ""
     )
     app.config["ADMIN_NAME"] = os.environ.get("ADMIN_NAME", app.config.get("ADMIN_NAME"))
+    app.config["OFFICER_EMAIL"] = os.environ.get("OFFICER_EMAIL", "").strip().lower()
+    app.config["OFFICER_PASSWORD"] = os.environ.get("OFFICER_PASSWORD", "")
+    app.config["OFFICER_NAME"] = os.environ.get("OFFICER_NAME", "Collection Officer")
+    app.config["SETUP_SECRET"] = os.environ.get("SETUP_SECRET", "")
 
 
 def _configure_logging(app: Flask) -> None:
@@ -150,12 +154,36 @@ def _configure_logging(app: Flask) -> None:
     app.logger.setLevel(level)
 
 
-def _bootstrap_users(app: Flask) -> None:
-    """Create demo accounts and/or bootstrap admin.
+def _upsert_user(email: str, name: str, role: str, password: str, phone: str = "") -> bool:
+    """Create or update a user by email. Returns True if created."""
+    from app.models import User
 
-    When SEED_DEMO_DATA is true, demo users are always ensured (create or
-    reset passwords). This fixes deploys where the DB was created before
-    demo seeding was enabled.
+    email = (email or "").strip().lower()
+    if not email or not password:
+        return False
+    user = User.query.filter_by(email=email).first()
+    created = False
+    if not user:
+        user = User(email=email, name=name or email.split("@")[0], role=role, phone=phone or None)
+        db.session.add(user)
+        created = True
+    else:
+        user.name = name or user.name
+        user.role = role
+        if phone:
+            user.phone = phone
+    user.is_active_user = True
+    user.set_password(password)
+    db.session.commit()
+    return created
+
+
+def _bootstrap_users(app: Flask) -> None:
+    """Create demo accounts and/or env-based admin & officer accounts.
+
+    - SEED_DEMO_DATA=true → always ensure demo admin/officer/resident
+    - ADMIN_EMAIL + ADMIN_PASSWORD → always upsert admin (works even if residents exist)
+    - OFFICER_EMAIL + OFFICER_PASSWORD → always upsert officer
     """
     from app.models import User
 
@@ -164,32 +192,45 @@ def _bootstrap_users(app: Flask) -> None:
         if _reports_empty():
             _seed_sample_reports()
         app.logger.info(
-            "Demo accounts ready (admin@waste.local / officer@waste.local / "
-            "resident@waste.local). users_created_or_updated=%s",
+            "Demo accounts ready: admin@waste.local / officer@waste.local / "
+            "resident@waste.local (password ends with 123). updated=%s",
             created,
         )
-        return
 
-    if User.query.first():
-        return
-
-    password = app.config.get("ADMIN_PASSWORD") or ""
-    if not password:
-        app.logger.warning(
-            "Empty database and no ADMIN_PASSWORD set. "
-            "Set ADMIN_PASSWORD (and optionally ADMIN_EMAIL) or SEED_DEMO_DATA=true."
+    admin_pw = (app.config.get("ADMIN_PASSWORD") or "").strip()
+    admin_email = (app.config.get("ADMIN_EMAIL") or "").strip().lower()
+    if admin_pw and admin_email:
+        created = _upsert_user(
+            admin_email,
+            app.config.get("ADMIN_NAME") or "System Administrator",
+            "admin",
+            admin_pw,
         )
-        return
+        app.logger.info(
+            "Admin account %s: %s",
+            "created" if created else "updated",
+            admin_email,
+        )
+    elif not User.query.filter_by(role="admin").first() and not app.config.get("SEED_DEMO_DATA"):
+        app.logger.warning(
+            "No admin user in database. Set SEED_DEMO_DATA=true or "
+            "ADMIN_EMAIL + ADMIN_PASSWORD, or open /auth/setup with SETUP_SECRET."
+        )
 
-    admin = User(
-        name=app.config.get("ADMIN_NAME") or "System Administrator",
-        email=(app.config.get("ADMIN_EMAIL") or "admin@example.com").lower().strip(),
-        role="admin",
-    )
-    admin.set_password(password)
-    db.session.add(admin)
-    db.session.commit()
-    app.logger.info("Bootstrap admin created: %s", admin.email)
+    officer_pw = (app.config.get("OFFICER_PASSWORD") or "").strip()
+    officer_email = (app.config.get("OFFICER_EMAIL") or "").strip().lower()
+    if officer_pw and officer_email:
+        created = _upsert_user(
+            officer_email,
+            app.config.get("OFFICER_NAME") or "Collection Officer",
+            "officer",
+            officer_pw,
+        )
+        app.logger.info(
+            "Officer account %s: %s",
+            "created" if created else "updated",
+            officer_email,
+        )
 
 
 def _reports_empty() -> bool:
