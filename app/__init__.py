@@ -271,14 +271,14 @@ def _seed_sample_reports() -> None:
         return
 
     samples = [
-        ("illegal_dump", "Illegal dumping near market entrance", 10.3158, 9.8442, "high"),
-        ("overflow", "Public bin overflowing by bus stop", 10.3105, 9.8501, "high"),
-        ("blocked_drainage", "Drainage blocked with plastic waste", 10.3182, 9.8390, "medium"),
-        ("household", "Uncollected household refuse for 3 days", 10.3050, 9.8455, "medium"),
-        ("public_space", "Waste scattered at playground", 10.3210, 9.8520, "low"),
-        ("commercial", "Shop waste bags left on roadside", 10.3125, 9.8412, "medium"),
-        ("overflow", "Skip nearly full at housing estate", 10.3088, 9.8488, "high"),
-        ("illegal_dump", "Construction debris dumped on open plot", 10.3175, 9.8550, "medium"),
+        ("illegal_dump", "Illegal dumping near Wunti Market entrance", 10.3158, 9.8442, "high"),
+        ("overflow", "Public bin overflowing at Yelwa bus stop", 10.3105, 9.8501, "high"),
+        ("blocked_drainage", "Drainage blocked with plastic near Railway Quarters", 10.3182, 9.8390, "medium"),
+        ("household", "Uncollected household refuse for 3 days in New GRA", 10.3050, 9.8455, "medium"),
+        ("public_space", "Waste scattered near ATBU main gate area", 10.3210, 9.8520, "low"),
+        ("commercial", "Shop waste bags left on roadside by Central Market", 10.3125, 9.8412, "medium"),
+        ("overflow", "Skip nearly full at Fadaman Mada housing area", 10.3088, 9.8488, "high"),
+        ("illegal_dump", "Construction debris dumped on open plot along Jos Road", 10.3175, 9.8550, "medium"),
     ]
 
     statuses_cycle = ["submitted", "verified", "assigned", "scheduled", "in_progress", "completed"]
@@ -288,7 +288,16 @@ def _seed_sample_reports() -> None:
             tracking_code=generate_tracking_code(),
             category=cat,
             description=desc,
-            address=f"Bauchi sample location #{i + 1}",
+            address=[
+                "Wunti Market, Bauchi",
+                "Yelwa Junction, Bauchi",
+                "Railway Quarters, Bauchi",
+                "New GRA, Bauchi",
+                "ATBU Main Gate area, Bauchi",
+                "Central Market roadside, Bauchi",
+                "Fadaman Mada, Bauchi",
+                "Along Jos Road, Bauchi",
+            ][i],
             latitude=lat + random.uniform(-0.002, 0.002),
             longitude=lon + random.uniform(-0.002, 0.002),
             urgency=urg,

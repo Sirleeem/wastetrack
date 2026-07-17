@@ -1,37 +1,42 @@
 {% extends "base.html" %}
-{% block title %}WasteTrack — Waste Management Reporting Portal{% endblock %}
+{% block title %}WasteTrack Bauchi — Report refuse & track collection{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}?v=1">
-<link rel="preload" as="image" href="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=1800&q=80">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}?v=2">
+<link rel="preload" as="image" href="https://images.unsplash.com/photo-1618828665011-0abd973f7bb8?auto=format&fit=crop&w=1800&q=80">
 {% endblock %}
 
 {% block hero %}{% endblock %}
 {% block main_class %}landing-page{% endblock %}
 
 {% block content %}
-{# Authority strip — LAWMA-style official bar #}
+{# Local authority strip #}
 <div class="lp-topstrip">
   <div class="container inner">
-    <span><strong>WasteTrack</strong> · Waste Management Reporting &amp; Collection Authority Portal</span>
+    <span><strong>WasteTrack Bauchi</strong> · Refuse reporting &amp; collection portal</span>
     <span>
-      ATBU Bauchi
+      Bauchi State, Nigeria
       · <a href="{{ url_for('main.about') }}">About</a>
-      · <a href="{{ url_for('auth.login') }}">Portal sign-in</a>
+      · <a href="{{ url_for('auth.login') }}">Sign in</a>
     </span>
   </div>
 </div>
 
-{# Hero — Recorra-style bold photo + trust #}
+{# Hero — local focus, no canvas #}
 <section class="lp-hero" aria-label="Introduction">
-  <div class="lp-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=1920&q=80');" role="img" aria-label="Waste collection operations"></div>
+  <div
+    class="lp-hero-bg"
+    style="background-image:url('https://images.unsplash.com/photo-1618828665011-0abd973f7bb8?auto=format&fit=crop&w=1920&q=80');"
+    role="img"
+    aria-label="Nigerian city street and community environment"
+  ></div>
   <div class="lp-hero-overlay"></div>
   <div class="container lp-hero-content">
-    <span class="lp-badge"><i class="bi bi-recycle"></i> Cleaner communities · Accountable collection</span>
-    <h1>Report waste. Track response. Keep the city clean.</h1>
+    <span class="lp-badge"><i class="bi bi-geo-alt-fill"></i> Bauchi State · Cleaner neighbourhoods</span>
+    <h1>Report refuse in your area. Follow it until it is cleared.</h1>
     <p class="lp-hero-lead">
-      The digital channel for residents to report sanitation issues, and for authorities
-      and collection crews to verify, schedule, and clear them — with full case history.
+      For residents of Bauchi and surrounding communities: report overflowing bins, illegal dumping,
+      and blocked drains. Local officers and administrators can verify, schedule, and close each case.
     </p>
     <div class="lp-hero-actions">
       {% if current_user.is_authenticated %}
@@ -40,271 +45,218 @@
         {% elif current_user.is_officer %}
           <a class="btn-lp-primary" href="{{ url_for('officer.dashboard') }}">Open field tasks</a>
         {% else %}
-          <a class="btn-lp-primary" href="{{ url_for('resident.new_report') }}">Submit a waste report</a>
-          <a class="btn-lp-outline" href="{{ url_for('resident.dashboard') }}">My dashboard</a>
+          <a class="btn-lp-primary" href="{{ url_for('resident.new_report') }}">Report refuse now</a>
+          <a class="btn-lp-outline" href="{{ url_for('resident.dashboard') }}">My reports</a>
         {% endif %}
       {% else %}
-        <a class="btn-lp-primary" href="{{ url_for('auth.register') }}">Report waste now</a>
-        <a class="btn-lp-outline" href="{{ url_for('auth.login') }}">Authorised sign-in</a>
+        <a class="btn-lp-primary" href="{{ url_for('auth.register') }}">Report refuse now</a>
+        <a class="btn-lp-outline" href="{{ url_for('auth.login') }}">Sign in</a>
       {% endif %}
     </div>
     <ul class="lp-trust">
-      <li><i class="bi bi-check-circle-fill"></i> Map-based incident reporting</li>
-      <li><i class="bi bi-check-circle-fill"></i> Role-based authority workflows</li>
-      <li><i class="bi bi-check-circle-fill"></i> Optimised collection sequencing</li>
+      <li><i class="bi bi-check-circle-fill"></i> Map pin for Bauchi locations</li>
+      <li><i class="bi bi-check-circle-fill"></i> Works on phone in the field</li>
+      <li><i class="bi bi-check-circle-fill"></i> Built at ATBU Bauchi</li>
     </ul>
   </div>
 </section>
 
-{# Why it works — Recorra photo value props #}
+{# Why local #}
 <section class="lp-section lp-section-muted">
   <div class="container">
     <header class="lp-section-head">
-      <p class="lp-kicker">Why this portal</p>
-      <h2>Built for the street, trusted for operations</h2>
-      <p>Patterns used by leading waste authorities and commercial operators: clear reporting, local dispatch, and measurable response.</p>
+      <p class="lp-kicker">Why Bauchi needs this</p>
+      <h2>From market gate to Yelwa road — one clear channel</h2>
+      <p>
+        Many refuse complaints still move by phone call or word of mouth. That makes it hard to
+        confirm the place, prioritise urgent sites, or know when a team has finished the job.
+      </p>
     </header>
 
     <div class="lp-why-grid">
       <article class="lp-why-card">
-        <img src="https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=900&q=80" alt="Resident reporting environment issue" loading="lazy" width="900" height="600">
+        <img
+          src="https://images.unsplash.com/photo-1577948000111-9c970dfe3743?auto=format&fit=crop&w=900&q=80"
+          alt="Busy West African market area"
+          loading="lazy" width="900" height="600"
+        >
         <div class="lp-why-body">
-          <div class="lp-why-num">01 — Reliable</div>
-          <h3>Every report is a tracked case</h3>
-          <p>Submissions capture category, description, location, and optional photo evidence — so nothing depends on a lost phone call or informal complaint.</p>
+          <div class="lp-why-num">01 — Residents</div>
+          <h3>Report where the problem is</h3>
+          <p>
+            Drop a pin near the market, mosque, motor park, or estate road. Add a short description
+            and optional photo so the authority can see the real situation.
+          </p>
         </div>
       </article>
 
       <article class="lp-why-card">
-        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80" alt="Field collection crew" loading="lazy" width="900" height="600">
+        <img
+          src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=900&q=80"
+          alt="Community street in West Africa"
+          loading="lazy" width="900" height="600"
+        >
         <div class="lp-why-body">
-          <div class="lp-why-num">02 — Local</div>
-          <h3>Field officers get clear stops</h3>
-          <p>Assigned tasks show map pins, urgency, and schedule so collection teams work from a structured list — not scattered verbal instructions.</p>
+          <div class="lp-why-num">02 — Collection team</div>
+          <h3>Clear assigned stops on the ground</h3>
+          <p>
+            Officers see mapped tasks for Bauchi areas, start work on site, and mark completion
+            so residents can follow the status.
+          </p>
         </div>
       </article>
 
       <article class="lp-why-card">
-        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80" alt="Operations planning desk" loading="lazy" width="900" height="600">
+        <img
+          src="https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?auto=format&fit=crop&w=900&q=80"
+          alt="Northern Nigeria landscape and settlement"
+          loading="lazy" width="900" height="600"
+        >
         <div class="lp-why-body">
-          <div class="lp-why-num">03 — Accountable</div>
-          <h3>Authorities see the full trail</h3>
-          <p>Verify, prioritise, assign, schedule, and close cases with a complete status history for audit, defence, and service improvement.</p>
+          <div class="lp-why-num">03 — Authority</div>
+          <h3>Plan collection with better visibility</h3>
+          <p>
+            Administrators verify cases, set urgency, assign officers, and group nearby reports
+            for a practical collection order across the LGA.
+          </p>
         </div>
       </article>
     </div>
   </div>
 </section>
 
-{# What we do — LAWMA-style service tiles with photo backgrounds #}
+{# Services #}
 <section class="lp-section">
   <div class="container">
     <header class="lp-section-head">
-      <p class="lp-kicker">What we do</p>
-      <h2>Online services of the portal</h2>
-      <p>Access the channel that matches your role — public reporting, authority control, or field operations.</p>
+      <p class="lp-kicker">What you can do here</p>
+      <h2>Portal services for Bauchi users</h2>
+      <p>Choose the service that matches your role in the community or the waste authority.</p>
     </header>
 
     <div class="lp-services">
       <a class="lp-service" href="{% if current_user.is_authenticated and current_user.is_resident %}{{ url_for('resident.new_report') }}{% else %}{{ url_for('auth.register') }}{% endif %}">
-        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1577948000111-9c970dfe3743?auto=format&fit=crop&w=1000&q=80');"></div>
         <div class="lp-service-shade"></div>
         <div class="lp-service-body">
           <div class="lp-service-icon"><i class="bi bi-geo-alt-fill"></i></div>
-          <h3>Resident reporting</h3>
-          <p>Lodge overflow, illegal dump, or drainage issues with a map pin and optional photo.</p>
-          <span class="lp-service-link">Open service →</span>
+          <h3>Resident report</h3>
+          <p>Illegal dump, overflow, blocked drainage, household refuse — pin it on the map.</p>
+          <span class="lp-service-link">Report now →</span>
         </div>
       </a>
 
       <a class="lp-service" href="{{ url_for('auth.login') }}">
-        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1523805009345-7448845a9e53?auto=format&fit=crop&w=1000&q=80');"></div>
         <div class="lp-service-shade"></div>
         <div class="lp-service-body">
           <div class="lp-service-icon"><i class="bi bi-building"></i></div>
           <h3>Authority desk</h3>
-          <p>Review queue, set urgency, assign officers, publish schedules, and run route optimisation.</p>
-          <span class="lp-service-link">Admin access →</span>
+          <p>Verify reports from Bauchi communities, assign crews, and schedule pickups.</p>
+          <span class="lp-service-link">Admin sign-in →</span>
         </div>
       </a>
 
       <a class="lp-service" href="{{ url_for('auth.login') }}">
-        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1621451537084-482c73073a0f?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1000&q=80');"></div>
         <div class="lp-service-shade"></div>
         <div class="lp-service-body">
           <div class="lp-service-icon"><i class="bi bi-truck"></i></div>
-          <h3>Collection operations</h3>
-          <p>Receive assigned stops, navigate locations, start and complete field tasks in real time.</p>
-          <span class="lp-service-link">Officer access →</span>
-        </div>
-      </a>
-
-      <a class="lp-service" href="{{ url_for('main.about') }}">
-        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1000&q=80');"></div>
-        <div class="lp-service-shade"></div>
-        <div class="lp-service-body">
-          <div class="lp-service-icon"><i class="bi bi-recycle"></i></div>
-          <h3>Resource recovery</h3>
-          <p>Structured data for hotspots and priorities — foundation for smarter recovery and cleaner streets.</p>
-          <span class="lp-service-link">Learn more →</span>
-        </div>
-      </a>
-
-      <a class="lp-service" href="{{ url_for('auth.login') }}">
-        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1000&q=80');"></div>
-        <div class="lp-service-shade"></div>
-        <div class="lp-service-body">
-          <div class="lp-service-icon"><i class="bi bi-people"></i></div>
-          <h3>Education &amp; awareness</h3>
-          <p>Transparent case status builds public trust and encourages responsible reporting culture.</p>
-          <span class="lp-service-link">Sign in →</span>
-        </div>
-      </a>
-
-      <a class="lp-service" href="{{ url_for('auth.login') }}">
-        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80');"></div>
-        <div class="lp-service-shade"></div>
-        <div class="lp-service-body">
-          <div class="lp-service-icon"><i class="bi bi-graph-up"></i></div>
-          <h3>Analytics &amp; planning</h3>
-          <p>Dashboards for categories, urgency, response time, and hotspot density for decision support.</p>
-          <span class="lp-service-link">View analytics →</span>
+          <h3>Field collection</h3>
+          <p>Officers receive stops, navigate locations, and close jobs after collection.</p>
+          <span class="lp-service-link">Officer sign-in →</span>
         </div>
       </a>
     </div>
   </div>
 </section>
 
-{# Impact in numbers — Recorra stats band #}
+{# Areas / coverage #}
 <section class="lp-section lp-section-green">
   <div class="container">
     <header class="lp-section-head">
-      <p class="lp-kicker">Portal capabilities</p>
-      <h2>Monitoring impact without losing the plot</h2>
-      <p>Designed for evaluation and operational clarity — from first report to completed collection.</p>
+      <p class="lp-kicker">Coverage focus</p>
+      <h2>Built around Bauchi community realities</h2>
+      <p>Prototype map defaults and sample data use Bauchi coordinates and local place-style addresses.</p>
     </header>
     <div class="lp-stats">
       <div class="lp-stat">
-        <strong>3 roles</strong>
-        <span>Residents, collection officers, and administrators with separated permissions</span>
+        <strong>Bauchi metropolis</strong>
+        <span>Default map centre for reporting (approx. 10.32°N, 9.84°E)</span>
       </div>
       <div class="lp-stat">
-        <strong>7 statuses</strong>
-        <span>Full lifecycle from submitted through verified, assigned, scheduled, and completed</span>
+        <strong>Local landmarks</strong>
+        <span>Markets, motor parks, estates, drains, and public spaces</span>
       </div>
       <div class="lp-stat">
-        <strong>1 trail</strong>
-        <span>Time-stamped history on every case for accountability and academic evaluation</span>
+        <strong>ATBU campus link</strong>
+        <span>Final-year project · Computer Science · ATBU Bauchi</span>
       </div>
       <div class="lp-stat">
-        <strong>Map-first</strong>
-        <span>OpenStreetMap pins for reporting, dispatch, and route optimisation</span>
-      </div>
-      <div class="lp-stat">
-        <strong>Route logic</strong>
-        <span>Haversine nearest-neighbour sequencing with urgency preference</span>
-      </div>
-      <div class="lp-stat">
-        <strong>Mobile ready</strong>
-        <span>Field-friendly layouts for reporting and task updates on phone</span>
+        <strong>Nigeria context</strong>
+        <span>Designed for LGA-style refuse coordination, not foreign city logistics</span>
       </div>
     </div>
   </div>
 </section>
 
-{# Mission — LAWMA institutional narrative #}
+{# Mandate #}
 <section class="lp-section">
   <div class="container">
     <div class="lp-mission">
       <figure>
-        <img src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?auto=format&fit=crop&w=1200&q=80" alt="Urban sanitation and cleaner streets" width="1200" height="800" loading="lazy">
+        <img
+          src="https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?auto=format&fit=crop&w=1200&q=80"
+          alt="Northern Nigeria community setting"
+          width="1200" height="800" loading="lazy"
+        >
       </figure>
       <div class="lp-mission-copy">
-        <p class="lp-kicker">Our mandate</p>
-        <h2>A structured channel between the community and waste authorities</h2>
+        <p class="lp-kicker">Our purpose in Bauchi</p>
+        <h2>A practical tool for cleaner streets and better response</h2>
         <p>
-          Informal complaints by phone or word of mouth make it hard to verify locations, prioritise cases,
-          or measure response. WasteTrack captures waste issues as structured records so collection can be
-          planned with clearer operational visibility — in the spirit of professional waste authorities
-          and modern collection partners.
+          WasteTrack helps close the gap between people who see refuse problems and the teams
+          responsible for clearing them — with records you can follow from submission to completion.
         </p>
         <ul class="lp-checklist">
-          <li>Central register of reported waste incidents</li>
-          <li>Verification, assignment, and scheduling workflows</li>
-          <li>Proximity-based collection order support</li>
-          <li>Status history for service accountability</li>
+          <li>Report overflow, illegal dumping, and blocked drains</li>
+          <li>Track status without repeated phone follow-ups</li>
+          <li>Help officers plan nearby stops more efficiently</li>
+          <li>Give administrators a single view of open cases</li>
         </ul>
-        <a class="btn-lp-primary" href="{{ url_for('main.about') }}" style="border-radius:999px;">Read the system mandate</a>
+        <a class="btn-lp-primary" href="{{ url_for('main.about') }}">About this Bauchi project</a>
       </div>
     </div>
   </div>
 </section>
 
-{# Cleaner community initiatives — LAWMA Cleaner Lagos style #}
+{# Local priorities #}
 <section class="lp-section lp-section-muted">
   <div class="container">
     <header class="lp-section-head">
-      <p class="lp-kicker">Cleaner communities</p>
-      <h2>Priorities this portal supports</h2>
-      <p>Solid waste visibility, coordinated collection, and environmental regeneration start with reliable data.</p>
+      <p class="lp-kicker">Local priorities</p>
+      <h2>Issues common across Bauchi neighbourhoods</h2>
     </header>
     <div class="lp-initiatives">
       <article class="lp-init">
-        <img src="https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=800&q=80" alt="Solid waste management" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=800&q=80" alt="Refuse accumulation" loading="lazy">
         <div class="lp-init-body">
-          <h3>Solid waste management</h3>
-          <p>Capture household, commercial, and public-space waste issues before they become public-health risks.</p>
+          <h3>Overflowing public bins</h3>
+          <p>Report full skips and scattered refuse around bus stops, markets, and estates.</p>
         </div>
       </article>
       <article class="lp-init">
-        <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=800&q=80" alt="Collection operations" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=800&q=80" alt="Waste collection truck" loading="lazy">
         <div class="lp-init-body">
-          <h3>Collection coordination</h3>
-          <p>Turn scattered complaints into scheduled stops for officers with map guidance and priority order.</p>
+          <h3>Missed or delayed collection</h3>
+          <p>Flag locations where refuse has waited too long so crews can be scheduled.</p>
         </div>
       </article>
       <article class="lp-init">
-        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80" alt="Environmental regeneration" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80" alt="Drainage and environment" loading="lazy">
         <div class="lp-init-body">
-          <h3>Environmental regeneration</h3>
-          <p>Hotspot visibility helps target illegal dumping and blocked drainage for a cleaner living environment.</p>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-{# News & events — LAWMA style #}
-<section class="lp-section">
-  <div class="container">
-    <header class="lp-section-head">
-      <p class="lp-kicker">News &amp; updates</p>
-      <h2>How the service works in practice</h2>
-      <p>Key capabilities presented the way professional waste organisations communicate programmes and results.</p>
-    </header>
-    <div class="lp-news">
-      <article class="lp-news-card">
-        <img src="https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=800&q=80" alt="Community reporting" loading="lazy">
-        <div class="lp-news-body">
-          <div class="lp-news-date">Service feature</div>
-          <h3>Residents pin waste issues on the map</h3>
-          <p>Geolocation and photo evidence reduce ambiguity and speed verification.</p>
-        </div>
-      </article>
-      <article class="lp-news-card">
-        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80" alt="Collection crew" loading="lazy">
-        <div class="lp-news-body">
-          <div class="lp-news-date">Operations</div>
-          <h3>Officers close the loop in the field</h3>
-          <p>Start and complete tasks with notes so the public record stays accurate.</p>
-        </div>
-      </article>
-      <article class="lp-news-card">
-        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Analytics dashboard" loading="lazy">
-        <div class="lp-news-body">
-          <div class="lp-news-date">Planning</div>
-          <h3>Route optimisation for pending stops</h3>
-          <p>Group nearby reports and recommend collection order by distance and urgency.</p>
+          <h3>Blocked drains &amp; illegal dumps</h3>
+          <p>Pin drainage blockages and open dumps that threaten health during the rains.</p>
         </div>
       </article>
     </div>
@@ -312,11 +264,11 @@
 </section>
 
 {% if show_demo_credentials %}
-<section class="lp-section lp-section-muted">
+<section class="lp-section">
   <div class="container">
     <div class="lp-demo">
-      <h3>Authorised demonstration access</h3>
-      <p>Evaluation accounts for the academic prototype. Use only for demonstration — not for real personal data.</p>
+      <h3>Demo access (academic prototype)</h3>
+      <p>For ATBU project demonstration only. Not for real personal data.</p>
       <div class="lp-demo-grid">
         <div>
           <span>Administrator</span>
@@ -339,21 +291,19 @@
 </section>
 {% endif %}
 
-{# Closing CTA — Recorra “join the revolution” energy #}
 <section class="lp-cta">
   <div class="container">
-    <h2>Join the cleaner-community effort</h2>
+    <h2>Help keep Bauchi cleaner</h2>
     <p>
-      Report an issue, manage the queue, or clear a stop — one portal for residents,
-      authorities, and collection teams.
+      Report what you see on your street. Officers and administrators use the same portal
+      to respond and close the case.
     </p>
     <div class="lp-cta-actions">
       {% if current_user.is_authenticated %}
         <a class="btn-lp-primary" href="{{ url_for('main.home') }}">Open my workspace</a>
-        <a class="btn-lp-outline" href="{{ url_for('main.about') }}">About the system</a>
       {% else %}
-        <a class="btn-lp-primary" href="{{ url_for('auth.register') }}">Get started</a>
-        <a class="btn-lp-outline" href="{{ url_for('auth.login') }}">Sign in to the portal</a>
+        <a class="btn-lp-primary" href="{{ url_for('auth.register') }}">Create resident account</a>
+        <a class="btn-lp-outline" href="{{ url_for('auth.login') }}">Sign in</a>
       {% endif %}
     </div>
   </div>
