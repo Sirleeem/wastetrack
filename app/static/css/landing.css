@@ -1,0 +1,722 @@
+/* ============================================================
+   WasteTrack landing — inspired by LAWMA (authority) + Recorra (modern ops)
+   Green authority base · lime accent CTAs · photo-forward sections
+   ============================================================ */
+
+:root {
+  --wt-green: #0b6b3a;
+  --wt-green-deep: #064528;
+  --wt-green-mid: #128a4c;
+  --wt-lime: #c8e600;
+  --wt-lime-dark: #a8c200;
+  --wt-ink: #0f1a14;
+  --wt-muted: #4a5c52;
+  --wt-line: #d8e0da;
+  --wt-paper: #f4f7f5;
+  --wt-white: #ffffff;
+  --wt-radius: 12px;
+  --wt-shadow: 0 12px 40px rgba(6, 69, 40, 0.1);
+  --wt-font: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --wt-display: "Fraunces", Georgia, serif;
+}
+
+.landing-page {
+  padding: 0 !important;
+  max-width: none;
+  width: 100%;
+  background: var(--wt-white);
+  color: var(--wt-ink);
+  font-family: var(--wt-font);
+}
+
+.landing-page h1,
+.landing-page h2,
+.landing-page h3 {
+  font-family: var(--wt-display);
+  color: var(--wt-ink);
+  letter-spacing: -0.02em;
+}
+
+/* —— Top authority strip (LAWMA-style) —— */
+.lp-topstrip {
+  background: var(--wt-green-deep);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8rem;
+  border-bottom: 3px solid var(--wt-lime);
+}
+
+.lp-topstrip .inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0.55rem 0;
+  align-items: center;
+}
+
+.lp-topstrip a {
+  color: var(--wt-lime) !important;
+  font-weight: 700;
+  text-decoration: none !important;
+}
+
+/* —— Hero (Recorra-style: bold photo + CTA + trust chips) —— */
+.lp-hero {
+  position: relative;
+  min-height: min(86vh, 680px);
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  color: #fff;
+}
+
+.lp-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 35%;
+  transform: scale(1.03);
+}
+
+.lp-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(105deg, rgba(6, 69, 40, 0.94) 0%, rgba(11, 107, 58, 0.78) 48%, rgba(6, 69, 40, 0.45) 100%),
+    linear-gradient(0deg, rgba(6, 40, 24, 0.75) 0%, transparent 50%);
+}
+
+.lp-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 3.5rem 0 2.75rem;
+  max-width: 44rem;
+}
+
+.lp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(200, 230, 0, 0.15);
+  border: 1px solid rgba(200, 230, 0, 0.45);
+  color: var(--wt-lime);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.lp-hero h1 {
+  color: #fff;
+  font-size: clamp(2rem, 6vw, 3.35rem);
+  line-height: 1.08;
+  margin: 0 0 1rem;
+  max-width: 14ch;
+}
+
+.lp-hero-lead {
+  font-size: clamp(1.02rem, 2.4vw, 1.18rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 1.4rem;
+  max-width: 36rem;
+}
+
+.lp-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 1.75rem;
+}
+
+.btn-lp-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0.7rem 1.35rem;
+  background: var(--wt-lime);
+  color: var(--wt-green-deep) !important;
+  font-weight: 800;
+  border-radius: 999px;
+  text-decoration: none !important;
+  border: none;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.btn-lp-primary:hover {
+  background: #d8f51a;
+  color: var(--wt-green-deep) !important;
+  transform: translateY(-1px);
+}
+
+.btn-lp-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0.7rem 1.35rem;
+  background: transparent;
+  color: #fff !important;
+  font-weight: 700;
+  border-radius: 999px;
+  text-decoration: none !important;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+}
+.btn-lp-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff !important;
+}
+
+.lp-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1.1rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.lp-trust li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.lp-trust i {
+  color: var(--wt-lime);
+}
+
+/* —— Section shells —— */
+.lp-section {
+  padding: 3.5rem 0;
+}
+
+.lp-section-muted {
+  background: var(--wt-paper);
+}
+
+.lp-section-green {
+  background: var(--wt-green-deep);
+  color: #e8f5ec;
+}
+
+.lp-section-green h2,
+.lp-section-green h3 {
+  color: #fff;
+}
+
+.lp-section-head {
+  margin-bottom: 2rem;
+  max-width: 40rem;
+}
+
+.lp-kicker {
+  margin: 0 0 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wt-green-mid);
+}
+
+.lp-section-green .lp-kicker {
+  color: var(--wt-lime);
+}
+
+.lp-section-head h2 {
+  margin: 0 0 0.65rem;
+  font-size: clamp(1.55rem, 3.5vw, 2.15rem);
+  line-height: 1.15;
+}
+
+.lp-section-head p {
+  margin: 0;
+  color: var(--wt-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.lp-section-green .lp-section-head p {
+  color: rgba(232, 245, 236, 0.82);
+}
+
+/* —— Why / value props with photo (Recorra) —— */
+.lp-why-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.lp-why-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  background: var(--wt-white);
+  border-radius: var(--wt-radius);
+  overflow: hidden;
+  border: 1px solid var(--wt-line);
+  box-shadow: var(--wt-shadow);
+}
+
+.lp-why-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.lp-why-body {
+  padding: 1.25rem 1.3rem 1.4rem;
+}
+
+.lp-why-num {
+  font-family: var(--wt-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--wt-green-mid);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
+}
+
+.lp-why-body h3 {
+  margin: 0 0 0.45rem;
+  font-size: 1.25rem;
+}
+
+.lp-why-body p {
+  margin: 0;
+  color: var(--wt-muted);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+/* —— What we do (LAWMA services grid) —— */
+.lp-services {
+  display: grid;
+  gap: 1rem;
+}
+
+.lp-service {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+  border-radius: var(--wt-radius);
+  overflow: hidden;
+  text-decoration: none !important;
+  color: #fff !important;
+  box-shadow: var(--wt-shadow);
+  isolation: isolate;
+}
+
+.lp-service-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.35s ease;
+  z-index: 0;
+}
+
+.lp-service:hover .lp-service-bg {
+  transform: scale(1.05);
+}
+
+.lp-service-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 69, 40, 0.25) 0%, rgba(6, 40, 24, 0.92) 100%);
+  z-index: 1;
+}
+
+.lp-service-body {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  padding: 1.25rem;
+}
+
+.lp-service-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--wt-lime);
+  color: var(--wt-green-deep);
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.lp-service h3 {
+  color: #fff;
+  margin: 0 0 0.4rem;
+  font-size: 1.2rem;
+}
+
+.lp-service p {
+  margin: 0 0 0.75rem;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.lp-service-link {
+  font-weight: 800;
+  color: var(--wt-lime);
+  font-size: 0.9rem;
+}
+
+/* —— Impact stats (Recorra numbers) —— */
+.lp-stats {
+  display: grid;
+  gap: 1rem;
+}
+
+.lp-stat {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--wt-radius);
+  padding: 1.35rem 1.25rem;
+}
+
+.lp-stat strong {
+  display: block;
+  font-family: var(--wt-display);
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  color: var(--wt-lime);
+  line-height: 1.1;
+  margin-bottom: 0.35rem;
+}
+
+.lp-stat span {
+  color: rgba(232, 245, 236, 0.85);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* —— News / events (LAWMA) —— */
+.lp-news {
+  display: grid;
+  gap: 1rem;
+}
+
+.lp-news-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  background: var(--wt-white);
+  border: 1px solid var(--wt-line);
+  border-radius: var(--wt-radius);
+  overflow: hidden;
+  text-decoration: none !important;
+  color: inherit !important;
+  box-shadow: 0 4px 18px rgba(6, 69, 40, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.lp-news-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--wt-shadow);
+}
+
+.lp-news-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.lp-news-body {
+  padding: 1.1rem 1.15rem 1.25rem;
+}
+
+.lp-news-date {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wt-green-mid);
+  margin-bottom: 0.35rem;
+}
+
+.lp-news-body h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.08rem;
+  line-height: 1.3;
+}
+
+.lp-news-body p {
+  margin: 0;
+  color: var(--wt-muted);
+  font-size: 0.92rem;
+}
+
+/* —— Mission / about split (LAWMA institutional) —— */
+.lp-mission {
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.lp-mission figure {
+  margin: 0;
+  border-radius: var(--wt-radius);
+  overflow: hidden;
+  border: 1px solid var(--wt-line);
+  box-shadow: var(--wt-shadow);
+}
+
+.lp-mission img {
+  width: 100%;
+  height: min(380px, 50vw);
+  object-fit: cover;
+  display: block;
+}
+
+.lp-mission-copy h2 {
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.45rem, 3vw, 1.9rem);
+}
+
+.lp-mission-copy p {
+  color: var(--wt-muted);
+  margin-bottom: 1rem;
+  line-height: 1.65;
+}
+
+.lp-checklist {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+}
+
+.lp-checklist li {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 1.75rem;
+  border-bottom: 1px solid var(--wt-line);
+  color: var(--wt-ink);
+  font-weight: 600;
+}
+
+.lp-checklist li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0.45rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: rgba(11, 107, 58, 0.12);
+  color: var(--wt-green);
+  font-size: 0.75rem;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+/* —— Demo notice —— */
+.lp-demo {
+  border: 1px solid var(--wt-line);
+  border-left: 5px solid var(--wt-lime);
+  border-radius: var(--wt-radius);
+  background: var(--wt-white);
+  padding: 1.25rem 1.35rem;
+  box-shadow: var(--wt-shadow);
+}
+
+.lp-demo h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+}
+
+.lp-demo p {
+  margin: 0 0 1rem;
+  color: var(--wt-muted);
+}
+
+.lp-demo-grid {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.lp-demo-grid div {
+  background: var(--wt-paper);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+}
+
+.lp-demo-grid span {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--wt-muted);
+  margin-bottom: 0.2rem;
+}
+
+.lp-demo-grid code {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--wt-green-deep);
+  background: none;
+  padding: 0;
+}
+
+/* —— Closing CTA (Recorra revolution band) —— */
+.lp-cta {
+  position: relative;
+  overflow: hidden;
+  background: var(--wt-green);
+  color: #fff;
+  padding: 3.25rem 0;
+  text-align: center;
+}
+
+.lp-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(200, 230, 0, 0.18), transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.08), transparent 35%);
+  pointer-events: none;
+}
+
+.lp-cta .container {
+  position: relative;
+  z-index: 1;
+}
+
+.lp-cta h2 {
+  color: #fff;
+  font-size: clamp(1.6rem, 4vw, 2.35rem);
+  margin: 0 0 0.75rem;
+}
+
+.lp-cta p {
+  max-width: 34rem;
+  margin: 0 auto 1.35rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.05rem;
+}
+
+.lp-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: center;
+}
+
+/* —— Cleaner community strip —— */
+.lp-initiatives {
+  display: grid;
+  gap: 1rem;
+}
+
+.lp-init {
+  background: var(--wt-white);
+  border-radius: var(--wt-radius);
+  overflow: hidden;
+  border: 1px solid var(--wt-line);
+  box-shadow: var(--wt-shadow);
+}
+
+.lp-init img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+.lp-init-body {
+  padding: 1.1rem 1.15rem 1.25rem;
+}
+
+.lp-init-body h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+}
+
+.lp-init-body p {
+  margin: 0;
+  color: var(--wt-muted);
+  font-size: 0.94rem;
+}
+
+@media (min-width: 768px) {
+  .lp-why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-why-card {
+    grid-template-columns: 280px 1fr;
+  }
+
+  .lp-why-card img {
+    height: 100%;
+    min-height: 180px;
+  }
+
+  .lp-why-grid .lp-why-card:nth-child(even) {
+    grid-template-columns: 1fr 280px;
+  }
+
+  .lp-why-grid .lp-why-card:nth-child(even) img {
+    order: 2;
+  }
+
+  .lp-services {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lp-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .lp-news {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .lp-mission {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 2.5rem;
+  }
+
+  .lp-demo-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .lp-initiatives {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .lp-hero {
+    min-height: 640px;
+  }
+
+  .lp-hero-content {
+    padding: 5rem 0 3.5rem;
+  }
+
+  .lp-services {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .lp-why-grid {
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .lp-hero {
+    min-height: 78vh;
+  }
+}

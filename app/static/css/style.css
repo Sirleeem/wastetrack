@@ -8,12 +8,13 @@
 :root {
   --ink: #14241f;
   --ink-soft: #2c3f38;
-  --forest: #1f4d3a;
-  --forest-deep: #143528;
-  --leaf: #3d7a58;
-  --amber: #d4890b;
-  --amber-dark: #a86a08;
-  --amber-soft: #fdf0d5;
+  /* Aligned with LAWMA green authority + Recorra lime accent feel */
+  --forest: #0b6b3a;
+  --forest-deep: #064528;
+  --leaf: #128a4c;
+  --amber: #c8e600;
+  --amber-dark: #a8c200;
+  --amber-soft: #f4facc;
   --clay: #c45c26;
   --paper: #f3efe6;
   --paper-2: #e9e3d6;
@@ -93,7 +94,7 @@ img, svg, video {
   background: var(--forest-deep);
   color: #f5f0e6;
   border-bottom: 3px solid var(--amber);
-  box-shadow: 0 4px 18px rgba(20, 36, 31, 0.18);
+  box-shadow: 0 4px 18px rgba(6, 69, 40, 0.22);
 }
 
 .topbar .container {
@@ -561,13 +562,13 @@ img, svg, video {
 .btn-amber {
   background: var(--amber);
   border-color: var(--amber);
-  color: #1a1408;
-  font-weight: 700;
+  color: #064528;
+  font-weight: 800;
 }
 .btn-amber:hover {
   background: var(--amber-dark);
   border-color: var(--amber-dark);
-  color: #fff;
+  color: #064528;
 }
 
 .btn-outline-wm {

@@ -1,384 +1,361 @@
 {% extends "base.html" %}
-{% block title %}Waste Management Reporting Portal — WasteTrack{% endblock %}
+{% block title %}WasteTrack — Waste Management Reporting Portal{% endblock %}
 
 {% block head %}
-<link rel="preload" as="image" href="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=1600&q=80">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}?v=1">
+<link rel="preload" as="image" href="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=1800&q=80">
 {% endblock %}
 
 {% block hero %}{% endblock %}
-
-{% block main_class %}gov-landing{% endblock %}
+{% block main_class %}landing-page{% endblock %}
 
 {% block content %}
-{# —— Official masthead strip —— #}
-<div class="gov-utility">
-  <div class="container gov-utility-inner">
-    <div class="gov-utility-left">
-      <span class="gov-seal" aria-hidden="true">
-        <i class="bi bi-shield-check"></i>
-      </span>
-      <div>
-        <strong>Waste Management Reporting &amp; Collection Portal</strong>
-        <span>Official digital channel for environmental sanitation services</span>
-      </div>
-    </div>
-    <div class="gov-utility-right">
-      <span>ATBU Bauchi · Department of Computer Science</span>
-      <a href="{{ url_for('main.about') }}">About this system</a>
-    </div>
+{# Authority strip — LAWMA-style official bar #}
+<div class="lp-topstrip">
+  <div class="container inner">
+    <span><strong>WasteTrack</strong> · Waste Management Reporting &amp; Collection Authority Portal</span>
+    <span>
+      ATBU Bauchi
+      · <a href="{{ url_for('main.about') }}">About</a>
+      · <a href="{{ url_for('auth.login') }}">Portal sign-in</a>
+    </span>
   </div>
 </div>
 
-{# —— Photographic hero + canvas texture —— #}
-<section class="gov-hero" aria-label="Portal introduction">
-  <div class="gov-hero-media" style="background-image:url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=1920&q=80');" role="img" aria-label="Municipal waste collection vehicles on urban streets"></div>
-  <canvas id="govHeroCanvas" class="gov-hero-canvas" aria-hidden="true"></canvas>
-  <div class="gov-hero-shade"></div>
-  <div class="container gov-hero-content">
-    <p class="gov-eyebrow">Public environmental health service</p>
-    <h1>Report sanitation issues.<br>Track official response.</h1>
-    <p class="gov-hero-lead">
-      This portal enables residents to notify authorities of refuse overflow, illegal dumping,
-      and blocked drains; and enables waste officers to coordinate verified collection tasks.
+{# Hero — Recorra-style bold photo + trust #}
+<section class="lp-hero" aria-label="Introduction">
+  <div class="lp-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=1920&q=80');" role="img" aria-label="Waste collection operations"></div>
+  <div class="lp-hero-overlay"></div>
+  <div class="container lp-hero-content">
+    <span class="lp-badge"><i class="bi bi-recycle"></i> Cleaner communities · Accountable collection</span>
+    <h1>Report waste. Track response. Keep the city clean.</h1>
+    <p class="lp-hero-lead">
+      The digital channel for residents to report sanitation issues, and for authorities
+      and collection crews to verify, schedule, and clear them — with full case history.
     </p>
-    <div class="gov-hero-actions">
+    <div class="lp-hero-actions">
       {% if current_user.is_authenticated %}
         {% if current_user.is_admin %}
-          <a class="btn btn-gov-primary" href="{{ url_for('admin.dashboard') }}">Open operations desk</a>
+          <a class="btn-lp-primary" href="{{ url_for('admin.dashboard') }}">Open operations desk</a>
         {% elif current_user.is_officer %}
-          <a class="btn btn-gov-primary" href="{{ url_for('officer.dashboard') }}">Open field tasks</a>
+          <a class="btn-lp-primary" href="{{ url_for('officer.dashboard') }}">Open field tasks</a>
         {% else %}
-          <a class="btn btn-gov-primary" href="{{ url_for('resident.new_report') }}">Submit a waste report</a>
-          <a class="btn btn-gov-ghost" href="{{ url_for('resident.dashboard') }}">My dashboard</a>
+          <a class="btn-lp-primary" href="{{ url_for('resident.new_report') }}">Submit a waste report</a>
+          <a class="btn-lp-outline" href="{{ url_for('resident.dashboard') }}">My dashboard</a>
         {% endif %}
       {% else %}
-        <a class="btn btn-gov-primary" href="{{ url_for('auth.register') }}">Submit a waste report</a>
-        <a class="btn btn-gov-ghost" href="{{ url_for('auth.login') }}">Authorised sign-in</a>
+        <a class="btn-lp-primary" href="{{ url_for('auth.register') }}">Report waste now</a>
+        <a class="btn-lp-outline" href="{{ url_for('auth.login') }}">Authorised sign-in</a>
       {% endif %}
     </div>
-    <dl class="gov-hero-meta">
-      <div>
-        <dt>Service type</dt>
-        <dd>Digital reporting &amp; scheduling</dd>
-      </div>
-      <div>
-        <dt>Access</dt>
-        <dd>Residents · Officers · Administrators</dd>
-      </div>
-      <div>
-        <dt>Coverage</dt>
-        <dd>Map-based location capture</dd>
-      </div>
-    </dl>
+    <ul class="lp-trust">
+      <li><i class="bi bi-check-circle-fill"></i> Map-based incident reporting</li>
+      <li><i class="bi bi-check-circle-fill"></i> Role-based authority workflows</li>
+      <li><i class="bi bi-check-circle-fill"></i> Optimised collection sequencing</li>
+    </ul>
   </div>
 </section>
 
-{# —— Service portals (photo cards, not "steps") —— #}
-<section class="gov-section">
+{# Why it works — Recorra photo value props #}
+<section class="lp-section lp-section-muted">
   <div class="container">
-    <header class="gov-section-head">
-      <div>
-        <p class="gov-label">Online services</p>
-        <h2>Access the portal by role</h2>
-      </div>
-      <p class="gov-section-intro">
-        Select the service appropriate to your responsibility. All submissions are recorded
-        with status history for accountability.
-      </p>
+    <header class="lp-section-head">
+      <p class="lp-kicker">Why this portal</p>
+      <h2>Built for the street, trusted for operations</h2>
+      <p>Patterns used by leading waste authorities and commercial operators: clear reporting, local dispatch, and measurable response.</p>
     </header>
 
-    <div class="gov-portals">
-      <a class="gov-portal" href="{{ url_for('auth.register') if not current_user.is_authenticated else url_for('resident.new_report') if current_user.is_resident else url_for('auth.login') }}">
-        <div class="gov-portal-img" style="background-image:url('https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=900&q=80');"></div>
-        <div class="gov-portal-body">
-          <span class="gov-portal-tag">Public</span>
+    <div class="lp-why-grid">
+      <article class="lp-why-card">
+        <img src="https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=900&q=80" alt="Resident reporting environment issue" loading="lazy" width="900" height="600">
+        <div class="lp-why-body">
+          <div class="lp-why-num">01 — Reliable</div>
+          <h3>Every report is a tracked case</h3>
+          <p>Submissions capture category, description, location, and optional photo evidence — so nothing depends on a lost phone call or informal complaint.</p>
+        </div>
+      </article>
+
+      <article class="lp-why-card">
+        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80" alt="Field collection crew" loading="lazy" width="900" height="600">
+        <div class="lp-why-body">
+          <div class="lp-why-num">02 — Local</div>
+          <h3>Field officers get clear stops</h3>
+          <p>Assigned tasks show map pins, urgency, and schedule so collection teams work from a structured list — not scattered verbal instructions.</p>
+        </div>
+      </article>
+
+      <article class="lp-why-card">
+        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80" alt="Operations planning desk" loading="lazy" width="900" height="600">
+        <div class="lp-why-body">
+          <div class="lp-why-num">03 — Accountable</div>
+          <h3>Authorities see the full trail</h3>
+          <p>Verify, prioritise, assign, schedule, and close cases with a complete status history for audit, defence, and service improvement.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+{# What we do — LAWMA-style service tiles with photo backgrounds #}
+<section class="lp-section">
+  <div class="container">
+    <header class="lp-section-head">
+      <p class="lp-kicker">What we do</p>
+      <h2>Online services of the portal</h2>
+      <p>Access the channel that matches your role — public reporting, authority control, or field operations.</p>
+    </header>
+
+    <div class="lp-services">
+      <a class="lp-service" href="{% if current_user.is_authenticated and current_user.is_resident %}{{ url_for('resident.new_report') }}{% else %}{{ url_for('auth.register') }}{% endif %}">
+        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-shade"></div>
+        <div class="lp-service-body">
+          <div class="lp-service-icon"><i class="bi bi-geo-alt-fill"></i></div>
           <h3>Resident reporting</h3>
-          <p>Lodge a geolocated waste complaint with description and optional photographic evidence.</p>
-          <span class="gov-portal-cta">Open service <i class="bi bi-arrow-right"></i></span>
+          <p>Lodge overflow, illegal dump, or drainage issues with a map pin and optional photo.</p>
+          <span class="lp-service-link">Open service →</span>
         </div>
       </a>
 
-      <a class="gov-portal" href="{{ url_for('auth.login') }}">
-        <div class="gov-portal-img" style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80');"></div>
-        <div class="gov-portal-body">
-          <span class="gov-portal-tag">Authority</span>
-          <h3>Administration desk</h3>
-          <p>Verify reports, prioritise urgency, assign collection officers, and publish schedules.</p>
-          <span class="gov-portal-cta">Sign in as admin <i class="bi bi-arrow-right"></i></span>
+      <a class="lp-service" href="{{ url_for('auth.login') }}">
+        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-shade"></div>
+        <div class="lp-service-body">
+          <div class="lp-service-icon"><i class="bi bi-building"></i></div>
+          <h3>Authority desk</h3>
+          <p>Review queue, set urgency, assign officers, publish schedules, and run route optimisation.</p>
+          <span class="lp-service-link">Admin access →</span>
         </div>
       </a>
 
-      <a class="gov-portal" href="{{ url_for('auth.login') }}">
-        <div class="gov-portal-img" style="background-image:url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80');"></div>
-        <div class="gov-portal-body">
-          <span class="gov-portal-tag">Field operations</span>
-          <h3>Collection officers</h3>
-          <p>Receive assigned stops, navigate mapped locations, and close tasks after collection.</p>
-          <span class="gov-portal-cta">Officer access <i class="bi bi-arrow-right"></i></span>
+      <a class="lp-service" href="{{ url_for('auth.login') }}">
+        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1621451537084-482c73073a0f?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-shade"></div>
+        <div class="lp-service-body">
+          <div class="lp-service-icon"><i class="bi bi-truck"></i></div>
+          <h3>Collection operations</h3>
+          <p>Receive assigned stops, navigate locations, start and complete field tasks in real time.</p>
+          <span class="lp-service-link">Officer access →</span>
+        </div>
+      </a>
+
+      <a class="lp-service" href="{{ url_for('main.about') }}">
+        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-shade"></div>
+        <div class="lp-service-body">
+          <div class="lp-service-icon"><i class="bi bi-recycle"></i></div>
+          <h3>Resource recovery</h3>
+          <p>Structured data for hotspots and priorities — foundation for smarter recovery and cleaner streets.</p>
+          <span class="lp-service-link">Learn more →</span>
+        </div>
+      </a>
+
+      <a class="lp-service" href="{{ url_for('auth.login') }}">
+        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-shade"></div>
+        <div class="lp-service-body">
+          <div class="lp-service-icon"><i class="bi bi-people"></i></div>
+          <h3>Education &amp; awareness</h3>
+          <p>Transparent case status builds public trust and encourages responsible reporting culture.</p>
+          <span class="lp-service-link">Sign in →</span>
+        </div>
+      </a>
+
+      <a class="lp-service" href="{{ url_for('auth.login') }}">
+        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-shade"></div>
+        <div class="lp-service-body">
+          <div class="lp-service-icon"><i class="bi bi-graph-up"></i></div>
+          <h3>Analytics &amp; planning</h3>
+          <p>Dashboards for categories, urgency, response time, and hotspot density for decision support.</p>
+          <span class="lp-service-link">View analytics →</span>
         </div>
       </a>
     </div>
   </div>
 </section>
 
-{# —— Mandate + photography —— #}
-<section class="gov-section gov-section-alt">
+{# Impact in numbers — Recorra stats band #}
+<section class="lp-section lp-section-green">
   <div class="container">
-    <div class="gov-split">
-      <figure class="gov-split-media">
-        <img
-          src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?auto=format&fit=crop&w=1200&q=80"
-          alt="Urban environment and street sanitation context"
-          width="1200"
-          height="800"
-          loading="lazy"
-        >
-        <figcaption>Coordinated collection reduces illegal dumping and blocked drainage.</figcaption>
+    <header class="lp-section-head">
+      <p class="lp-kicker">Portal capabilities</p>
+      <h2>Monitoring impact without losing the plot</h2>
+      <p>Designed for evaluation and operational clarity — from first report to completed collection.</p>
+    </header>
+    <div class="lp-stats">
+      <div class="lp-stat">
+        <strong>3 roles</strong>
+        <span>Residents, collection officers, and administrators with separated permissions</span>
+      </div>
+      <div class="lp-stat">
+        <strong>7 statuses</strong>
+        <span>Full lifecycle from submitted through verified, assigned, scheduled, and completed</span>
+      </div>
+      <div class="lp-stat">
+        <strong>1 trail</strong>
+        <span>Time-stamped history on every case for accountability and academic evaluation</span>
+      </div>
+      <div class="lp-stat">
+        <strong>Map-first</strong>
+        <span>OpenStreetMap pins for reporting, dispatch, and route optimisation</span>
+      </div>
+      <div class="lp-stat">
+        <strong>Route logic</strong>
+        <span>Haversine nearest-neighbour sequencing with urgency preference</span>
+      </div>
+      <div class="lp-stat">
+        <strong>Mobile ready</strong>
+        <span>Field-friendly layouts for reporting and task updates on phone</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# Mission — LAWMA institutional narrative #}
+<section class="lp-section">
+  <div class="container">
+    <div class="lp-mission">
+      <figure>
+        <img src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?auto=format&fit=crop&w=1200&q=80" alt="Urban sanitation and cleaner streets" width="1200" height="800" loading="lazy">
       </figure>
-      <div class="gov-split-copy">
-        <p class="gov-label">Institutional purpose</p>
+      <div class="lp-mission-copy">
+        <p class="lp-kicker">Our mandate</p>
         <h2>A structured channel between the community and waste authorities</h2>
         <p>
-          Informal complaints by phone or word of mouth make it difficult to verify locations,
-          prioritise cases, or measure response. This system captures waste issues as structured
-          records—location, category, urgency, and status—so collection can be planned with
-          clearer operational visibility.
+          Informal complaints by phone or word of mouth make it hard to verify locations, prioritise cases,
+          or measure response. WasteTrack captures waste issues as structured records so collection can be
+          planned with clearer operational visibility — in the spirit of professional waste authorities
+          and modern collection partners.
         </p>
-        <ul class="gov-checklist">
+        <ul class="lp-checklist">
           <li>Central register of reported waste incidents</li>
-          <li>Role-based review, assignment, and completion</li>
-          <li>Route order support using proximity and priority</li>
-          <li>Full status history for each case</li>
+          <li>Verification, assignment, and scheduling workflows</li>
+          <li>Proximity-based collection order support</li>
+          <li>Status history for service accountability</li>
         </ul>
-        <a class="btn btn-outline-wm" href="{{ url_for('main.about') }}">Read the system mandate</a>
+        <a class="btn-lp-primary" href="{{ url_for('main.about') }}" style="border-radius:999px;">Read the system mandate</a>
       </div>
     </div>
   </div>
 </section>
 
-{# —— Capabilities band with image mosaic —— #}
-<section class="gov-section">
+{# Cleaner community initiatives — LAWMA Cleaner Lagos style #}
+<section class="lp-section lp-section-muted">
   <div class="container">
-    <header class="gov-section-head">
-      <div>
-        <p class="gov-label">System capabilities</p>
-        <h2>Operational features of the portal</h2>
-      </div>
+    <header class="lp-section-head">
+      <p class="lp-kicker">Cleaner communities</p>
+      <h2>Priorities this portal supports</h2>
+      <p>Solid waste visibility, coordinated collection, and environmental regeneration start with reliable data.</p>
     </header>
-
-    <div class="gov-feature-grid">
-      <article class="gov-feature">
-        <div class="gov-feature-icon" aria-hidden="true"><i class="bi bi-geo-alt"></i></div>
-        <h3>Map-based reporting</h3>
-        <p>Incidents are pinned on OpenStreetMap with coordinates stored for dispatch and planning.</p>
-      </article>
-      <article class="gov-feature">
-        <div class="gov-feature-icon" aria-hidden="true"><i class="bi bi-journal-check"></i></div>
-        <h3>Case status history</h3>
-        <p>Every transition—from submission to completion—is time-stamped for audit and follow-up.</p>
-      </article>
-      <article class="gov-feature">
-        <div class="gov-feature-icon" aria-hidden="true"><i class="bi bi-people"></i></div>
-        <h3>Role separation</h3>
-        <p>Residents, collection officers, and administrators work in separate, permissioned workspaces.</p>
-      </article>
-      <article class="gov-feature">
-        <div class="gov-feature-icon" aria-hidden="true"><i class="bi bi-signpost-split"></i></div>
-        <h3>Collection sequencing</h3>
-        <p>Pending stops can be ordered by proximity and urgency to support field routing decisions.</p>
-      </article>
-    </div>
-
-    <div class="gov-mosaic" aria-hidden="true">
-      <div class="gov-mosaic-item" style="background-image:url('https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=800&q=80');"></div>
-      <div class="gov-mosaic-item" style="background-image:url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80');"></div>
-      <div class="gov-mosaic-item tall" style="background-image:url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80');"></div>
-    </div>
-  </div>
-</section>
-
-{# —— Official notice / demo access —— #}
-<section class="gov-section gov-section-tight">
-  <div class="container">
-    <div class="gov-notice">
-      <div class="gov-notice-badge">Notice</div>
-      <div class="gov-notice-body">
-        {% if show_demo_credentials %}
-        <h2>Authorised demonstration access</h2>
-        <p>
-          This deployment includes evaluation accounts for academic demonstration of the final-year prototype.
-          Do not use these credentials for real personal data.
-        </p>
-        <div class="gov-cred-grid">
-          <div>
-            <span>Administrator</span>
-            <code>admin@waste.local</code>
-            <code>admin123</code>
-          </div>
-          <div>
-            <span>Collection officer</span>
-            <code>officer@waste.local</code>
-            <code>officer123</code>
-          </div>
-          <div>
-            <span>Resident</span>
-            <code>resident@waste.local</code>
-            <code>resident123</code>
-          </div>
+    <div class="lp-initiatives">
+      <article class="lp-init">
+        <img src="https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=800&q=80" alt="Solid waste management" loading="lazy">
+        <div class="lp-init-body">
+          <h3>Solid waste management</h3>
+          <p>Capture household, commercial, and public-space waste issues before they become public-health risks.</p>
         </div>
-        {% else %}
-        <h2>Service notice</h2>
-        <p class="mb-0">
-          This is an institutional software prototype for waste reporting and collection coordination.
-          For live municipal operations, contact your local environmental health authority for official channels.
-        </p>
-        {% endif %}
-      </div>
-      <div class="gov-notice-aside">
-        <img
-          src="https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?auto=format&fit=crop&w=700&q=80"
-          alt="Operations coordination workspace"
-          width="700"
-          height="480"
-          loading="lazy"
-        >
-      </div>
+      </article>
+      <article class="lp-init">
+        <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=800&q=80" alt="Collection operations" loading="lazy">
+        <div class="lp-init-body">
+          <h3>Collection coordination</h3>
+          <p>Turn scattered complaints into scheduled stops for officers with map guidance and priority order.</p>
+        </div>
+      </article>
+      <article class="lp-init">
+        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80" alt="Environmental regeneration" loading="lazy">
+        <div class="lp-init-body">
+          <h3>Environmental regeneration</h3>
+          <p>Hotspot visibility helps target illegal dumping and blocked drainage for a cleaner living environment.</p>
+        </div>
+      </article>
     </div>
   </div>
 </section>
 
-{# —— Closing institutional strip —— #}
-<section class="gov-closing">
-  <div class="container gov-closing-inner">
-    <div>
-      <p class="gov-label light">Academic prototype</p>
-      <h2>Design and Implementation of a Waste Management Reporting and Collection Optimization System</h2>
-      <p>
-        Prepared for the Department of Computer Science, Abubakar Tafawa Balewa University, Bauchi.
-      </p>
-    </div>
-    <div class="gov-closing-actions">
-      <a class="btn btn-gov-primary" href="{{ url_for('auth.login') }}">Sign in to the portal</a>
-      <a class="btn btn-gov-ghost" href="{{ url_for('main.about') }}">Project documentation</a>
+{# News & events — LAWMA style #}
+<section class="lp-section">
+  <div class="container">
+    <header class="lp-section-head">
+      <p class="lp-kicker">News &amp; updates</p>
+      <h2>How the service works in practice</h2>
+      <p>Key capabilities presented the way professional waste organisations communicate programmes and results.</p>
+    </header>
+    <div class="lp-news">
+      <article class="lp-news-card">
+        <img src="https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=800&q=80" alt="Community reporting" loading="lazy">
+        <div class="lp-news-body">
+          <div class="lp-news-date">Service feature</div>
+          <h3>Residents pin waste issues on the map</h3>
+          <p>Geolocation and photo evidence reduce ambiguity and speed verification.</p>
+        </div>
+      </article>
+      <article class="lp-news-card">
+        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80" alt="Collection crew" loading="lazy">
+        <div class="lp-news-body">
+          <div class="lp-news-date">Operations</div>
+          <h3>Officers close the loop in the field</h3>
+          <p>Start and complete tasks with notes so the public record stays accurate.</p>
+        </div>
+      </article>
+      <article class="lp-news-card">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Analytics dashboard" loading="lazy">
+        <div class="lp-news-body">
+          <div class="lp-news-date">Planning</div>
+          <h3>Route optimisation for pending stops</h3>
+          <p>Group nearby reports and recommend collection order by distance and urgency.</p>
+        </div>
+      </article>
     </div>
   </div>
 </section>
-{% endblock %}
 
-{% block scripts %}
-<script>
-(function () {
-  var canvas = document.getElementById("govHeroCanvas");
-  if (!canvas) return;
-  var ctx = canvas.getContext("2d");
-  var dpr = Math.min(window.devicePixelRatio || 1, 2);
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var points = [];
-  var raf;
+{% if show_demo_credentials %}
+<section class="lp-section lp-section-muted">
+  <div class="container">
+    <div class="lp-demo">
+      <h3>Authorised demonstration access</h3>
+      <p>Evaluation accounts for the academic prototype. Use only for demonstration — not for real personal data.</p>
+      <div class="lp-demo-grid">
+        <div>
+          <span>Administrator</span>
+          <code>admin@waste.local</code>
+          <code>admin123</code>
+        </div>
+        <div>
+          <span>Collection officer</span>
+          <code>officer@waste.local</code>
+          <code>officer123</code>
+        </div>
+        <div>
+          <span>Resident</span>
+          <code>resident@waste.local</code>
+          <code>resident123</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
 
-  function resize() {
-    var parent = canvas.parentElement;
-    var w = parent.clientWidth;
-    var h = parent.clientHeight;
-    canvas.width = Math.floor(w * dpr);
-    canvas.height = Math.floor(h * dpr);
-    canvas.style.width = w + "px";
-    canvas.style.height = h + "px";
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    seed(w, h);
-    draw(w, h, 0);
-  }
-
-  function seed(w, h) {
-    points = [];
-    var count = Math.floor((w * h) / 18000);
-    for (var i = 0; i < count; i++) {
-      points.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: 1 + Math.random() * 1.6,
-        vx: (Math.random() - 0.5) * 0.15,
-        vy: (Math.random() - 0.5) * 0.15,
-      });
-    }
-  }
-
-  function draw(w, h, t) {
-    ctx.clearRect(0, 0, w, h);
-
-    // Municipal grid
-    ctx.strokeStyle = "rgba(255,255,255,0.045)";
-    ctx.lineWidth = 1;
-    var step = 48;
-    for (var x = 0; x < w; x += step) {
-      ctx.beginPath();
-      ctx.moveTo(x + 0.5, 0);
-      ctx.lineTo(x + 0.5, h);
-      ctx.stroke();
-    }
-    for (var y = 0; y < h; y += step) {
-      ctx.beginPath();
-      ctx.moveTo(0, y + 0.5);
-      ctx.lineTo(w, y + 0.5);
-      ctx.stroke();
-    }
-
-    // Soft map nodes + links
-    for (var i = 0; i < points.length; i++) {
-      var p = points[i];
-      if (!reduce) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
-      }
-      for (var j = i + 1; j < points.length; j++) {
-        var q = points[j];
-        var dx = p.x - q.x;
-        var dy = p.y - q.y;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 110) {
-          ctx.strokeStyle = "rgba(232, 184, 75, " + (0.12 * (1 - dist / 110)) + ")";
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(q.x, q.y);
-          ctx.stroke();
-        }
-      }
-      ctx.fillStyle = "rgba(255, 236, 190, 0.55)";
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Corner registration marks (document-like)
-    ctx.strokeStyle = "rgba(255,255,255,0.28)";
-    ctx.lineWidth = 1.5;
-    var m = 28;
-    [[m, m], [w - m, m], [m, h - m], [w - m, h - m]].forEach(function (pt, idx) {
-      var sx = idx % 2 === 0 ? 1 : -1;
-      var sy = idx < 2 ? 1 : -1;
-      ctx.beginPath();
-      ctx.moveTo(pt[0], pt[1] + 14 * sy);
-      ctx.lineTo(pt[0], pt[1]);
-      ctx.lineTo(pt[0] + 14 * sx, pt[1]);
-      ctx.stroke();
-    });
-  }
-
-  function loop(ts) {
-    var parent = canvas.parentElement;
-    draw(parent.clientWidth, parent.clientHeight, ts || 0);
-    if (!reduce) raf = requestAnimationFrame(loop);
-  }
-
-  resize();
-  window.addEventListener("resize", function () {
-    cancelAnimationFrame(raf);
-    resize();
-    if (!reduce) raf = requestAnimationFrame(loop);
-  });
-  if (!reduce) raf = requestAnimationFrame(loop);
-})();
-</script>
+{# Closing CTA — Recorra “join the revolution” energy #}
+<section class="lp-cta">
+  <div class="container">
+    <h2>Join the cleaner-community effort</h2>
+    <p>
+      Report an issue, manage the queue, or clear a stop — one portal for residents,
+      authorities, and collection teams.
+    </p>
+    <div class="lp-cta-actions">
+      {% if current_user.is_authenticated %}
+        <a class="btn-lp-primary" href="{{ url_for('main.home') }}">Open my workspace</a>
+        <a class="btn-lp-outline" href="{{ url_for('main.about') }}">About the system</a>
+      {% else %}
+        <a class="btn-lp-primary" href="{{ url_for('auth.register') }}">Get started</a>
+        <a class="btn-lp-outline" href="{{ url_for('auth.login') }}">Sign in to the portal</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
 {% endblock %}
