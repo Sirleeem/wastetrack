@@ -114,15 +114,26 @@ def _configure_logging(app: Flask) -> None:
 
 
 def _bootstrap_users(app: Flask) -> None:
-    """Create demo data and/or bootstrap admin on empty database."""
+    """Create demo accounts and/or bootstrap admin.
+
+    When SEED_DEMO_DATA is true, demo users are always ensured (create or
+    reset passwords). This fixes deploys where the DB was created before
+    demo seeding was enabled.
+    """
     from app.models import User
 
-    if User.query.first():
+    if app.config.get("SEED_DEMO_DATA"):
+        created = _ensure_demo_users()
+        if _reports_empty():
+            _seed_sample_reports()
+        app.logger.info(
+            "Demo accounts ready (admin@waste.local / officer@waste.local / "
+            "resident@waste.local). users_created_or_updated=%s",
+            created,
+        )
         return
 
-    if app.config.get("SEED_DEMO_DATA"):
-        _seed_demo_data()
-        app.logger.info("Seeded demo users and sample reports")
+    if User.query.first():
         return
 
     password = app.config.get("ADMIN_PASSWORD") or ""
@@ -144,30 +155,83 @@ def _bootstrap_users(app: Flask) -> None:
     app.logger.info("Bootstrap admin created: %s", admin.email)
 
 
-def _seed_demo_data() -> None:
+def _reports_empty() -> bool:
+    from app.models import Report
+
+    return Report.query.first() is None
+
+
+def _ensure_demo_users() -> int:
+    """Create demo users if missing; always reset known demo passwords."""
+    from app.models import User
+
+    specs = [
+        {
+            "email": "admin@waste.local",
+            "name": "System Admin",
+            "role": "admin",
+            "phone": "08010000001",
+            "password": "admin123",
+        },
+        {
+            "email": "officer@waste.local",
+            "name": "Musa Collection",
+            "role": "officer",
+            "phone": "08010000002",
+            "password": "officer123",
+        },
+        {
+            "email": "officer2@waste.local",
+            "name": "Aisha Field",
+            "role": "officer",
+            "phone": "08010000003",
+            "password": "officer123",
+        },
+        {
+            "email": "resident@waste.local",
+            "name": "Ahmad Resident",
+            "role": "resident",
+            "phone": "08010000004",
+            "password": "resident123",
+        },
+    ]
+    touched = 0
+    for spec in specs:
+        user = User.query.filter_by(email=spec["email"]).first()
+        if not user:
+            user = User(
+                email=spec["email"],
+                name=spec["name"],
+                role=spec["role"],
+                phone=spec["phone"],
+                is_active_user=True,
+            )
+            db.session.add(user)
+            touched += 1
+        else:
+            user.name = spec["name"]
+            user.role = spec["role"]
+            user.phone = spec["phone"]
+            user.is_active_user = True
+            touched += 1
+        user.set_password(spec["password"])
+    db.session.commit()
+    return touched
+
+
+def _seed_sample_reports() -> None:
     from datetime import timedelta
     import random
 
     from app.models import Report, User, utcnow
     from app.utils import generate_tracking_code, transition_status
 
-    admin = User(name="System Admin", email="admin@waste.local", role="admin", phone="08010000001")
-    admin.set_password("admin123")
-    officer1 = User(
-        name="Musa Collection", email="officer@waste.local", role="officer", phone="08010000002"
-    )
-    officer1.set_password("officer123")
-    officer2 = User(
-        name="Aisha Field", email="officer2@waste.local", role="officer", phone="08010000003"
-    )
-    officer2.set_password("officer123")
-    resident = User(
-        name="Ahmad Resident", email="resident@waste.local", role="resident", phone="08010000004"
-    )
-    resident.set_password("resident123")
-
-    db.session.add_all([admin, officer1, officer2, resident])
-    db.session.flush()
+    admin = User.query.filter_by(email="admin@waste.local").first()
+    officer1 = User.query.filter_by(email="officer@waste.local").first()
+    officer2 = User.query.filter_by(email="officer2@waste.local").first()
+    resident = User.query.filter_by(email="resident@waste.local").first()
+    if not all([admin, officer1, officer2, resident]):
+        return
 
     samples = [
         ("illegal_dump", "Illegal dumping near market entrance", 10.3158, 9.8442, "high"),

@@ -28,8 +28,10 @@ services:
         value: "true"
       - key: SHOW_DEMO_CREDENTIALS
         value: "false"
-      # true = demo accounts for academic defense; set false for real public use
+      # REQUIRED for demo logins (admin@waste.local / officer@waste.local / resident@waste.local)
       - key: SEED_DEMO_DATA
+        value: "true"
+      - key: SHOW_DEMO_CREDENTIALS
         value: "true"
       - key: SECRET_KEY
         generateValue: true
