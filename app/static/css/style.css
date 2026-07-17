@@ -1553,3 +1553,11 @@ body:not(.is-guest) .footer-wm {
     font-size: 0.82rem;
   }
 }
+
+/* Square UI — no rounded corners */
+.panel, .stat-card, .step-card, .filter-bar, .opt-stop, .auth-wrap .panel,
+.btn, .btn-sm, .btn-lg, .form-control, .form-select, .badge, .alert,
+.brand-mark, .icon-btn, .user-chip, .nav-desktop a, .bottom-nav a,
+.map-box, .report-image, .table code, .empty-state {
+  border-radius: 0 !important;
+}
