@@ -14,7 +14,7 @@
   --wt-line: #d8e0da;
   --wt-paper: #f4f7f5;
   --wt-white: #ffffff;
-  --wt-radius: 12px;
+  --wt-radius: 0;
   --wt-shadow: 0 12px 40px rgba(6, 69, 40, 0.1);
   --wt-font: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
   --wt-display: "Fraunces", Georgia, serif;
@@ -105,7 +105,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 0.35rem 0.75rem;
-  border-radius: 999px;
+  border-radius: 0;
   margin-bottom: 1rem;
 }
 
@@ -141,7 +141,7 @@
   background: var(--wt-lime);
   color: var(--wt-green-deep) !important;
   font-weight: 800;
-  border-radius: 999px;
+  border-radius: 0;
   text-decoration: none !important;
   border: none;
   transition: transform 0.15s ease, background 0.15s ease;
@@ -161,7 +161,7 @@
   background: transparent;
   color: #fff !important;
   font-weight: 700;
-  border-radius: 999px;
+  border-radius: 0;
   text-decoration: none !important;
   border: 2px solid rgba(255, 255, 255, 0.65);
 }
@@ -345,7 +345,7 @@
 .lp-service-icon {
   width: 44px;
   height: 44px;
-  border-radius: 50%;
+  border-radius: 0;
   background: var(--wt-lime);
   color: var(--wt-green-deep);
   display: grid;
@@ -510,7 +510,7 @@
   top: 0.45rem;
   width: 1.25rem;
   height: 1.25rem;
-  border-radius: 50%;
+  border-radius: 0;
   background: rgba(11, 107, 58, 0.12);
   color: var(--wt-green);
   font-size: 0.75rem;
@@ -546,7 +546,7 @@
 
 .lp-demo-grid div {
   background: var(--wt-paper);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 0.75rem 0.9rem;
 }
 
