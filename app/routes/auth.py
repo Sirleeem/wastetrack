@@ -28,7 +28,12 @@ def login():
             next_url = request.args.get("next")
             if next_url:
                 return redirect(next_url)
-            return redirect(url_for("main.home"))
+            # After login go to role workspace (homepage stays public via logo/Home)
+            if user.is_admin:
+                return redirect(url_for("admin.dashboard"))
+            if user.is_officer:
+                return redirect(url_for("officer.dashboard"))
+            return redirect(url_for("resident.dashboard"))
 
     return render_template("auth/login.html")
 
