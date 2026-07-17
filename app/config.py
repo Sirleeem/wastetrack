@@ -90,7 +90,11 @@ class ProductionConfig(Config):
     PREFERRED_URL_SCHEME = os.environ.get("PREFERRED_URL_SCHEME", "https")
     BEHIND_PROXY = os.environ.get("BEHIND_PROXY", "true").lower() in ("1", "true", "yes")
     SEED_DEMO_DATA = os.environ.get("SEED_DEMO_DATA", "false").lower() in ("1", "true", "yes")
-    SHOW_DEMO_CREDENTIALS = False
+    SHOW_DEMO_CREDENTIALS = os.environ.get("SHOW_DEMO_CREDENTIALS", "false").lower() in (
+        "1",
+        "true",
+        "yes",
+    )
 
     # SQLite needs check_same_thread for some workers; Postgres uses pool
     @staticmethod

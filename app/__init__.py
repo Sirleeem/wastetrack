@@ -15,6 +15,7 @@ def create_app(config_class=None):
 
     app = Flask(__name__)
     app.config.from_object(config_class)
+    _apply_runtime_env(app)
 
     # Engine options (pool for Postgres; thread-safe SQLite)
     uri = app.config["SQLALCHEMY_DATABASE_URI"]
@@ -102,6 +103,42 @@ def create_app(config_class=None):
         _bootstrap_users(app)
 
     return app
+
+
+def _truthy(name: str, default: str = "false") -> bool:
+    return os.environ.get(name, default).lower() in ("1", "true", "yes")
+
+
+def _apply_runtime_env(app: Flask) -> None:
+    """Re-read env vars on every boot (class attributes are frozen at import)."""
+    from app.config import _normalize_database_url, _default_sqlite_uri
+
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or app.config.get("SECRET_KEY")
+    db_url = (os.environ.get("DATABASE_URL") or "").strip()
+    app.config["SQLALCHEMY_DATABASE_URI"] = _normalize_database_url(
+        db_url or app.config.get("SQLALCHEMY_DATABASE_URI") or _default_sqlite_uri()
+    )
+    app.config["SEED_DEMO_DATA"] = _truthy(
+        "SEED_DEMO_DATA",
+        "true" if app.debug else "false",
+    )
+    app.config["SHOW_DEMO_CREDENTIALS"] = _truthy(
+        "SHOW_DEMO_CREDENTIALS",
+        "true" if app.debug else "false",
+    )
+    app.config["BEHIND_PROXY"] = _truthy(
+        "BEHIND_PROXY",
+        "true" if not app.debug else "false",
+    )
+    app.config["SESSION_COOKIE_SECURE"] = _truthy(
+        "SESSION_COOKIE_SECURE",
+        "true" if not app.debug else "false",
+    )
+    app.config["ADMIN_EMAIL"] = os.environ.get("ADMIN_EMAIL", app.config.get("ADMIN_EMAIL"))
+    app.config["ADMIN_PASSWORD"] = os.environ.get(
+        "ADMIN_PASSWORD", app.config.get("ADMIN_PASSWORD") or ""
+    )
+    app.config["ADMIN_NAME"] = os.environ.get("ADMIN_NAME", app.config.get("ADMIN_NAME"))
 
 
 def _configure_logging(app: Flask) -> None:
