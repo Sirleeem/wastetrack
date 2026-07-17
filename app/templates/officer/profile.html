@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Officer Profile — WasteTrack{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="panel">
+      <div class="panel-header"><h2>My profile</h2></div>
+      <div class="panel-body">
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" value="{{ current_user.email }}" disabled>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ current_user.name }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="phone">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" value="{{ current_user.phone or '' }}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="password">New password (optional)</label>
+            <input type="password" class="form-control" id="password" name="password" minlength="6">
+          </div>
+          <button type="submit" class="btn btn-wm">Save changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

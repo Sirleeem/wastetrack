@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "macros.html" import status_badge, urgency_badge, empty %}
+{% block title %}My Reports — WasteTrack{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">My reports</h1>
+  <a href="{{ url_for('resident.new_report') }}" class="btn btn-wm">New report</a>
+</div>
+<div class="panel">
+  <div class="panel-body p-0">
+    {% if reports %}
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Tracking</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>Urgency</th>
+            <th>Status</th>
+            <th>Submitted</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in reports %}
+          <tr>
+            <td><code>{{ r.tracking_code }}</code></td>
+            <td>{{ r.category_label() }}</td>
+            <td class="small text-secondary">{{ r.address or (r.latitude|round(4)|string + ', ' + r.longitude|round(4)|string) }}</td>
+            <td>{{ urgency_badge(r.urgency) }}</td>
+            <td>{{ status_badge(r.status) }}</td>
+            <td class="small">{{ r.created_at.strftime('%d %b %Y %H:%M') if r.created_at else '—' }}</td>
+            <td><a class="btn btn-sm btn-outline-secondary" href="{{ url_for('resident.report_detail', report_id=r.id) }}">Details</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      {{ empty("You have not submitted any reports.") }}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

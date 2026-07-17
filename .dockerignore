@@ -1,0 +1,17 @@
+.venv
+venv
+__pycache__
+*.pyc
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+instance/*.db
+*.md
+.pytest_cache
+.mypy_cache
+.idea
+.vscode
+scripts
+deploy

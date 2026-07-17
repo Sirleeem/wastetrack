@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Analytics — WasteTrack{% endblock %}
+{% block content %}
+<div class="mb-4">
+  <h1 class="h3 mb-1">Analytics & evaluation metrics</h1>
+  <p class="text-secondary mb-0">Supports project evaluation: functional overview, response time and hotspot visibility.</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="stat-card"><div class="label">Total reports</div><div class="value">{{ total }}</div></div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card"><div class="label">Completed</div><div class="value">{{ completed_count }}</div></div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="label">Avg response (hrs)</div>
+      <div class="value">{{ avg_response if avg_response is not none else '—' }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card"><div class="label">Data completeness</div><div class="value">{{ data_completeness }}%</div></div>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-md-4">
+    <div class="panel h-100">
+      <div class="panel-header"><h2>By status</h2></div>
+      <div class="panel-body">
+        <ul class="list-group list-group-flush">
+          {% for status, count in by_status %}
+          <li class="list-group-item d-flex justify-content-between px-0">
+            <span class="text-capitalize">{{ status.replace('_',' ') }}</span>
+            <strong>{{ count }}</strong>
+          </li>
+          {% else %}
+          <li class="list-group-item px-0 text-secondary">No data</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel h-100">
+      <div class="panel-header"><h2>By category</h2></div>
+      <div class="panel-body">
+        <ul class="list-group list-group-flush">
+          {% for cat, count in by_category %}
+          <li class="list-group-item d-flex justify-content-between px-0">
+            <span class="text-capitalize">{{ cat.replace('_',' ') }}</span>
+            <strong>{{ count }}</strong>
+          </li>
+          {% else %}
+          <li class="list-group-item px-0 text-secondary">No data</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel h-100">
+      <div class="panel-header"><h2>By urgency</h2></div>
+      <div class="panel-body">
+        <ul class="list-group list-group-flush">
+          {% for urg, count in by_urgency %}
+          <li class="list-group-item d-flex justify-content-between px-0">
+            <span class="text-capitalize">{{ urg or 'medium' }}</span>
+            <strong>{{ count }}</strong>
+          </li>
+          {% else %}
+          <li class="list-group-item px-0 text-secondary">No data</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header"><h2>Hotspot map</h2></div>
+  <div class="panel-body">
+    <div id="hotspot-map" class="map-box map-box-lg"></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const points = [
+      {% for r in hotspot_reports %}
+      { lat: {{ r.latitude }}, lng: {{ r.longitude }}, popup: {{ (r.tracking_code + ' · ' + r.category + ' · ' + r.status)|tojson }}, order: null },
+      {% endfor %}
+    ];
+    if (points.length) initMultiMarkerMap("hotspot-map", points, false);
+  });
+</script>
+{% endblock %}

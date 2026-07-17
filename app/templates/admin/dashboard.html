@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% from "macros.html" import status_badge, urgency_badge %}
+{% block title %}Admin Dashboard — WasteTrack{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+  <div>
+    <h1 class="h3 mb-1">Operations dashboard</h1>
+    <p class="text-secondary mb-0">Monitor reports, assignments and collection readiness.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('admin.optimize') }}" class="btn btn-outline-wm">Optimize routes</a>
+    <a href="{{ url_for('admin.reports', status='submitted') }}" class="btn btn-wm">Review queue</a>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg">
+    <div class="stat-card"><div class="label">Total</div><div class="value">{{ total }}</div></div>
+  </div>
+  <div class="col-6 col-lg">
+    <div class="stat-card"><div class="label">Pending review</div><div class="value">{{ submitted }}</div></div>
+  </div>
+  <div class="col-6 col-lg">
+    <div class="stat-card"><div class="label">Open cases</div><div class="value">{{ open_reports }}</div></div>
+  </div>
+  <div class="col-6 col-lg">
+    <div class="stat-card"><div class="label">High urgency</div><div class="value text-danger">{{ high }}</div></div>
+  </div>
+  <div class="col-6 col-lg">
+    <div class="stat-card"><div class="label">Completed</div><div class="value">{{ completed }}</div></div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="panel mb-4">
+      <div class="panel-header">
+        <h2>Recent reports</h2>
+        <a href="{{ url_for('admin.reports') }}" class="btn btn-sm btn-outline-secondary">All reports</a>
+      </div>
+      <div class="panel-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Code</th>
+                <th>Category</th>
+                <th>Urgency</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in recent %}
+              <tr>
+                <td><code>{{ r.tracking_code }}</code></td>
+                <td>{{ r.category_label() }}</td>
+                <td>{{ urgency_badge(r.urgency) }}</td>
+                <td>{{ status_badge(r.status) }}</td>
+                <td><a class="btn btn-sm btn-outline-wm" href="{{ url_for('admin.report_detail', report_id=r.id) }}">Manage</a></td>
+              </tr>
+              {% else %}
+              <tr><td colspan="5" class="text-center text-secondary py-4">No reports yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="panel">
+      <div class="panel-header"><h2>Open reports map</h2></div>
+      <div class="panel-body">
+        <div id="dash-map" class="map-box map-box-sm"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const points = [
+      {% for r in map_reports %}
+      { lat: {{ r.latitude }}, lng: {{ r.longitude }}, popup: {{ (r.tracking_code + ' · ' + r.status)|tojson }}, order: null },
+      {% endfor %}
+    ];
+    if (points.length) initMultiMarkerMap("dash-map", points, false);
+    else {
+      const el = document.getElementById("dash-map");
+      if (el) el.innerHTML = '<div class="empty-state">No open reports to map.</div>';
+    }
+  });
+</script>
+{% endblock %}

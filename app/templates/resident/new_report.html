@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Submit Report — WasteTrack{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="panel">
+      <div class="panel-header"><h2>Submit waste report</h2></div>
+      <div class="panel-body">
+        <form method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label" for="category">Category</label>
+            <select class="form-select" id="category" name="category" required>
+              {% for c in categories %}
+              <option value="{{ c }}">{{ c.replace('_', ' ')|title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="4" required
+              placeholder="Describe the waste issue clearly..."></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="address">Address / landmark (optional)</label>
+            <input type="text" class="form-control" id="address" name="address" placeholder="Near market gate, opposite mosque…">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="urgency">Urgency</label>
+            <select class="form-select" id="urgency" name="urgency">
+              {% for u in urgencies %}
+              <option value="{{ u }}" {% if u == 'medium' %}selected{% endif %}>{{ u|title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="image">Photo evidence (optional)</label>
+            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+          </div>
+          <input type="hidden" name="latitude" id="latitude" value="10.3158">
+          <input type="hidden" name="longitude" id="longitude" value="9.8442">
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="form-label mb-0">Location on map <span class="text-danger">*</span></label>
+              <button type="button" class="btn btn-sm btn-outline-wm" id="use-my-location">
+                <i class="bi bi-geo-alt"></i> Use my location
+              </button>
+            </div>
+            <div id="picker-map" class="map-box"></div>
+            <p class="form-text">Click the map or drag the marker to set the exact location.</p>
+          </div>
+          <button type="submit" class="btn btn-wm">Submit report</button>
+          <a href="{{ url_for('resident.dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="panel">
+      <div class="panel-header"><h2>Tips</h2></div>
+      <div class="panel-body text-secondary">
+        <ul class="mb-0">
+          <li>Be specific about the waste type and volume.</li>
+          <li>Pin the location as accurately as possible.</li>
+          <li>A clear photo helps officers prioritise faster.</li>
+          <li>You will receive a tracking code after submission.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    initReportPickerMap("picker-map", "latitude", "longitude", 10.3158, 9.8442, 13);
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% macro status_badge(status) %}
+  {%- set map = {
+    'submitted': 'secondary',
+    'verified': 'info',
+    'rejected': 'danger',
+    'assigned': 'primary',
+    'scheduled': 'warning',
+    'in_progress': 'orange',
+    'completed': 'success'
+  } -%}
+  {%- set cls = map.get(status, 'secondary') -%}
+  {% if cls == 'orange' %}
+    <span class="badge bg-orange badge-status">{{ status.replace('_', ' ') }}</span>
+  {% else %}
+    <span class="badge bg-{{ cls }} badge-status">{{ status.replace('_', ' ') }}</span>
+  {% endif %}
+{% endmacro %}
+
+{% macro urgency_badge(urgency) %}
+  {%- set u = (urgency or 'medium')|lower -%}
+  {%- set map = {'high': 'danger', 'medium': 'warning', 'low': 'success'} -%}
+  <span class="badge bg-{{ map.get(u, 'secondary') }}">{{ u|capitalize }}</span>
+{% endmacro %}
+
+{% macro empty(message) %}
+  <div class="empty-state">
+    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+    <p class="mb-0">{{ message }}</p>
+  </div>
+{% endmacro %}

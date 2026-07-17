@@ -1,0 +1,44 @@
+# Render Blueprint — WasteTrack
+# Docs: https://render.com/docs/blueprint-spec
+#
+# After connecting the GitHub repo:
+#   Dashboard → New → Blueprint → select this repo
+# Or: New → Web Service → connect repo (use env vars from DEPLOY-RENDER.md)
+
+services:
+  - type: web
+    name: wastetrack
+    runtime: python
+    plan: free
+    region: oregon
+    pythonVersion: "3.12.8"
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -c gunicorn.conf.py wsgi:app
+    healthCheckPath: /health
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PYTHON_VERSION
+        value: "3.12.8"
+      - key: BEHIND_PROXY
+        value: "true"
+      - key: PREFERRED_URL_SCHEME
+        value: https
+      - key: SESSION_COOKIE_SECURE
+        value: "true"
+      - key: SHOW_DEMO_CREDENTIALS
+        value: "false"
+      # true = demo accounts for academic defense; set false for real public use
+      - key: SEED_DEMO_DATA
+        value: "true"
+      - key: SECRET_KEY
+        generateValue: true
+      # Used only when SEED_DEMO_DATA=false and DB is empty
+      - key: ADMIN_EMAIL
+        value: admin@wastetrack.app
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      # Optional: paste a Postgres URL (Neon free / Render Postgres).
+      # If unset, the app uses SQLite (fine for demos; data can reset on redeploy).
+      - key: DATABASE_URL
+        sync: false

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% from "macros.html" import status_badge, urgency_badge, empty %}
+{% block title %}Schedule — WasteTrack{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <h1 class="h3 mb-0">Pickup schedule</h1>
+  <a href="{{ url_for('admin.optimize') }}" class="btn btn-wm">Build optimized run</a>
+</div>
+
+<form class="filter-bar row g-2 align-items-end" method="get">
+  <div class="col-md-4">
+    <label class="form-label">Filter by date</label>
+    <input type="date" class="form-control" name="date" value="{{ date_str }}">
+  </div>
+  <div class="col-md-4 d-flex gap-2">
+    <button class="btn btn-wm" type="submit">Apply</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('admin.schedule') }}">Clear</a>
+  </div>
+</form>
+
+<div class="panel">
+  <div class="panel-body p-0">
+    {% if reports %}
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Order</th>
+            <th>Date</th>
+            <th>Code</th>
+            <th>Category</th>
+            <th>Urgency</th>
+            <th>Status</th>
+            <th>Officer</th>
+            <th>Address</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in reports %}
+          <tr>
+            <td>{{ r.collection_order or '—' }}</td>
+            <td>{{ r.scheduled_date.strftime('%d %b %Y') if r.scheduled_date else '—' }}</td>
+            <td><code>{{ r.tracking_code }}</code></td>
+            <td>{{ r.category_label() }}</td>
+            <td>{{ urgency_badge(r.urgency) }}</td>
+            <td>{{ status_badge(r.status) }}</td>
+            <td class="small">{{ r.officer.name if r.officer else '—' }}</td>
+            <td class="small text-secondary">{{ r.address or '—' }}</td>
+            <td><a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin.report_detail', report_id=r.id) }}">Open</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      {{ empty("No scheduled pickups found. Assign dates on reports or run optimization.") }}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

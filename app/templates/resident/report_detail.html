@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% from "macros.html" import status_badge, urgency_badge %}
+{% block title %}Report {{ report.tracking_code }} — WasteTrack{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <div>
+    <p class="text-secondary small mb-1">Tracking code</p>
+    <h1 class="h3 mb-0"><code>{{ report.tracking_code }}</code></h1>
+  </div>
+  <div class="d-flex gap-2 align-items-center">
+    {{ urgency_badge(report.urgency) }}
+    {{ status_badge(report.status) }}
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="panel mb-4">
+      <div class="panel-header"><h2>Details</h2></div>
+      <div class="panel-body">
+        <dl class="row mb-0">
+          <dt class="col-sm-4">Category</dt><dd class="col-sm-8">{{ report.category_label() }}</dd>
+          <dt class="col-sm-4">Description</dt><dd class="col-sm-8">{{ report.description }}</dd>
+          <dt class="col-sm-4">Address</dt><dd class="col-sm-8">{{ report.address or '—' }}</dd>
+          <dt class="col-sm-4">Coordinates</dt>
+          <dd class="col-sm-8"><code>{{ '%.5f'|format(report.latitude) }}, {{ '%.5f'|format(report.longitude) }}</code></dd>
+          <dt class="col-sm-4">Submitted</dt>
+          <dd class="col-sm-8">{{ report.created_at.strftime('%d %b %Y %H:%M') if report.created_at else '—' }}</dd>
+          {% if report.scheduled_date %}
+          <dt class="col-sm-4">Scheduled</dt><dd class="col-sm-8">{{ report.scheduled_date.strftime('%d %b %Y') }}</dd>
+          {% endif %}
+        </dl>
+        {% if report.image_filename %}
+        <div class="mt-3">
+          <img class="report-image" src="{{ url_for('static', filename='uploads/' + report.image_filename) }}" alt="Evidence">
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><h2>Location</h2></div>
+      <div class="panel-body">
+        <div id="view-map" class="map-box map-box-sm"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="panel">
+      <div class="panel-header"><h2>Status history</h2></div>
+      <div class="panel-body">
+        {% if report.history %}
+        <ul class="timeline">
+          {% for h in report.history|reverse %}
+          <li>
+            <div class="fw-semibold">{{ h.new_status.replace('_', ' ')|title }}</div>
+            {% if h.note %}<div class="small">{{ h.note }}</div>{% endif %}
+            <div class="time">
+              {{ h.created_at.strftime('%d %b %Y %H:%M') if h.created_at else '' }}
+              {% if h.user %} · {{ h.user.name }}{% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-secondary mb-0">No history yet.</p>
+        {% endif %}
+      </div>
+    </div>
+    <a href="{{ url_for('resident.reports') }}" class="btn btn-outline-secondary mt-3">Back to my reports</a>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    initViewMap("view-map", {{ report.latitude }}, {{ report.longitude }}, {{ report.tracking_code|tojson }});
+  });
+</script>
+{% endblock %}

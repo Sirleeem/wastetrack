@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% from "macros.html" import status_badge, urgency_badge %}
+{% block title %}Manage {{ report.tracking_code }} — WasteTrack{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <div>
+    <p class="text-secondary small mb-1">Manage report</p>
+    <h1 class="h3 mb-0"><code>{{ report.tracking_code }}</code></h1>
+  </div>
+  <div class="d-flex gap-2">{{ urgency_badge(report.urgency) }} {{ status_badge(report.status) }}</div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="panel mb-4">
+      <div class="panel-header"><h2>Report information</h2></div>
+      <div class="panel-body">
+        <dl class="row mb-0">
+          <dt class="col-sm-4">Reporter</dt><dd class="col-sm-8">{{ report.reporter.name }} ({{ report.reporter.email }})</dd>
+          <dt class="col-sm-4">Category</dt><dd class="col-sm-8">{{ report.category_label() }}</dd>
+          <dt class="col-sm-4">Description</dt><dd class="col-sm-8">{{ report.description }}</dd>
+          <dt class="col-sm-4">Address</dt><dd class="col-sm-8">{{ report.address or '—' }}</dd>
+          <dt class="col-sm-4">Officer</dt><dd class="col-sm-8">{{ report.officer.name if report.officer else 'Unassigned' }}</dd>
+          <dt class="col-sm-4">Scheduled</dt><dd class="col-sm-8">{{ report.scheduled_date.strftime('%d %b %Y') if report.scheduled_date else '—' }}</dd>
+          <dt class="col-sm-4">Collection order</dt><dd class="col-sm-8">{{ report.collection_order or '—' }}</dd>
+          <dt class="col-sm-4">Admin notes</dt><dd class="col-sm-8">{{ report.admin_notes or '—' }}</dd>
+        </dl>
+        {% if report.image_filename %}
+        <img class="report-image mt-3" src="{{ url_for('static', filename='uploads/' + report.image_filename) }}" alt="Evidence">
+        {% endif %}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><h2>Map</h2></div>
+      <div class="panel-body"><div id="admin-map" class="map-box map-box-sm"></div></div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="panel mb-4">
+      <div class="panel-header"><h2>Actions</h2></div>
+      <div class="panel-body">
+        <form method="post" class="mb-3">
+          <div class="mb-3">
+            <label class="form-label">Urgency</label>
+            <select class="form-select" name="urgency">
+              {% for u in ['low','medium','high'] %}
+              <option value="{{ u }}" {% if report.urgency==u %}selected{% endif %}>{{ u|title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Note</label>
+            <textarea class="form-control" name="note" rows="2" placeholder="Optional note for history"></textarea>
+          </div>
+
+          {% if report.status == 'submitted' %}
+          <div class="d-grid gap-2 mb-3">
+            <button class="btn btn-wm" name="action" value="verify" type="submit">Verify report</button>
+            <button class="btn btn-outline-danger" name="action" value="reject" type="submit">Reject</button>
+          </div>
+          {% endif %}
+
+          {% if report.status in ['submitted','verified','assigned','scheduled'] %}
+          <div class="border rounded-3 p-3 mb-3">
+            <label class="form-label">Assign collection officer</label>
+            <select class="form-select mb-2" name="officer_id">
+              <option value="">Select officer…</option>
+              {% for o in officers %}
+              <option value="{{ o.id }}" {% if report.officer_id==o.id %}selected{% endif %}>{{ o.name }}</option>
+              {% endfor %}
+            </select>
+            <button class="btn btn-outline-wm w-100" name="action" value="assign" type="submit">Assign officer</button>
+          </div>
+
+          <div class="border rounded-3 p-3 mb-3">
+            <label class="form-label">Schedule pickup date</label>
+            <input type="date" class="form-control mb-2" name="scheduled_date"
+              value="{{ report.scheduled_date.isoformat() if report.scheduled_date else '' }}">
+            <button class="btn btn-outline-wm w-100" name="action" value="schedule" type="submit">Save schedule</button>
+          </div>
+          {% endif %}
+
+          <button class="btn btn-outline-secondary w-100 mb-2" name="action" value="note" type="submit">Save note only</button>
+
+          {% if report.status in ['rejected','completed'] %}
+          <button class="btn btn-outline-warning w-100" name="action" value="reopen" type="submit">Reopen report</button>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><h2>Status history</h2></div>
+      <div class="panel-body">
+        <ul class="timeline">
+          {% for h in report.history|reverse %}
+          <li>
+            <div class="fw-semibold">{{ h.new_status.replace('_',' ')|title }}</div>
+            {% if h.note %}<div class="small">{{ h.note }}</div>{% endif %}
+            <div class="time">
+              {{ h.created_at.strftime('%d %b %Y %H:%M') if h.created_at else '' }}
+              {% if h.user %} · {{ h.user.name }}{% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    initViewMap("admin-map", {{ report.latitude }}, {{ report.longitude }}, {{ report.tracking_code|tojson }});
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,48 @@
+services:
+  web:
+    build: .
+    container_name: wastetrack
+    ports:
+      - "${PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      FLASK_ENV: production
+      BEHIND_PROXY: "true"
+      # Override DATABASE_URL below when using the postgres service
+      # DATABASE_URL: postgresql://wastetrack:wastetrack@db:5432/wastetrack
+    volumes:
+      - wastetrack_data:/app/instance
+      - wastetrack_uploads:/app/app/static/uploads
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 25s
+    # Uncomment to use Postgres instead of SQLite:
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+
+  # Optional managed-style Postgres (enable depends_on above and set DATABASE_URL)
+  # db:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_DB: wastetrack
+  #     POSTGRES_USER: wastetrack
+  #     POSTGRES_PASSWORD: wastetrack
+  #   volumes:
+  #     - wastetrack_pg:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U wastetrack -d wastetrack"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   restart: unless-stopped
+
+volumes:
+  wastetrack_data:
+  wastetrack_uploads:
+  # wastetrack_pg:

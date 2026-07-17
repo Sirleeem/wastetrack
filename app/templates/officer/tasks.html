@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "macros.html" import status_badge, urgency_badge, empty %}
+{% block title %}My Tasks — WasteTrack{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <h1 class="h3 mb-0">My tasks</h1>
+  <div class="btn-group">
+    <a class="btn btn-sm btn-outline-secondary {% if not status %}active{% endif %}" href="{{ url_for('officer.tasks') }}">All</a>
+    <a class="btn btn-sm btn-outline-secondary {% if status=='assigned' %}active{% endif %}" href="{{ url_for('officer.tasks', status='assigned') }}">Assigned</a>
+    <a class="btn btn-sm btn-outline-secondary {% if status=='in_progress' %}active{% endif %}" href="{{ url_for('officer.tasks', status='in_progress') }}">In progress</a>
+    <a class="btn btn-sm btn-outline-secondary {% if status=='completed' %}active{% endif %}" href="{{ url_for('officer.tasks', status='completed') }}">Completed</a>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body p-0">
+    {% if tasks %}
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Code</th>
+            <th>Category</th>
+            <th>Urgency</th>
+            <th>Status</th>
+            <th>Address</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in tasks %}
+          <tr>
+            <td><code>{{ t.tracking_code }}</code></td>
+            <td>{{ t.category_label() }}</td>
+            <td>{{ urgency_badge(t.urgency) }}</td>
+            <td>{{ status_badge(t.status) }}</td>
+            <td class="small text-secondary">{{ t.address or '—' }}</td>
+            <td><a class="btn btn-sm btn-outline-wm" href="{{ url_for('officer.task_detail', report_id=t.id) }}">View</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      {{ empty("No tasks match this filter.") }}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

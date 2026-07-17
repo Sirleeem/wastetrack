@@ -1,0 +1,26 @@
+# systemd unit for Linux VPS (copy to /etc/systemd/system/wastetrack.service)
+#
+#   sudo cp deploy/wastetrack.service.example /etc/systemd/system/wastetrack.service
+#   # edit User, WorkingDirectory, EnvironmentFile paths
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now wastetrack
+
+[Unit]
+Description=WasteTrack Waste Management System
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/wastetrack
+EnvironmentFile=/opt/wastetrack/.env
+ExecStart=/opt/wastetrack/.venv/bin/gunicorn -c gunicorn.conf.py wsgi:app
+Restart=always
+RestartSec=5
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+# Core application
+Flask==3.0.3
+Flask-Login==0.6.3
+Flask-SQLAlchemy==3.1.1
+Werkzeug==3.0.3
+email-validator==2.2.0
+python-dotenv==1.0.1
+
+# Production WSGI (Linux/macOS containers & VPS)
+gunicorn==22.0.0
+
+# Production WSGI (Windows-friendly alternative)
+waitress==3.0.0
+
+# Optional PostgreSQL (install when DATABASE_URL uses postgres)
+psycopg[binary]==3.2.3

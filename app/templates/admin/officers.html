@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Officers — WasteTrack{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="panel">
+      <div class="panel-header"><h2>Collection officers</h2></div>
+      <div class="panel-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in officers %}
+              <tr>
+                <td>{{ o.name }}</td>
+                <td class="small">{{ o.email }}</td>
+                <td class="small">{{ o.phone or '—' }}</td>
+                <td>
+                  {% if o.is_active_user %}
+                  <span class="badge bg-success">Active</span>
+                  {% else %}
+                  <span class="badge bg-secondary">Inactive</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <form method="post" action="{{ url_for('admin.toggle_officer', user_id=o.id) }}">
+                    <button class="btn btn-sm btn-outline-secondary" type="submit">
+                      {{ 'Deactivate' if o.is_active_user else 'Activate' }}
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="5" class="text-center text-secondary py-4">No officers yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="panel">
+      <div class="panel-header"><h2>Add officer</h2></div>
+      <div class="panel-body">
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label" for="name">Full name</label>
+            <input class="form-control" id="name" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="phone">Phone</label>
+            <input class="form-control" id="phone" name="phone">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="password">Temporary password</label>
+            <input class="form-control" id="password" name="password" value="officer123">
+          </div>
+          <button type="submit" class="btn btn-wm w-100">Create officer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

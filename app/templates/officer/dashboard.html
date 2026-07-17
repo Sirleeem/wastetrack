@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% from "macros.html" import status_badge, urgency_badge, empty %}
+{% block title %}Officer Dashboard — WasteTrack{% endblock %}
+{% block content %}
+<div class="mb-4">
+  <h1 class="h3 mb-1">Collection tasks</h1>
+  <p class="text-secondary mb-0">You have <strong>{{ active_count }}</strong> active task{{ 's' if active_count != 1 else '' }}.</p>
+</div>
+
+<div class="panel mb-4">
+  <div class="panel-header">
+    <h2>Active tasks</h2>
+    <a href="{{ url_for('officer.tasks') }}" class="btn btn-sm btn-outline-wm">All tasks</a>
+  </div>
+  <div class="panel-body p-0">
+    {% if tasks %}
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Code</th>
+            <th>Category</th>
+            <th>Urgency</th>
+            <th>Status</th>
+            <th>Scheduled</th>
+            <th>Order</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in tasks %}
+          <tr>
+            <td><code>{{ t.tracking_code }}</code></td>
+            <td>{{ t.category_label() }}</td>
+            <td>{{ urgency_badge(t.urgency) }}</td>
+            <td>{{ status_badge(t.status) }}</td>
+            <td>{{ t.scheduled_date.strftime('%d %b %Y') if t.scheduled_date else '—' }}</td>
+            <td>{{ t.collection_order or '—' }}</td>
+            <td><a class="btn btn-sm btn-wm" href="{{ url_for('officer.task_detail', report_id=t.id) }}">Open</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      {{ empty("No active tasks assigned to you.") }}
+    {% endif %}
+  </div>
+</div>
+
+{% if completed %}
+<div class="panel">
+  <div class="panel-header"><h2>Recently completed</h2></div>
+  <div class="panel-body p-0">
+    <ul class="list-group list-group-flush">
+      {% for t in completed %}
+      <li class="list-group-item d-flex justify-content-between">
+        <span><code>{{ t.tracking_code }}</code> · {{ t.category_label() }}</span>
+        <span class="text-secondary small">{{ t.completed_at.strftime('%d %b %H:%M') if t.completed_at else '' }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

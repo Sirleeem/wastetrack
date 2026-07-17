@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}About — WasteTrack{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="panel">
+      <div class="panel-header"><h2>About this project</h2></div>
+      <div class="panel-body">
+        <p>
+          <strong>Design and Implementation of a Waste Management Reporting and Collection Optimization System</strong>
+        </p>
+        <p class="text-secondary">
+          Prepared as a final-year project proposal for the Department of Computer Science,
+          Abubakar Tafawa Balewa University Bauchi.
+        </p>
+        <h3 class="h6 mt-4">What the system does</h3>
+        <ul>
+          <li>Residents submit geolocated waste reports with optional images</li>
+          <li>Administrators verify, assign, schedule and track cases</li>
+          <li>Collection officers update task progress in the field</li>
+          <li>Optimization recommends an efficient pickup order using proximity and urgency</li>
+        </ul>
+        <h3 class="h6 mt-4">Out of scope</h3>
+        <p class="text-secondary mb-0">
+          Physical IoT sensors, payment processing, government identity integration and full industrial fleet logistics
+          are intentionally excluded for this undergraduate prototype.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

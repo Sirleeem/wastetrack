@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% from "macros.html" import status_badge, urgency_badge %}
+{% block title %}Task {{ report.tracking_code }} — WasteTrack{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <h1 class="h3 mb-0"><code>{{ report.tracking_code }}</code></h1>
+  <div class="d-flex gap-2">{{ urgency_badge(report.urgency) }} {{ status_badge(report.status) }}</div>
+</div>
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="panel mb-4">
+      <div class="panel-header"><h2>Task details</h2></div>
+      <div class="panel-body">
+        <p class="mb-1"><strong>Category:</strong> {{ report.category_label() }}</p>
+        <p class="mb-1"><strong>Description:</strong> {{ report.description }}</p>
+        <p class="mb-1"><strong>Address:</strong> {{ report.address or 'See map' }}</p>
+        <p class="mb-0"><strong>Scheduled:</strong> {{ report.scheduled_date.strftime('%d %b %Y') if report.scheduled_date else 'Not set' }}</p>
+        {% if report.image_filename %}
+        <img class="report-image mt-3" src="{{ url_for('static', filename='uploads/' + report.image_filename) }}" alt="Evidence">
+        {% endif %}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><h2>Map</h2></div>
+      <div class="panel-body"><div id="task-map" class="map-box map-box-sm"></div></div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="panel mb-4">
+      <div class="panel-header"><h2>Update status</h2></div>
+      <div class="panel-body">
+        {% if report.status in ['assigned', 'scheduled', 'in_progress'] %}
+        <form method="post" class="mb-3">
+          <div class="mb-3">
+            <label class="form-label" for="note">Note (optional)</label>
+            <textarea class="form-control" name="note" id="note" rows="2"></textarea>
+          </div>
+          {% if report.status in ['assigned', 'scheduled'] %}
+          <button type="submit" name="action" value="start" class="btn btn-outline-wm w-100 mb-2">Start collection</button>
+          {% endif %}
+          <button type="submit" name="action" value="complete" class="btn btn-wm w-100">Mark completed</button>
+        </form>
+        {% else %}
+        <p class="text-secondary mb-0">This task is {{ report.status_label() }}. No further field actions required.</p>
+        {% endif %}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><h2>History</h2></div>
+      <div class="panel-body">
+        <ul class="timeline">
+          {% for h in report.history|reverse %}
+          <li>
+            <div class="fw-semibold">{{ h.new_status.replace('_', ' ')|title }}</div>
+            {% if h.note %}<div class="small">{{ h.note }}</div>{% endif %}
+            <div class="time">{{ h.created_at.strftime('%d %b %Y %H:%M') if h.created_at else '' }}</div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    initViewMap("task-map", {{ report.latitude }}, {{ report.longitude }}, {{ report.tracking_code|tojson }});
+  });
+</script>
+{% endblock %}

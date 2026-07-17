@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% from "macros.html" import urgency_badge, status_badge %}
+{% block title %}Optimize Collection — WasteTrack{% endblock %}
+{% block content %}
+<div class="mb-4">
+  <h1 class="h3 mb-1">Route / schedule optimization</h1>
+  <p class="text-secondary mb-0">
+    Select pending reports. The system uses Haversine distance + nearest-neighbour with urgency preference
+    to recommend an efficient collection order.
+  </p>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="panel">
+      <div class="panel-header"><h2>Candidate reports</h2></div>
+      <div class="panel-body">
+        <form method="post">
+          {% if candidates %}
+          <div class="table-responsive mb-3" style="max-height:360px;overflow:auto;">
+            <table class="table table-sm align-middle">
+              <thead class="table-light sticky-top">
+                <tr>
+                  <th><input type="checkbox" id="check-all" checked></th>
+                  <th>Code</th>
+                  <th>Urgency</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in candidates %}
+                <tr>
+                  <td>
+                    <input type="checkbox" name="report_ids" value="{{ r.id }}" class="report-check"
+                      {% if not selected_ids or r.id in selected_ids %}checked{% endif %}>
+                  </td>
+                  <td>
+                    <code>{{ r.tracking_code }}</code><br>
+                    <span class="small text-secondary">{{ r.category_label() }}</span>
+                  </td>
+                  <td>{{ urgency_badge(r.urgency) }}</td>
+                  <td>{{ status_badge(r.status) }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" name="apply_schedule" id="apply_schedule" value="1">
+            <label class="form-check-label" for="apply_schedule">Also schedule optimized order on date</label>
+          </div>
+          <div class="mb-3">
+            <input type="date" class="form-control" name="schedule_date">
+          </div>
+          <button type="submit" class="btn btn-wm w-100">Run optimization</button>
+          {% else %}
+          <p class="text-secondary mb-0">No verified/assigned/scheduled reports available to optimize.</p>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    {% if result %}
+    <div class="panel mb-4">
+      <div class="panel-header">
+        <h2>Recommended order</h2>
+        <span class="badge text-bg-success">{{ result.distance }} km</span>
+      </div>
+      <div class="panel-body">
+        <p class="small text-secondary">
+          Optimized path ≈ <strong>{{ result.distance }} km</strong>
+          {% if result.manual_distance is not none %}
+          · Manual (by report age) ≈ <strong>{{ result.manual_distance }} km</strong>
+          {% if result.manual_distance and result.distance is not none and result.manual_distance > 0 %}
+          · Saving ≈ <strong>{{ ((result.manual_distance - result.distance) / result.manual_distance * 100)|round(1) }}%</strong>
+          {% endif %}
+          {% endif %}
+        </p>
+        <div id="opt-map" class="map-box map-box-sm mb-3"></div>
+        {% for r in result.ordered %}
+        <div class="opt-stop">
+          <div class="num">{{ loop.index }}</div>
+          <div>
+            <div class="fw-semibold"><code>{{ r.tracking_code }}</code> · {{ r.category_label() }}</div>
+            <div class="small text-secondary">
+              {{ r.address or 'Map pin' }} · {{ r.urgency_label() }} urgency
+              {% if r.officer %} · {{ r.officer.name }}{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+    <div class="panel mb-4">
+      <div class="panel-body empty-state">
+        <i class="bi bi-sign-turn-right fs-1 d-block mb-2"></i>
+        Run optimization to see ordered stops and map path.
+      </div>
+    </div>
+    {% endif %}
+
+    {% if recent_runs %}
+    <div class="panel">
+      <div class="panel-header"><h2>Recent optimization runs</h2></div>
+      <div class="panel-body p-0">
+        <ul class="list-group list-group-flush">
+          {% for run in recent_runs %}
+          <li class="list-group-item d-flex justify-content-between">
+            <span class="small">{{ run.notes or 'Run' }} · {{ run.report_ids.split(',')|length }} stops</span>
+            <span class="small text-secondary">{{ run.estimated_distance_km }} km · {{ run.created_at.strftime('%d %b %H:%M') if run.created_at else '' }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const all = document.getElementById("check-all");
+    if (all) {
+      all.addEventListener("change", function () {
+        document.querySelectorAll(".report-check").forEach(function (c) { c.checked = all.checked; });
+      });
+    }
+    {% if result %}
+    const points = [
+      {% for r in result.ordered %}
+      { lat: {{ r.latitude }}, lng: {{ r.longitude }}, order: {{ loop.index }}, popup: {{ (loop.index|string + '. ' + r.tracking_code)|tojson }} },
+      {% endfor %}
+    ];
+    initMultiMarkerMap("opt-map", points, true);
+    {% endif %}
+  });
+</script>
+{% endblock %}

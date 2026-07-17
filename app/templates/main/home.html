@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}WasteTrack — Report & Optimize Waste Collection{% endblock %}
+
+{% block hero %}
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7">
+        <p class="text-uppercase small fw-semibold mb-2" style="letter-spacing:.08em;color:#5eead4;">
+          Community waste intelligence
+        </p>
+        <h1 class="display-5 mb-3">Report waste. Track response. Optimize collection.</h1>
+        <p class="lead mb-4">
+          A web system for residents to report waste issues, for authorities to manage cases,
+          and for collection teams to follow an efficient pickup order.
+        </p>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg fw-semibold">Report Waste</a>
+          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">Login</a>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        {% if show_demo_credentials %}
+        <div class="panel" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#ecfdf5;">
+          <div class="panel-body">
+            <h3 class="h5 mb-3">Demo accounts</h3>
+            <ul class="mb-0 small" style="line-height:1.8;">
+              <li><strong>Admin:</strong> admin@waste.local / admin123</li>
+              <li><strong>Officer:</strong> officer@waste.local / officer123</li>
+              <li><strong>Resident:</strong> resident@waste.local / resident123</li>
+            </ul>
+          </div>
+        </div>
+        {% else %}
+        <div class="panel" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#ecfdf5;">
+          <div class="panel-body">
+            <h3 class="h5 mb-3">For residents & authorities</h3>
+            <p class="small mb-2">Submit waste reports with map location, track response, and manage collection with optimized pickup order.</p>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-light fw-semibold">Sign in to continue</a>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block main_class %}container pb-4{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-5">
+  <div class="col-md-4">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h3 class="h5">Residents report</h3>
+      <p class="text-secondary mb-0">Submit category, description, map location and optional photo evidence in under a minute.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h3 class="h5">Authority manages</h3>
+      <p class="text-secondary mb-0">Admins verify, prioritize, assign officers and schedule pickups from one dashboard.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h3 class="h5">Optimized collection</h3>
+      <p class="text-secondary mb-0">A lightweight route module groups nearby reports and recommends collection order.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel mb-4">
+  <div class="panel-body">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-8">
+        <h2 class="h4">Built for final-year evaluation</h2>
+        <p class="text-secondary mb-0">
+          Role-based workflows, database-backed status history, Leaflet maps, and Haversine nearest-neighbour
+          optimization — aligned with the Waste Management Reporting and Collection Optimization proposal (ATBU).
+        </p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <a href="{{ url_for('main.about') }}" class="btn btn-outline-wm">Learn more</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
