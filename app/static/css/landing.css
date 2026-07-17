@@ -328,6 +328,17 @@
   transform: scale(1.05);
 }
 
+div.lp-service-static {
+  cursor: default;
+}
+div.lp-service-static:hover {
+  transform: none;
+  box-shadow: var(--wt-shadow);
+}
+div.lp-service-static:hover .lp-service-bg {
+  transform: none;
+}
+
 .lp-service-shade {
   position: absolute;
   inset: 0;

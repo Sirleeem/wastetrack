@@ -16,6 +16,7 @@
       <div class="panel-header"><h2>Candidate reports</h2></div>
       <div class="panel-body">
         <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           {% if candidates %}
           <div class="table-responsive mb-3" style="max-height:360px;overflow:auto;">
             <table class="table table-sm align-middle">

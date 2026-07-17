@@ -36,6 +36,7 @@
       </div>
       {% endif %}
       <form method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         {% if needs_key %}
         <div class="mb-3">
           <label class="form-label" for="setup_key">Setup secret</label>

@@ -28,11 +28,11 @@ services:
         value: "true"
       - key: SHOW_DEMO_CREDENTIALS
         value: "false"
-      # REQUIRED for demo logins (admin@waste.local / officer@waste.local / resident@waste.local)
+      # Keep false for presentation (no public demo accounts)
       - key: SEED_DEMO_DATA
-        value: "true"
+        value: "false"
       - key: SHOW_DEMO_CREDENTIALS
-        value: "true"
+        value: "false"
       # Optional: set these on Render to force-create your own admin/officer
       # - key: ADMIN_EMAIL
       #   value: you@email.com

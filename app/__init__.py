@@ -1,12 +1,13 @@
 import logging
 import os
+import secrets
 from pathlib import Path
 
 from flask import Flask, jsonify
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from app.config import ProductionConfig, get_config
-from app.extensions import db, login_manager
+from app.extensions import csrf, db, limiter, login_manager
 
 
 def create_app(config_class=None):
@@ -16,16 +17,14 @@ def create_app(config_class=None):
     app = Flask(__name__)
     app.config.from_object(config_class)
     _apply_runtime_env(app)
+    _harden_production(app)
 
-    # Engine options (pool for Postgres; thread-safe SQLite)
     uri = app.config["SQLALCHEMY_DATABASE_URI"]
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = ProductionConfig.init_engine_options(uri)
 
-    # Ensure folders exist
     Path(app.config["UPLOAD_FOLDER"]).mkdir(parents=True, exist_ok=True)
     (Path(app.root_path).parent / "instance").mkdir(parents=True, exist_ok=True)
 
-    # Trust X-Forwarded-* when behind nginx / load balancer
     if app.config.get("BEHIND_PROXY"):
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
@@ -33,6 +32,10 @@ def create_app(config_class=None):
 
     db.init_app(app)
     login_manager.init_app(app)
+    csrf.init_app(app)
+    # In-memory limiter is fine for single-instance Render free tier
+    app.config.setdefault("RATELIMIT_STORAGE_URI", "memory://")
+    limiter.init_app(app)
 
     from app.models import User
 
@@ -59,12 +62,10 @@ def create_app(config_class=None):
         return {
             "status_badge_class": status_badge_class,
             "urgency_badge_class": urgency_badge_class,
-            "show_demo_credentials": app.config.get("SHOW_DEMO_CREDENTIALS", False),
         }
 
     @app.get("/health")
     def health():
-        """Load balancer / container health check (no auth)."""
         from sqlalchemy import text
 
         try:
@@ -87,14 +88,28 @@ def create_app(config_class=None):
 
     @app.after_request
     def security_headers(response):
-        response.headers.setdefault("X-Content-Type-Options", "nosniff")
-        response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
-        response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
-        response.headers.setdefault("Permissions-Policy", "geolocation=(self)")
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "0"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "geolocation=(self), camera=(self), microphone=()"
+        response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+        response.headers["Cross-Origin-Resource-Policy"] = "same-site"
+        # Allow Bootstrap/Leaflet CDNs used by the UI
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; "
+            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com https://fonts.googleapis.com; "
+            "font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com data:; "
+            "img-src 'self' data: blob: https://*.tile.openstreetmap.org https://unpkg.com; "
+            "connect-src 'self'; "
+            "frame-ancestors 'none'; "
+            "base-uri 'self'; "
+            "form-action 'self'"
+        )
         if not app.debug:
-            response.headers.setdefault(
-                "Strict-Transport-Security",
-                "max-age=31536000; includeSubDomains",
+            response.headers["Strict-Transport-Security"] = (
+                "max-age=31536000; includeSubDomains"
             )
         return response
 
@@ -110,18 +125,29 @@ def _truthy(name: str, default: str = "false") -> bool:
 
 
 def _apply_runtime_env(app: Flask) -> None:
-    """Re-read env vars on every boot (class attributes are frozen at import)."""
-    from app.config import _normalize_database_url, _default_sqlite_uri
+    from app.config import _default_sqlite_uri, _normalize_database_url
 
-    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or app.config.get("SECRET_KEY")
+    secret = (os.environ.get("SECRET_KEY") or "").strip()
+    if secret:
+        app.config["SECRET_KEY"] = secret
+    elif not app.config.get("SECRET_KEY") or app.config["SECRET_KEY"] in (
+        "dev-only-change-me",
+        "waste-mgmt-dev-secret-change-in-prod",
+    ):
+        # Ephemeral secret if unset (sessions reset on restart) - log loudly
+        app.config["SECRET_KEY"] = secrets.token_hex(32)
+        app.logger.warning(
+            "SECRET_KEY was missing or default. Generated a temporary key. "
+            "Set a permanent SECRET_KEY in the environment for production."
+        )
+
     db_url = (os.environ.get("DATABASE_URL") or "").strip()
     app.config["SQLALCHEMY_DATABASE_URI"] = _normalize_database_url(
         db_url or app.config.get("SQLALCHEMY_DATABASE_URI") or _default_sqlite_uri()
     )
-    # Default ON so academic deploys always get admin@waste.local etc.
-    # Set SEED_DEMO_DATA=false on Render to disable.
-    app.config["SEED_DEMO_DATA"] = _truthy("SEED_DEMO_DATA", "true")
-    app.config["SHOW_DEMO_CREDENTIALS"] = _truthy("SHOW_DEMO_CREDENTIALS", "true")
+    # Presentation default: no public demo credentials
+    app.config["SEED_DEMO_DATA"] = _truthy("SEED_DEMO_DATA", "false")
+    app.config["SHOW_DEMO_CREDENTIALS"] = False
     app.config["BEHIND_PROXY"] = _truthy(
         "BEHIND_PROXY",
         "true" if not app.debug else "false",
@@ -130,6 +156,17 @@ def _apply_runtime_env(app: Flask) -> None:
         "SESSION_COOKIE_SECURE",
         "true" if not app.debug else "false",
     )
+    app.config["SESSION_COOKIE_HTTPONLY"] = True
+    app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+    app.config["REMEMBER_COOKIE_HTTPONLY"] = True
+    app.config["REMEMBER_COOKIE_SECURE"] = app.config["SESSION_COOKIE_SECURE"]
+    app.config["REMEMBER_COOKIE_SAMESITE"] = "Lax"
+    app.config["WTF_CSRF_TIME_LIMIT"] = 3600
+    app.config["WTF_CSRF_SSL_STRICT"] = bool(app.config["SESSION_COOKIE_SECURE"])
+    app.config["MAX_CONTENT_LENGTH"] = int(
+        os.environ.get("MAX_CONTENT_LENGTH", 5 * 1024 * 1024)
+    )
+
     app.config["ADMIN_EMAIL"] = os.environ.get("ADMIN_EMAIL", app.config.get("ADMIN_EMAIL"))
     app.config["ADMIN_PASSWORD"] = os.environ.get(
         "ADMIN_PASSWORD", app.config.get("ADMIN_PASSWORD") or ""
@@ -141,6 +178,15 @@ def _apply_runtime_env(app: Flask) -> None:
     app.config["SETUP_SECRET"] = os.environ.get("SETUP_SECRET", "")
 
 
+def _harden_production(app: Flask) -> None:
+    if app.debug:
+        return
+    app.config["PROPAGATE_EXCEPTIONS"] = False
+    # Prefer HTTPS cookies when behind Render/proxy
+    if app.config.get("BEHIND_PROXY"):
+        app.config["PREFERRED_URL_SCHEME"] = "https"
+
+
 def _configure_logging(app: Flask) -> None:
     level = logging.DEBUG if app.debug else logging.INFO
     logging.basicConfig(
@@ -148,10 +194,12 @@ def _configure_logging(app: Flask) -> None:
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     )
     app.logger.setLevel(level)
+    # Reduce noisy werkzeug in production
+    if not app.debug:
+        logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
 
 def _upsert_user(email: str, name: str, role: str, password: str, phone: str = "") -> bool:
-    """Create or update a user by email. Returns True if created."""
     from app.models import User
 
     email = (email or "").strip().lower()
@@ -175,23 +223,14 @@ def _upsert_user(email: str, name: str, role: str, password: str, phone: str = "
 
 
 def _bootstrap_users(app: Flask) -> None:
-    """Create demo accounts and/or env-based admin & officer accounts.
-
-    - SEED_DEMO_DATA=true → always ensure demo admin/officer/resident
-    - ADMIN_EMAIL + ADMIN_PASSWORD → always upsert admin (works even if residents exist)
-    - OFFICER_EMAIL + OFFICER_PASSWORD → always upsert officer
-    """
+    """Env-based admin/officer only. Demo seed optional via SEED_DEMO_DATA=true."""
     from app.models import User
 
     if app.config.get("SEED_DEMO_DATA"):
         created = _ensure_demo_users()
         if _reports_empty():
             _seed_sample_reports()
-        app.logger.info(
-            "Demo accounts ready: admin@waste.local / officer@waste.local / "
-            "resident@waste.local (password ends with 123). updated=%s",
-            created,
-        )
+        app.logger.info("Demo seed enabled (internal). users_touched=%s", created)
 
     admin_pw = (app.config.get("ADMIN_PASSWORD") or "").strip()
     admin_email = (app.config.get("ADMIN_EMAIL") or "").strip().lower()
@@ -202,15 +241,10 @@ def _bootstrap_users(app: Flask) -> None:
             "admin",
             admin_pw,
         )
-        app.logger.info(
-            "Admin account %s: %s",
-            "created" if created else "updated",
-            admin_email,
-        )
-    elif not User.query.filter_by(role="admin").first() and not app.config.get("SEED_DEMO_DATA"):
+        app.logger.info("Admin account %s: %s", "created" if created else "updated", admin_email)
+    elif not User.query.filter_by(role="admin").first():
         app.logger.warning(
-            "No admin user in database. Set SEED_DEMO_DATA=true or "
-            "ADMIN_EMAIL + ADMIN_PASSWORD, or open /auth/setup with SETUP_SECRET."
+            "No admin user. Set ADMIN_EMAIL + ADMIN_PASSWORD, or use /auth/setup with SETUP_SECRET."
         )
 
     officer_pw = (app.config.get("OFFICER_PASSWORD") or "").strip()
@@ -223,9 +257,7 @@ def _bootstrap_users(app: Flask) -> None:
             officer_pw,
         )
         app.logger.info(
-            "Officer account %s: %s",
-            "created" if created else "updated",
-            officer_email,
+            "Officer account %s: %s", "created" if created else "updated", officer_email
         )
 
 
@@ -236,7 +268,6 @@ def _reports_empty() -> bool:
 
 
 def _ensure_demo_users() -> int:
-    """Create demo users if missing; always reset known demo passwords."""
     from app.models import User
 
     specs = [
@@ -317,7 +348,16 @@ def _seed_sample_reports() -> None:
         ("overflow", "Skip nearly full at Fadaman Mada housing area", 10.3088, 9.8488, "high"),
         ("illegal_dump", "Construction debris dumped on open plot along Jos Road", 10.3175, 9.8550, "medium"),
     ]
-
+    addresses = [
+        "Wunti Market, Bauchi",
+        "Yelwa Junction, Bauchi",
+        "Railway Quarters, Bauchi",
+        "New GRA, Bauchi",
+        "ATBU Main Gate area, Bauchi",
+        "Central Market roadside, Bauchi",
+        "Fadaman Mada, Bauchi",
+        "Along Jos Road, Bauchi",
+    ]
     statuses_cycle = ["submitted", "verified", "assigned", "scheduled", "in_progress", "completed"]
     for i, (cat, desc, lat, lon, urg) in enumerate(samples):
         status = statuses_cycle[i % len(statuses_cycle)]
@@ -325,16 +365,7 @@ def _seed_sample_reports() -> None:
             tracking_code=generate_tracking_code(),
             category=cat,
             description=desc,
-            address=[
-                "Wunti Market, Bauchi",
-                "Yelwa Junction, Bauchi",
-                "Railway Quarters, Bauchi",
-                "New GRA, Bauchi",
-                "ATBU Main Gate area, Bauchi",
-                "Central Market roadside, Bauchi",
-                "Fadaman Mada, Bauchi",
-                "Along Jos Road, Bauchi",
-            ][i],
+            address=addresses[i],
             latitude=lat + random.uniform(-0.002, 0.002),
             longitude=lon + random.uniform(-0.002, 0.002),
             urgency=urg,

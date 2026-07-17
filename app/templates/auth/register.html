@@ -8,6 +8,7 @@
     </div>
     <div class="panel-body">
       <form method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="mb-3">
           <label class="form-label" for="name">Full name</label>
           <input type="text" class="form-control form-control-lg" id="name" name="name" required autocomplete="name">
@@ -22,11 +23,11 @@
         </div>
         <div class="mb-3">
           <label class="form-label" for="password">Password</label>
-          <input type="password" class="form-control form-control-lg" id="password" name="password" required minlength="6" autocomplete="new-password">
+          <input type="password" class="form-control form-control-lg" id="password" name="password" required minlength="8" autocomplete="new-password">
         </div>
         <div class="mb-3">
           <label class="form-label" for="confirm">Confirm password</label>
-          <input type="password" class="form-control form-control-lg" id="confirm" name="confirm" required minlength="6" autocomplete="new-password">
+          <input type="password" class="form-control form-control-lg" id="confirm" name="confirm" required minlength="8" autocomplete="new-password">
         </div>
         <button type="submit" class="btn btn-wm btn-lg w-100">Create account</button>
       </form>
