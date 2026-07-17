@@ -45,7 +45,19 @@ Open **http://127.0.0.1:5000**
 
 ---
 
-## Production & deploy
+## Deploy on Render (recommended)
+
+Step-by-step: **[DEPLOY-RENDER.md](DEPLOY-RENDER.md)**
+
+Quick settings once the GitHub repo is connected:
+
+| Field | Value |
+|--------|--------|
+| Build | `pip install -r requirements.txt` |
+| Start | `gunicorn -c gunicorn.conf.py wsgi:app` |
+| Health | `/health` |
+
+## Production & deploy (general)
 
 This repo is **production-ready**. See **[DEPLOY.md](DEPLOY.md)** for:
 
