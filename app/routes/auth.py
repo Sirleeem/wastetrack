@@ -7,17 +7,29 @@ from app.models import User
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
+def _dashboard_for(user: User) -> str:
+    if user.is_admin:
+        return url_for("admin.dashboard")
+    if user.is_officer:
+        return url_for("officer.dashboard")
+    return url_for("resident.dashboard")
+
+
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("main.home"))
+        return redirect(_dashboard_for(current_user))
 
     if request.method == "POST":
         email = (request.form.get("email") or "").strip().lower()
         password = request.form.get("password") or ""
         user = User.query.filter_by(email=email).first()
         if not user:
-            flash("No account found with that email. Register as a resident, or create admin/officer via /auth/setup.", "danger")
+            flash(
+                "No account found with that email. "
+                "Register as a resident, or create admin/officer at /auth/setup.",
+                "danger",
+            )
         elif not user.is_active_user:
             flash("This account is inactive. Contact an administrator.", "danger")
         elif not user.check_password(password):
@@ -28,12 +40,7 @@ def login():
             next_url = request.args.get("next")
             if next_url:
                 return redirect(next_url)
-            # After login go to role workspace (homepage stays public via logo/Home)
-            if user.is_admin:
-                return redirect(url_for("admin.dashboard"))
-            if user.is_officer:
-                return redirect(url_for("officer.dashboard"))
-            return redirect(url_for("resident.dashboard"))
+            return redirect(_dashboard_for(user))
 
     return render_template("auth/login.html")
 
@@ -41,7 +48,7 @@ def login():
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for("main.home"))
+        return redirect(_dashboard_for(current_user))
 
     if request.method == "POST":
         name = (request.form.get("name") or "").strip()
@@ -80,33 +87,31 @@ def logout():
 
 @auth_bp.route("/setup", methods=["GET", "POST"])
 def setup():
-    """Create admin or officer without being logged in.
+    """Create or update admin/officer accounts.
 
-    Protect with SETUP_SECRET env var (Render → Environment).
-    Open: /auth/setup?key=YOUR_SETUP_SECRET
+    - First admin: open /auth/setup (no key needed if no admin exists yet)
+    - After that: set SETUP_SECRET on Render and open
+      /auth/setup?key=YOUR_SETUP_SECRET
     """
     expected = (current_app.config.get("SETUP_SECRET") or "").strip()
-    provided = (
-        (request.args.get("key") or request.form.get("setup_key") or "").strip()
-    )
-
-    # Allow setup without secret only if there is no admin yet
+    provided = (request.args.get("key") or request.form.get("setup_key") or "").strip()
     has_admin = User.query.filter_by(role="admin").first() is not None
     secret_ok = bool(expected) and provided == expected
-    open_bootstrap = not has_admin and not expected
-
-    if has_admin and not secret_ok:
-        flash(
-            "Setup is locked. Set SETUP_SECRET in Render, then open "
-            "/auth/setup?key=YOUR_SECRET",
-            "warning",
-        )
-        return redirect(url_for("auth.login"))
+    # First admin may be created without a secret; later needs SETUP_SECRET
+    allowed = (not has_admin) or secret_ok or (not expected and not has_admin)
 
     if request.method == "POST":
-        if has_admin and not secret_ok:
-            flash("Invalid setup key.", "danger")
-            return redirect(url_for("auth.login"))
+        form_key = (request.form.get("setup_key") or "").strip()
+        post_ok = (not has_admin) or (
+            bool(expected) and form_key == expected
+        ) or (bool(expected) and provided == expected)
+        if has_admin and not post_ok:
+            flash("Invalid setup key. Use the SETUP_SECRET from Render environment.", "danger")
+            return render_template(
+                "auth/setup.html",
+                needs_key=True,
+                setup_blocked=False,
+            )
 
         name = (request.form.get("name") or "").strip()
         email = (request.form.get("email") or "").strip().lower()
@@ -139,8 +144,24 @@ def setup():
             )
             return redirect(url_for("auth.login"))
 
+    # GET
+    if has_admin and expected and not secret_ok:
+        # Show form with key field (do not hard-redirect)
+        return render_template(
+            "auth/setup.html",
+            needs_key=True,
+            setup_blocked=False,
+            hint_key=True,
+        )
+    if has_admin and not expected:
+        return render_template(
+            "auth/setup.html",
+            needs_key=False,
+            setup_blocked=True,
+        )
+
     return render_template(
         "auth/setup.html",
-        needs_key=has_admin or bool(expected),
-        open_bootstrap=open_bootstrap,
+        needs_key=bool(expected) and has_admin,
+        setup_blocked=False,
     )

@@ -118,14 +118,10 @@ def _apply_runtime_env(app: Flask) -> None:
     app.config["SQLALCHEMY_DATABASE_URI"] = _normalize_database_url(
         db_url or app.config.get("SQLALCHEMY_DATABASE_URI") or _default_sqlite_uri()
     )
-    app.config["SEED_DEMO_DATA"] = _truthy(
-        "SEED_DEMO_DATA",
-        "true" if app.debug else "false",
-    )
-    app.config["SHOW_DEMO_CREDENTIALS"] = _truthy(
-        "SHOW_DEMO_CREDENTIALS",
-        "true" if app.debug else "false",
-    )
+    # Default ON so academic deploys always get admin@waste.local etc.
+    # Set SEED_DEMO_DATA=false on Render to disable.
+    app.config["SEED_DEMO_DATA"] = _truthy("SEED_DEMO_DATA", "true")
+    app.config["SHOW_DEMO_CREDENTIALS"] = _truthy("SHOW_DEMO_CREDENTIALS", "true")
     app.config["BEHIND_PROXY"] = _truthy(
         "BEHIND_PROXY",
         "true" if not app.debug else "false",
