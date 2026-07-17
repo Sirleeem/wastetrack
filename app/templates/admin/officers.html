@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Officers — WasteTrack{% endblock %}
+{% block title %}Officers - WasteTrack{% endblock %}
 {% block content %}
 <div class="row g-4">
   <div class="col-lg-7">
@@ -22,7 +22,7 @@
               <tr>
                 <td>{{ o.name }}</td>
                 <td class="small">{{ o.email }}</td>
-                <td class="small">{{ o.phone or '—' }}</td>
+                <td class="small">{{ o.phone or '-' }}</td>
                 <td>
                   {% if o.is_active_user %}
                   <span class="badge bg-success">Active</span>

@@ -1,5 +1,5 @@
 /* ============================================================
-   WasteTrack landing — inspired by LAWMA (authority) + Recorra (modern ops)
+   WasteTrack landing - inspired by LAWMA (authority) + Recorra (modern ops)
    Green authority base · lime accent CTAs · photo-forward sections
    ============================================================ */
 
@@ -37,7 +37,7 @@
   letter-spacing: -0.02em;
 }
 
-/* —— Top authority strip (LAWMA-style) —— */
+/* -- Top authority strip (LAWMA-style) -- */
 .lp-topstrip {
   background: var(--wt-green-deep);
   color: rgba(255, 255, 255, 0.9);
@@ -60,7 +60,7 @@
   text-decoration: none !important;
 }
 
-/* —— Hero (Recorra-style: bold photo + CTA + trust chips) —— */
+/* -- Hero (Recorra-style: bold photo + CTA + trust chips) -- */
 .lp-hero {
   position: relative;
   min-height: min(72vh, 560px);
@@ -194,7 +194,7 @@
   color: var(--wt-lime);
 }
 
-/* —— Section shells —— */
+/* -- Section shells -- */
 .lp-section {
   padding: 3.5rem 0;
 }
@@ -248,7 +248,7 @@
   color: rgba(232, 245, 236, 0.82);
 }
 
-/* —— Why / value props with photo (Recorra) —— */
+/* -- Why / value props with photo (Recorra) -- */
 .lp-why-grid {
   display: grid;
   gap: 1rem;
@@ -296,7 +296,7 @@
   line-height: 1.55;
 }
 
-/* —— What we do (LAWMA services grid) —— */
+/* -- What we do (LAWMA services grid) -- */
 .lp-services {
   display: grid;
   gap: 1rem;
@@ -373,7 +373,7 @@
   font-size: 0.9rem;
 }
 
-/* —— Impact stats (Recorra numbers) —— */
+/* -- Impact stats (Recorra numbers) -- */
 .lp-stats {
   display: grid;
   gap: 1rem;
@@ -401,7 +401,7 @@
   line-height: 1.4;
 }
 
-/* —— News / events (LAWMA) —— */
+/* -- News / events (LAWMA) -- */
 .lp-news {
   display: grid;
   gap: 1rem;
@@ -456,7 +456,7 @@
   font-size: 0.92rem;
 }
 
-/* —— Mission / about split (LAWMA institutional) —— */
+/* -- Mission / about split (LAWMA institutional) -- */
 .lp-mission {
   display: grid;
   gap: 1.5rem;
@@ -519,7 +519,7 @@
   font-weight: 800;
 }
 
-/* —— Demo notice —— */
+/* -- Demo notice -- */
 .lp-demo {
   border: 1px solid var(--wt-line);
   border-left: 5px solid var(--wt-lime);
@@ -568,7 +568,7 @@
   padding: 0;
 }
 
-/* —— Closing CTA (Recorra revolution band) —— */
+/* -- Closing CTA (Recorra revolution band) -- */
 .lp-cta {
   position: relative;
   overflow: hidden;
@@ -613,7 +613,7 @@
   justify-content: center;
 }
 
-/* —— Cleaner community strip —— */
+/* -- Cleaner community strip -- */
 .lp-initiatives {
   display: grid;
   gap: 1rem;

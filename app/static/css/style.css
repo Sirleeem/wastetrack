@@ -1,5 +1,5 @@
 /* ============================================================
-   WasteTrack — civic field-ops design system
+   WasteTrack - civic field-ops design system
    Warm paper surfaces · deep forest · safety amber
    ============================================================ */
 
@@ -1554,7 +1554,7 @@ body:not(.is-guest) .footer-wm {
   }
 }
 
-/* Square UI — no rounded corners */
+/* Square UI - no rounded corners */
 .panel, .stat-card, .step-card, .filter-bar, .opt-stop, .auth-wrap .panel,
 .btn, .btn-sm, .btn-lg, .form-control, .form-select, .badge, .alert,
 .brand-mark, .icon-btn, .user-chip, .nav-desktop a, .bottom-nav a,

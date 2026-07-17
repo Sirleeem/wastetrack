@@ -7,11 +7,11 @@
 - Demo accounts ready (SEED_DEMO_DATA=true by default)
 - Optional free Postgres later
 
-**Note:** Free web services **spin down after ~15 minutes** idle. First request after sleep can take 30–60 seconds — normal for free tier.
+**Note:** Free web services **spin down after ~15 minutes** idle. First request after sleep can take 30-60 seconds - normal for free tier.
 
 ---
 
-## Part A — Put the project on GitHub
+## Part A - Put the project on GitHub
 
 Render deploys from a Git repository.
 
@@ -48,7 +48,7 @@ GitHub will ask you to sign in (browser or personal access token).
 
 ---
 
-## Part B — Deploy on Render
+## Part B - Deploy on Render
 
 ### 1. Sign up
 
@@ -97,7 +97,7 @@ Health check: `https://YOUR-URL.onrender.com/health`
 
 ---
 
-## Part C — Log in after deploy
+## Part C - Log in after deploy
 
 With `SEED_DEMO_DATA=true`:
 
@@ -158,7 +158,7 @@ Render auto-deploys from `main` if Auto-Deploy is on.
 |---------|-----|
 | Build fails on `psycopg` | Ensure `requirements.txt` is the project one; rebuild |
 | App crashes on boot | Check logs; confirm `SECRET_KEY` is set |
-| 502 / spin-up delay | Free tier cold start — wait 1 minute and refresh |
+| 502 / spin-up delay | Free tier cold start - wait 1 minute and refresh |
 | No login works | Confirm `SEED_DEMO_DATA=true` or set `ADMIN_EMAIL` / `ADMIN_PASSWORD` |
 | Database error | Clear bad `DATABASE_URL` or fix Postgres URL |
 | Health check fails | Ensure start command is `gunicorn -c gunicorn.conf.py wsgi:app` |

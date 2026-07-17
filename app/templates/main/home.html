@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block title %}WasteTrack Bauchi — Report refuse & track collection{% endblock %}
+{% block title %}WasteTrack Bauchi - Report refuse & track collection{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}?v=3">
-<link rel="preload" as="image" href="https://images.unsplash.com/photo-1618828665011-0abd973f7bb8?auto=format&fit=crop&w=1800&q=80">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}?v=4">
+<link rel="preload" as="image" href="{{ url_for('static', filename='images/bauchi/suburb.jpg') }}">
 {% endblock %}
 
 {% block hero %}{% endblock %}
@@ -22,13 +22,13 @@
   </div>
 </div>
 
-{# Hero — local focus, no canvas #}
+{# Hero - Bauchi photos (local static files) #}
 <section class="lp-hero" aria-label="Introduction">
   <div
     class="lp-hero-bg"
-    style="background-image:url('https://images.unsplash.com/photo-1618828665011-0abd973f7bb8?auto=format&fit=crop&w=1920&q=80');"
+    style="background-image:url('{{ url_for('static', filename='images/bauchi/suburb.jpg') }}');"
     role="img"
-    aria-label="Nigerian city street and community environment"
+    aria-label="Suburban settlement in Bauchi area, Nigeria"
   ></div>
   <div class="lp-hero-overlay"></div>
   <div class="container lp-hero-content">
@@ -66,7 +66,7 @@
   <div class="container">
     <header class="lp-section-head">
       <p class="lp-kicker">Why Bauchi needs this</p>
-      <h2>From market gate to Yelwa road — one clear channel</h2>
+      <h2>From market gate to Yelwa road - one clear channel</h2>
       <p>
         Many refuse complaints still move by phone call or word of mouth. That makes it hard to
         confirm the place, prioritise urgent sites, or know when a team has finished the job.
@@ -76,12 +76,12 @@
     <div class="lp-why-grid">
       <article class="lp-why-card">
         <img
-          src="https://images.unsplash.com/photo-1577948000111-9c970dfe3743?auto=format&fit=crop&w=900&q=80"
-          alt="Busy West African market area"
+          src="{{ url_for('static', filename='images/bauchi/suburb.jpg') }}"
+          alt="Suburban town view, Bauchi area"
           loading="lazy" width="900" height="600"
         >
         <div class="lp-why-body">
-          <div class="lp-why-num">01 — Residents</div>
+          <div class="lp-why-num">01 - Residents</div>
           <h3>Report where the problem is</h3>
           <p>
             Drop a pin near the market, mosque, motor park, or estate road. Add a short description
@@ -92,12 +92,12 @@
 
       <article class="lp-why-card">
         <img
-          src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=900&q=80"
-          alt="Community street in West Africa"
+          src="{{ url_for('static', filename='images/bauchi/college.jpg') }}"
+          alt="A college in Bauchi"
           loading="lazy" width="900" height="600"
         >
         <div class="lp-why-body">
-          <div class="lp-why-num">02 — Collection team</div>
+          <div class="lp-why-num">02 - Collection team</div>
           <h3>Clear assigned stops on the ground</h3>
           <p>
             Officers see mapped tasks for Bauchi areas, start work on site, and mark completion
@@ -108,12 +108,12 @@
 
       <article class="lp-why-card">
         <img
-          src="https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?auto=format&fit=crop&w=900&q=80"
-          alt="Northern Nigeria landscape and settlement"
+          src="{{ url_for('static', filename='images/bauchi/lake.jpg') }}"
+          alt="Lake and farmland in Bauchi, Nigeria"
           loading="lazy" width="900" height="600"
         >
         <div class="lp-why-body">
-          <div class="lp-why-num">03 — Authority</div>
+          <div class="lp-why-num">03 - Authority</div>
           <h3>Plan collection with better visibility</h3>
           <p>
             Administrators verify cases, set urgency, assign officers, and group nearby reports
@@ -136,18 +136,18 @@
 
     <div class="lp-services">
       <a class="lp-service" href="{% if current_user.is_authenticated and current_user.is_resident %}{{ url_for('resident.new_report') }}{% else %}{{ url_for('auth.register') }}{% endif %}">
-        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1577948000111-9c970dfe3743?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-bg" style="background-image:url('{{ url_for('static', filename='images/bauchi/suburb.jpg') }}');"></div>
         <div class="lp-service-shade"></div>
         <div class="lp-service-body">
           <div class="lp-service-icon"><i class="bi bi-geo-alt-fill"></i></div>
           <h3>Resident report</h3>
-          <p>Illegal dump, overflow, blocked drainage, household refuse — pin it on the map.</p>
+          <p>Illegal dump, overflow, blocked drainage, household refuse - pin it on the map.</p>
           <span class="lp-service-link">Report now →</span>
         </div>
       </a>
 
       <a class="lp-service" href="{{ url_for('auth.login') }}">
-        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1523805009345-7448845a9e53?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-bg" style="background-image:url('{{ url_for('static', filename='images/bauchi/hospital.jpg') }}');"></div>
         <div class="lp-service-shade"></div>
         <div class="lp-service-body">
           <div class="lp-service-icon"><i class="bi bi-building"></i></div>
@@ -158,7 +158,7 @@
       </a>
 
       <a class="lp-service" href="{{ url_for('auth.login') }}">
-        <div class="lp-service-bg" style="background-image:url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="lp-service-bg" style="background-image:url('{{ url_for('static', filename='images/bauchi/gubi.jpg') }}');"></div>
         <div class="lp-service-shade"></div>
         <div class="lp-service-body">
           <div class="lp-service-icon"><i class="bi bi-truck"></i></div>
@@ -182,11 +182,11 @@
     <div class="lp-stats">
       <div class="lp-stat">
         <strong>Bauchi metropolis</strong>
-        <span>Default map centre for reporting (approx. 10.32°N, 9.84°E) — covers town roads, housing areas, and public spaces across the city</span>
+        <span>Default map centre for reporting (approx. 10.32°N, 9.84°E) - covers town roads, housing areas, and public spaces across the city</span>
       </div>
       <div class="lp-stat">
         <strong>Local landmarks</strong>
-        <span>Markets, motor parks, estates, drains, and public spaces — e.g. Wunti, Yelwa, Railway Quarters, Central Market, Jos Road</span>
+        <span>Markets, motor parks, estates, drains, and public spaces - e.g. Wunti, Yelwa, Railway Quarters, Central Market, Jos Road</span>
       </div>
     </div>
   </div>
@@ -198,8 +198,8 @@
     <div class="lp-mission">
       <figure>
         <img
-          src="https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?auto=format&fit=crop&w=1200&q=80"
-          alt="Northern Nigeria community setting"
+          src="{{ url_for('static', filename='images/bauchi/lake.jpg') }}"
+          alt="Lake within a farm at Bauchi, Nigeria"
           width="1200" height="800" loading="lazy"
         >
       </figure>
@@ -208,7 +208,7 @@
         <h2>A practical tool for cleaner streets and better response</h2>
         <p>
           WasteTrack helps close the gap between people who see refuse problems and the teams
-          responsible for clearing them — with records you can follow from submission to completion.
+          responsible for clearing them - with records you can follow from submission to completion.
         </p>
         <ul class="lp-checklist">
           <li>Report overflow, illegal dumping, and blocked drains</li>
@@ -231,21 +231,21 @@
     </header>
     <div class="lp-initiatives">
       <article class="lp-init">
-        <img src="https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=800&q=80" alt="Refuse accumulation" loading="lazy">
+        <img src="{{ url_for('static', filename='images/bauchi/suburb.jpg') }}" alt="Bauchi area settlement" loading="lazy">
         <div class="lp-init-body">
           <h3>Overflowing public bins</h3>
           <p>Report full skips and scattered refuse around bus stops, markets, and estates.</p>
         </div>
       </article>
       <article class="lp-init">
-        <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=800&q=80" alt="Waste collection truck" loading="lazy">
+        <img src="{{ url_for('static', filename='images/bauchi/hospital.jpg') }}" alt="ATB Teaching Hospital Bauchi" loading="lazy">
         <div class="lp-init-body">
           <h3>Missed or delayed collection</h3>
           <p>Flag locations where refuse has waited too long so crews can be scheduled.</p>
         </div>
       </article>
       <article class="lp-init">
-        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80" alt="Drainage and environment" loading="lazy">
+        <img src="{{ url_for('static', filename='images/bauchi/gubi.jpg') }}" alt="Gubi Dam, Bauchi" loading="lazy">
         <div class="lp-init-body">
           <h3>Blocked drains &amp; illegal dumps</h3>
           <p>Pin drainage blockages and open dumps that threaten health during the rains.</p>

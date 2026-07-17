@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}About — WasteTrack Bauchi{% endblock %}
+{% block title %}About - WasteTrack Bauchi{% endblock %}
 {% block content %}
 <div class="page-head">
   <div>
@@ -45,8 +45,8 @@
       <img
         class="w-100 rounded border"
         style="object-fit:cover;max-height:280px;border-color:var(--line)!important;"
-        src="https://images.unsplash.com/photo-1618828665011-0abd973f7bb8?auto=format&fit=crop&w=1000&q=80"
-        alt="Nigerian urban environment"
+        src="{{ url_for('static', filename='images/bauchi/suburb.jpg') }}"
+        alt="Suburban area in Bauchi, Nigeria"
         loading="lazy"
       >
     </figure>

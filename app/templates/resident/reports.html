@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% from "macros.html" import status_badge, urgency_badge, empty %}
-{% block title %}My Reports — WasteTrack{% endblock %}
+{% block title %}My Reports - WasteTrack{% endblock %}
 {% block content %}
 <div class="page-head">
   <div>
@@ -35,7 +35,7 @@
             <td data-label="Location" class="small text-secondary">{{ r.address or (r.latitude|round(4)|string + ', ' + r.longitude|round(4)|string) }}</td>
             <td data-label="Urgency">{{ urgency_badge(r.urgency) }}</td>
             <td data-label="Status">{{ status_badge(r.status) }}</td>
-            <td data-label="Submitted" class="small">{{ r.created_at.strftime('%d %b %Y %H:%M') if r.created_at else '—' }}</td>
+            <td data-label="Submitted" class="small">{{ r.created_at.strftime('%d %b %Y %H:%M') if r.created_at else '-' }}</td>
             <td class="td-actions"><a class="btn btn-sm btn-outline-wm" href="{{ url_for('resident.report_detail', report_id=r.id) }}">Details</a></td>
           </tr>
           {% endfor %}

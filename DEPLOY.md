@@ -1,4 +1,4 @@
-# WasteTrack — Production & Deployment Guide
+# WasteTrack - Production & Deployment Guide
 
 This project is deploy-ready with:
 

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% from "macros.html" import status_badge, urgency_badge, empty %}
-{% block title %}Officer Dashboard — WasteTrack{% endblock %}
+{% block title %}Officer Dashboard - WasteTrack{% endblock %}
 {% block content %}
 <div class="page-head">
   <div>
@@ -38,8 +38,8 @@
             <td data-label="Category">{{ t.category_label() }}</td>
             <td data-label="Urgency">{{ urgency_badge(t.urgency) }}</td>
             <td data-label="Status">{{ status_badge(t.status) }}</td>
-            <td data-label="Scheduled">{{ t.scheduled_date.strftime('%d %b %Y') if t.scheduled_date else '—' }}</td>
-            <td data-label="Stop #">{{ t.collection_order or '—' }}</td>
+            <td data-label="Scheduled">{{ t.scheduled_date.strftime('%d %b %Y') if t.scheduled_date else '-' }}</td>
+            <td data-label="Stop #">{{ t.collection_order or '-' }}</td>
             <td class="td-actions"><a class="btn btn-sm btn-amber" href="{{ url_for('officer.task_detail', report_id=t.id) }}">Open</a></td>
           </tr>
           {% endfor %}

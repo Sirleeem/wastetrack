@@ -2,13 +2,13 @@
 
 **Waste Management Reporting & Collection Optimization System**
 
-Final-year project prototype — Department of Computer Science, Abubakar Tafawa Balewa University Bauchi.
+Final-year project prototype - Department of Computer Science, Abubakar Tafawa Balewa University Bauchi.
 
 Web application for:
 
-- **Residents** — geolocated waste reports (category, description, map, optional photo) + status tracking  
-- **Administrators** — verify, assign, schedule, analytics, route optimization  
-- **Collection officers** — task list, start/complete workflow  
+- **Residents** - geolocated waste reports (category, description, map, optional photo) + status tracking  
+- **Administrators** - verify, assign, schedule, analytics, route optimization  
+- **Collection officers** - task list, start/complete workflow  
 
 Optimization uses **Haversine distance + nearest-neighbour** with urgency preference.
 

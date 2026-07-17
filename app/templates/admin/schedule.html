@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% from "macros.html" import status_badge, urgency_badge, empty %}
-{% block title %}Schedule — WasteTrack{% endblock %}
+{% block title %}Schedule - WasteTrack{% endblock %}
 {% block content %}
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
   <h1 class="h3 mb-0">Pickup schedule</h1>
@@ -39,14 +39,14 @@
         <tbody>
           {% for r in reports %}
           <tr>
-            <td>{{ r.collection_order or '—' }}</td>
-            <td>{{ r.scheduled_date.strftime('%d %b %Y') if r.scheduled_date else '—' }}</td>
+            <td>{{ r.collection_order or '-' }}</td>
+            <td>{{ r.scheduled_date.strftime('%d %b %Y') if r.scheduled_date else '-' }}</td>
             <td><code>{{ r.tracking_code }}</code></td>
             <td>{{ r.category_label() }}</td>
             <td>{{ urgency_badge(r.urgency) }}</td>
             <td>{{ status_badge(r.status) }}</td>
-            <td class="small">{{ r.officer.name if r.officer else '—' }}</td>
-            <td class="small text-secondary">{{ r.address or '—' }}</td>
+            <td class="small">{{ r.officer.name if r.officer else '-' }}</td>
+            <td class="small text-secondary">{{ r.address or '-' }}</td>
             <td><a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin.report_detail', report_id=r.id) }}">Open</a></td>
           </tr>
           {% endfor %}

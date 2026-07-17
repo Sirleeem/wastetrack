@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% from "macros.html" import status_badge, urgency_badge %}
-{% block title %}Manage {{ report.tracking_code }} — WasteTrack{% endblock %}
+{% block title %}Manage {{ report.tracking_code }} - WasteTrack{% endblock %}
 {% block content %}
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
   <div>
@@ -19,11 +19,11 @@
           <dt class="col-sm-4">Reporter</dt><dd class="col-sm-8">{{ report.reporter.name }} ({{ report.reporter.email }})</dd>
           <dt class="col-sm-4">Category</dt><dd class="col-sm-8">{{ report.category_label() }}</dd>
           <dt class="col-sm-4">Description</dt><dd class="col-sm-8">{{ report.description }}</dd>
-          <dt class="col-sm-4">Address</dt><dd class="col-sm-8">{{ report.address or '—' }}</dd>
+          <dt class="col-sm-4">Address</dt><dd class="col-sm-8">{{ report.address or '-' }}</dd>
           <dt class="col-sm-4">Officer</dt><dd class="col-sm-8">{{ report.officer.name if report.officer else 'Unassigned' }}</dd>
-          <dt class="col-sm-4">Scheduled</dt><dd class="col-sm-8">{{ report.scheduled_date.strftime('%d %b %Y') if report.scheduled_date else '—' }}</dd>
-          <dt class="col-sm-4">Collection order</dt><dd class="col-sm-8">{{ report.collection_order or '—' }}</dd>
-          <dt class="col-sm-4">Admin notes</dt><dd class="col-sm-8">{{ report.admin_notes or '—' }}</dd>
+          <dt class="col-sm-4">Scheduled</dt><dd class="col-sm-8">{{ report.scheduled_date.strftime('%d %b %Y') if report.scheduled_date else '-' }}</dd>
+          <dt class="col-sm-4">Collection order</dt><dd class="col-sm-8">{{ report.collection_order or '-' }}</dd>
+          <dt class="col-sm-4">Admin notes</dt><dd class="col-sm-8">{{ report.admin_notes or '-' }}</dd>
         </dl>
         {% if report.image_filename %}
         <img class="report-image mt-3" src="{{ url_for('static', filename='uploads/' + report.image_filename) }}" alt="Evidence">

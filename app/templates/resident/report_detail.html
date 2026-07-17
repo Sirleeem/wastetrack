@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% from "macros.html" import status_badge, urgency_badge %}
-{% block title %}Report {{ report.tracking_code }} — WasteTrack{% endblock %}
+{% block title %}Report {{ report.tracking_code }} - WasteTrack{% endblock %}
 {% block content %}
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
   <div>
@@ -21,11 +21,11 @@
         <dl class="row mb-0">
           <dt class="col-sm-4">Category</dt><dd class="col-sm-8">{{ report.category_label() }}</dd>
           <dt class="col-sm-4">Description</dt><dd class="col-sm-8">{{ report.description }}</dd>
-          <dt class="col-sm-4">Address</dt><dd class="col-sm-8">{{ report.address or '—' }}</dd>
+          <dt class="col-sm-4">Address</dt><dd class="col-sm-8">{{ report.address or '-' }}</dd>
           <dt class="col-sm-4">Coordinates</dt>
           <dd class="col-sm-8"><code>{{ '%.5f'|format(report.latitude) }}, {{ '%.5f'|format(report.longitude) }}</code></dd>
           <dt class="col-sm-4">Submitted</dt>
-          <dd class="col-sm-8">{{ report.created_at.strftime('%d %b %Y %H:%M') if report.created_at else '—' }}</dd>
+          <dd class="col-sm-8">{{ report.created_at.strftime('%d %b %Y %H:%M') if report.created_at else '-' }}</dd>
           {% if report.scheduled_date %}
           <dt class="col-sm-4">Scheduled</dt><dd class="col-sm-8">{{ report.scheduled_date.strftime('%d %b %Y') }}</dd>
           {% endif %}

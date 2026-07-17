@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% from "macros.html" import status_badge, urgency_badge %}
-{% block title %}Admin Dashboard — WasteTrack{% endblock %}
+{% block title %}Admin Dashboard - WasteTrack{% endblock %}
 {% block content %}
 <div class="page-head">
   <div>
     <h1>Operations desk</h1>
-    <p>What needs action today — queue, urgency, and open pins.</p>
+    <p>What needs action today - queue, urgency, and open pins.</p>
   </div>
   <div class="page-actions">
     <a href="{{ url_for('admin.optimize') }}" class="btn btn-outline-wm">Optimize routes</a>

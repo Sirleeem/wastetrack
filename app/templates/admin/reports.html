@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% from "macros.html" import status_badge, urgency_badge, empty %}
-{% block title %}All Reports — WasteTrack{% endblock %}
+{% block title %}All Reports - WasteTrack{% endblock %}
 {% block content %}
 <div class="page-head">
   <div>
@@ -70,11 +70,11 @@
           <tr>
             <td data-label="Code"><code>{{ r.tracking_code }}</code></td>
             <td data-label="Category">{{ r.category_label() }}</td>
-            <td data-label="Reporter" class="small">{{ r.reporter.name if r.reporter else '—' }}</td>
+            <td data-label="Reporter" class="small">{{ r.reporter.name if r.reporter else '-' }}</td>
             <td data-label="Urgency">{{ urgency_badge(r.urgency) }}</td>
             <td data-label="Status">{{ status_badge(r.status) }}</td>
-            <td data-label="Officer" class="small">{{ r.officer.name if r.officer else '—' }}</td>
-            <td data-label="Date" class="small text-secondary">{{ r.created_at.strftime('%d %b %Y') if r.created_at else '—' }}</td>
+            <td data-label="Officer" class="small">{{ r.officer.name if r.officer else '-' }}</td>
+            <td data-label="Date" class="small text-secondary">{{ r.created_at.strftime('%d %b %Y') if r.created_at else '-' }}</td>
             <td class="td-actions"><a class="btn btn-sm btn-wm" href="{{ url_for('admin.report_detail', report_id=r.id) }}">Manage</a></td>
           </tr>
           {% endfor %}
