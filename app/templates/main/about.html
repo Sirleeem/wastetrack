@@ -1,30 +1,55 @@
 {% extends "base.html" %}
-{% block title %}About — WasteTrack{% endblock %}
+{% block title %}About the system — WasteTrack{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-lg-8">
+<div class="gov-utility mb-0" style="margin:-0.25rem -0.75rem 1.25rem;padding-left:0;padding-right:0;">
+  <div class="container gov-utility-inner">
+    <div class="gov-utility-left">
+      <span class="gov-seal" aria-hidden="true"><i class="bi bi-file-earmark-text"></i></span>
+      <div>
+        <strong>System documentation</strong>
+        <span>Mandate, scope, and institutional context</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
     <div class="panel">
-      <div class="panel-header"><h2>About this project</h2></div>
+      <div class="panel-header"><h2>Official description</h2></div>
       <div class="panel-body">
-        <p>
-          <strong>Design and Implementation of a Waste Management Reporting and Collection Optimization System</strong>
+        <p class="fw-semibold mb-2">
+          Design and Implementation of a Waste Management Reporting and Collection Optimization System
         </p>
         <p class="text-secondary">
-          Prepared as a final-year project proposal for the Department of Computer Science,
-          Abubakar Tafawa Balewa University Bauchi.
+          A final-year project of the Department of Computer Science,
+          Abubakar Tafawa Balewa University, Bauchi.
         </p>
-        <h3 class="h6 mt-4">What the system does</h3>
-        <ul>
-          <li>Residents submit geolocated waste reports with optional images</li>
-          <li>Administrators verify, assign, schedule and track cases</li>
-          <li>Collection officers update task progress in the field</li>
-          <li>Optimization recommends an efficient pickup order using proximity and urgency</li>
+        <h3 class="h6 mt-4 text-uppercase" style="letter-spacing:.06em;font-size:.75rem;color:var(--muted);">Functions</h3>
+        <ul class="mb-0">
+          <li>Residents submit geolocated waste reports with optional photographic evidence</li>
+          <li>Administrators verify, assign, schedule and monitor cases</li>
+          <li>Collection officers update field task progress through to completion</li>
+          <li>A lightweight optimization module recommends collection order by proximity and urgency</li>
         </ul>
-        <h3 class="h6 mt-4">Out of scope</h3>
-        <p class="text-secondary mb-0">
-          Physical IoT sensors, payment processing, government identity integration and full industrial fleet logistics
-          are intentionally excluded for this undergraduate prototype.
-        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <figure class="m-0">
+      <img
+        class="w-100 rounded border"
+        style="object-fit:cover;max-height:280px;border-color:var(--line)!important;"
+        src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=1000&q=80"
+        alt="Municipal waste collection operations"
+        loading="lazy"
+      >
+    </figure>
+    <div class="panel mt-3">
+      <div class="panel-header"><h2>Scope boundaries</h2></div>
+      <div class="panel-body text-secondary">
+        Physical IoT bin sensors, payment processing, government identity integration,
+        and industrial multi-vehicle fleet logistics are outside the scope of this undergraduate prototype.
       </div>
     </div>
   </div>
