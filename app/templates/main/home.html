@@ -2,18 +2,17 @@
 {% block title %}WasteTrack Bauchi - Report refuse & track collection{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}?v=4">
-<link rel="preload" as="image" href="{{ url_for('static', filename='images/bauchi/suburb.jpg') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}?v=5">
+<link rel="preload" as="image" href="{{ url_for('static', filename='images/basepa/hero.jpg') }}">
 {% endblock %}
 
 {% block hero %}{% endblock %}
 {% block main_class %}landing-page{% endblock %}
 
 {% block content %}
-{# Local authority strip #}
 <div class="lp-topstrip">
   <div class="container inner">
-    <span><strong>WasteTrack Bauchi</strong> · Refuse reporting &amp; collection portal</span>
+    <span><strong>WasteTrack Bauchi</strong> · Digital refuse reporting for local sanitation operations</span>
     <span>
       Bauchi State, Nigeria
       · <a href="{{ url_for('main.about') }}">About</a>
@@ -22,21 +21,21 @@
   </div>
 </div>
 
-{# Hero - Bauchi photos (local static files) #}
 <section class="lp-hero" aria-label="Introduction">
   <div
     class="lp-hero-bg"
-    style="background-image:url('{{ url_for('static', filename='images/bauchi/suburb.jpg') }}');"
+    style="background-image:url('{{ url_for('static', filename='images/basepa/hero.jpg') }}');"
     role="img"
-    aria-label="Suburban settlement in Bauchi area, Nigeria"
+    aria-label="Bauchi urban environment"
   ></div>
   <div class="lp-hero-overlay"></div>
   <div class="container lp-hero-content">
-    <span class="lp-badge"><i class="bi bi-geo-alt-fill"></i> Bauchi State · Cleaner neighbourhoods</span>
-    <h1>Report refuse in your area. Follow it until it is cleared.</h1>
+    <span class="lp-badge"><i class="bi bi-recycle"></i> Bauchi State · Sanitation &amp; collection</span>
+    <h1>Report refuse where you live. Help collection teams respond faster.</h1>
     <p class="lp-hero-lead">
-      For residents of Bauchi and surrounding communities: report overflowing bins, illegal dumping,
-      and blocked drains. Local officers and administrators can verify, schedule, and close each case.
+      A practical portal for Bauchi residents, field officers, and administrators - built around the same
+      day-to-day work done by agencies like the Bauchi State Environmental Protection Agency (BASEPA):
+      reporting dumps, clearing collection points, and tracking response.
     </p>
     <div class="lp-hero-actions">
       {% if current_user.is_authenticated %}
@@ -61,63 +60,63 @@
   </div>
 </section>
 
-{# Why local #}
 <section class="lp-section lp-section-muted">
   <div class="container">
     <header class="lp-section-head">
-      <p class="lp-kicker">Why Bauchi needs this</p>
-      <h2>From market gate to Yelwa road - one clear channel</h2>
+      <p class="lp-kicker">Local waste operations</p>
+      <h2>From collection centres to street evacuations</h2>
       <p>
-        Many refuse complaints still move by phone call or word of mouth. That makes it hard to
-        confirm the place, prioritise urgent sites, or know when a team has finished the job.
+        In Bauchi metropolis, solid waste is often moved from neighbourhood collection points by
+        agency trucks and field teams. This portal digitises the reporting and task side of that work
+        so cases are easier to verify, assign, and close.
       </p>
     </header>
 
     <div class="lp-why-grid">
       <article class="lp-why-card">
         <img
-          src="{{ url_for('static', filename='images/bauchi/suburb.jpg') }}"
-          alt="Suburban town view, Bauchi area"
+          src="{{ url_for('static', filename='images/basepa/evacuation.jpg') }}"
+          alt="Bauchi neighbourhood and collection context"
           loading="lazy" width="900" height="600"
         >
         <div class="lp-why-body">
           <div class="lp-why-num">01 - Residents</div>
-          <h3>Report where the problem is</h3>
+          <h3>Report the dump or overflow you see</h3>
           <p>
-            Drop a pin near the market, mosque, motor park, or estate road. Add a short description
-            and optional photo so the authority can see the real situation.
+            Pin places such as markets, motor parks, estates, and roadside collection points.
+            Add a short note and optional photo so officers know what to expect on arrival.
           </p>
         </div>
       </article>
 
       <article class="lp-why-card">
         <img
-          src="{{ url_for('static', filename='images/bauchi/college.jpg') }}"
-          alt="A college in Bauchi"
+          src="{{ url_for('static', filename='images/basepa/field-work.jpg') }}"
+          alt="Field operations in Bauchi State"
           loading="lazy" width="900" height="600"
         >
         <div class="lp-why-body">
-          <div class="lp-why-num">02 - Collection team</div>
-          <h3>Clear assigned stops on the ground</h3>
+          <div class="lp-why-num">02 - Collection officers</div>
+          <h3>Work from assigned stops</h3>
           <p>
-            Officers see mapped tasks for Bauchi areas, start work on site, and mark completion
-            so residents can follow the status.
+            Field staff open mapped tasks, start collection on site, and mark completion - similar to
+            how solid waste evacuation exercises move from one collection centre to another across town.
           </p>
         </div>
       </article>
 
       <article class="lp-why-card">
         <img
-          src="{{ url_for('static', filename='images/bauchi/lake.jpg') }}"
-          alt="Lake and farmland in Bauchi, Nigeria"
+          src="{{ url_for('static', filename='images/basepa/collection-centre.jpg') }}"
+          alt="Public facilities and service locations in Bauchi"
           loading="lazy" width="900" height="600"
         >
         <div class="lp-why-body">
-          <div class="lp-why-num">03 - Authority</div>
-          <h3>Plan collection with better visibility</h3>
+          <div class="lp-why-num">03 - Authority desk</div>
+          <h3>Coordinate verification and scheduling</h3>
           <p>
-            Administrators verify cases, set urgency, assign officers, and group nearby reports
-            for a practical collection order across the LGA.
+            Administrators review the queue, set urgency, assign officers, and group nearby reports
+            for a practical pickup order across Bauchi roads and neighbourhoods.
           </p>
         </div>
       </article>
@@ -125,18 +124,17 @@
   </div>
 </section>
 
-{# Services #}
 <section class="lp-section">
   <div class="container">
     <header class="lp-section-head">
-      <p class="lp-kicker">What you can do here</p>
-      <h2>Portal services for Bauchi users</h2>
-      <p>Choose the service that matches your role in the community or the waste authority.</p>
+      <p class="lp-kicker">Portal services</p>
+      <h2>What you can do on WasteTrack Bauchi</h2>
+      <p>Three role-based entry points for community reporting and collection coordination.</p>
     </header>
 
     <div class="lp-services">
       <a class="lp-service" href="{% if current_user.is_authenticated and current_user.is_resident %}{{ url_for('resident.new_report') }}{% else %}{{ url_for('auth.register') }}{% endif %}">
-        <div class="lp-service-bg" style="background-image:url('{{ url_for('static', filename='images/bauchi/suburb.jpg') }}');"></div>
+        <div class="lp-service-bg" style="background-image:url('{{ url_for('static', filename='images/basepa/community.jpg') }}');"></div>
         <div class="lp-service-shade"></div>
         <div class="lp-service-body">
           <div class="lp-service-icon"><i class="bi bi-geo-alt-fill"></i></div>
@@ -147,23 +145,23 @@
       </a>
 
       <a class="lp-service" href="{{ url_for('auth.login') }}">
-        <div class="lp-service-bg" style="background-image:url('{{ url_for('static', filename='images/bauchi/hospital.jpg') }}');"></div>
+        <div class="lp-service-bg" style="background-image:url('{{ url_for('static', filename='images/basepa/collection-centre.jpg') }}');"></div>
         <div class="lp-service-shade"></div>
         <div class="lp-service-body">
           <div class="lp-service-icon"><i class="bi bi-building"></i></div>
           <h3>Authority desk</h3>
-          <p>Verify reports from Bauchi communities, assign crews, and schedule pickups.</p>
+          <p>Verify reports, assign crews, schedule pickups, and review analytics.</p>
           <span class="lp-service-link">Admin sign-in →</span>
         </div>
       </a>
 
       <a class="lp-service" href="{{ url_for('auth.login') }}">
-        <div class="lp-service-bg" style="background-image:url('{{ url_for('static', filename='images/bauchi/gubi.jpg') }}');"></div>
+        <div class="lp-service-bg" style="background-image:url('{{ url_for('static', filename='images/basepa/recycling-plant.jpg') }}');"></div>
         <div class="lp-service-shade"></div>
         <div class="lp-service-body">
           <div class="lp-service-icon"><i class="bi bi-truck"></i></div>
           <h3>Field collection</h3>
-          <p>Officers receive stops, navigate locations, and close jobs after collection.</p>
+          <p>Open assigned stops, navigate locations, and close jobs after evacuation.</p>
           <span class="lp-service-link">Officer sign-in →</span>
         </div>
       </a>
@@ -171,44 +169,46 @@
   </div>
 </section>
 
-{# Areas / coverage #}
 <section class="lp-section lp-section-green">
   <div class="container">
     <header class="lp-section-head">
-      <p class="lp-kicker">Coverage focus</p>
-      <h2>Built around Bauchi community realities</h2>
-      <p>Prototype map defaults and sample data use Bauchi coordinates and local place-style addresses.</p>
+      <p class="lp-kicker">Bauchi coverage focus</p>
+      <h2>Places that matter for local collection</h2>
+      <p>
+        Sample data and map defaults use Bauchi coordinates. Real BASEPA field work often covers
+        collection centres and streets across the metropolis - this portal is designed for that pattern.
+      </p>
     </header>
     <div class="lp-stats">
       <div class="lp-stat">
         <strong>Bauchi metropolis</strong>
-        <span>Default map centre for reporting (approx. 10.32°N, 9.84°E) - covers town roads, housing areas, and public spaces across the city</span>
+        <span>Default map centre (approx. 10.32°N, 9.84°E) for town roads, housing areas, and public spaces</span>
       </div>
       <div class="lp-stat">
-        <strong>Local landmarks</strong>
-        <span>Markets, motor parks, estates, drains, and public spaces - e.g. Wunti, Yelwa, Railway Quarters, Central Market, Jos Road</span>
+        <strong>Local collection points</strong>
+        <span>Markets, motor parks, estates, drains - e.g. Wunti, Yelwa, Railway, Central Market, Jos Road, Games Village, Jahun, Zango</span>
       </div>
     </div>
   </div>
 </section>
 
-{# Mandate #}
 <section class="lp-section">
   <div class="container">
     <div class="lp-mission">
       <figure>
         <img
-          src="{{ url_for('static', filename='images/bauchi/lake.jpg') }}"
-          alt="Lake within a farm at Bauchi, Nigeria"
+          src="{{ url_for('static', filename='images/basepa/environment.jpg') }}"
+          alt="Bauchi State environment"
           width="1200" height="800" loading="lazy"
         >
       </figure>
       <div class="lp-mission-copy">
-        <p class="lp-kicker">Our purpose in Bauchi</p>
-        <h2>A practical tool for cleaner streets and better response</h2>
+        <p class="lp-kicker">About BASEPA context</p>
+        <h2>Built for Bauchi sanitation realities</h2>
         <p>
-          WasteTrack helps close the gap between people who see refuse problems and the teams
-          responsible for clearing them - with records you can follow from submission to completion.
+          The Bauchi State Environmental Protection Agency (BASEPA) is the state body responsible for
+          environmental protection and solid waste evacuation across Bauchi. WasteTrack is an academic
+          software prototype that models digital reporting and collection coordination for that local setting.
         </p>
         <ul class="lp-checklist">
           <li>Report overflow, illegal dumping, and blocked drains</li>
@@ -222,7 +222,6 @@
   </div>
 </section>
 
-{# Local priorities #}
 <section class="lp-section lp-section-muted">
   <div class="container">
     <header class="lp-section-head">
@@ -231,21 +230,21 @@
     </header>
     <div class="lp-initiatives">
       <article class="lp-init">
-        <img src="{{ url_for('static', filename='images/bauchi/suburb.jpg') }}" alt="Bauchi area settlement" loading="lazy">
+        <img src="{{ url_for('static', filename='images/basepa/evacuation.jpg') }}" alt="Bauchi settlement area" loading="lazy">
         <div class="lp-init-body">
-          <h3>Overflowing public bins</h3>
-          <p>Report full skips and scattered refuse around bus stops, markets, and estates.</p>
+          <h3>Overflowing collection points</h3>
+          <p>Report full skips and scattered refuse at neighbourhood collection centres and markets.</p>
         </div>
       </article>
       <article class="lp-init">
-        <img src="{{ url_for('static', filename='images/bauchi/hospital.jpg') }}" alt="ATB Teaching Hospital Bauchi" loading="lazy">
+        <img src="{{ url_for('static', filename='images/basepa/recycling-plant.jpg') }}" alt="Waste management operations in Bauchi" loading="lazy">
         <div class="lp-init-body">
-          <h3>Missed or delayed collection</h3>
+          <h3>Missed or delayed evacuation</h3>
           <p>Flag locations where refuse has waited too long so crews can be scheduled.</p>
         </div>
       </article>
       <article class="lp-init">
-        <img src="{{ url_for('static', filename='images/bauchi/gubi.jpg') }}" alt="Gubi Dam, Bauchi" loading="lazy">
+        <img src="{{ url_for('static', filename='images/basepa/field-work.jpg') }}" alt="Field sanitation work context" loading="lazy">
         <div class="lp-init-body">
           <h3>Blocked drains &amp; illegal dumps</h3>
           <p>Pin drainage blockages and open dumps that threaten health during the rains.</p>
