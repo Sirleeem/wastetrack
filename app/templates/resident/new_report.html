@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 {% block title %}Submit Report — WasteTrack{% endblock %}
 {% block content %}
-<div class="row g-4">
+<div class="page-head">
+  <div>
+    <h1>Report waste</h1>
+    <p>Pin the location carefully — collection depends on it.</p>
+  </div>
+</div>
+
+<div class="row g-3 g-lg-4">
   <div class="col-lg-7">
     <div class="panel">
-      <div class="panel-header"><h2>Submit waste report</h2></div>
+      <div class="panel-header"><h2>Issue details</h2></div>
       <div class="panel-body">
         <form method="post" enctype="multipart/form-data">
           <div class="mb-3">
@@ -16,53 +23,57 @@
             </select>
           </div>
           <div class="mb-3">
-            <label class="form-label" for="description">Description</label>
+            <label class="form-label" for="description">What do you see?</label>
             <textarea class="form-control" id="description" name="description" rows="4" required
-              placeholder="Describe the waste issue clearly..."></textarea>
+              placeholder="e.g. Skip overflowing for 2 days near the market gate"></textarea>
           </div>
           <div class="mb-3">
-            <label class="form-label" for="address">Address / landmark (optional)</label>
+            <label class="form-label" for="address">Landmark (optional)</label>
             <input type="text" class="form-control" id="address" name="address" placeholder="Near market gate, opposite mosque…">
           </div>
-          <div class="mb-3">
-            <label class="form-label" for="urgency">Urgency</label>
-            <select class="form-select" id="urgency" name="urgency">
-              {% for u in urgencies %}
-              <option value="{{ u }}" {% if u == 'medium' %}selected{% endif %}>{{ u|title }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="image">Photo evidence (optional)</label>
-            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label" for="urgency">Urgency</label>
+              <select class="form-select" id="urgency" name="urgency">
+                {% for u in urgencies %}
+                <option value="{{ u }}" {% if u == 'medium' %}selected{% endif %}>{{ u|title }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label" for="image">Photo</label>
+              <input type="file" class="form-control" id="image" name="image" accept="image/*" capture="environment">
+            </div>
           </div>
           <input type="hidden" name="latitude" id="latitude" value="10.3158">
           <input type="hidden" name="longitude" id="longitude" value="9.8442">
           <div class="mb-3">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <label class="form-label mb-0">Location on map <span class="text-danger">*</span></label>
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+              <label class="form-label mb-0">Map location <span class="text-danger">*</span></label>
               <button type="button" class="btn btn-sm btn-outline-wm" id="use-my-location">
                 <i class="bi bi-geo-alt"></i> Use my location
               </button>
             </div>
             <div id="picker-map" class="map-box"></div>
-            <p class="form-text">Click the map or drag the marker to set the exact location.</p>
+            <p class="form-text">Tap the map or drag the marker. On phone, use GPS when outdoors.</p>
           </div>
-          <button type="submit" class="btn btn-wm">Submit report</button>
-          <a href="{{ url_for('resident.dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-amber btn-lg">Submit report</button>
+            <a href="{{ url_for('resident.dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
         </form>
       </div>
     </div>
   </div>
   <div class="col-lg-5">
     <div class="panel">
-      <div class="panel-header"><h2>Tips</h2></div>
+      <div class="panel-header"><h2>Quick tips</h2></div>
       <div class="panel-body text-secondary">
-        <ul class="mb-0">
-          <li>Be specific about the waste type and volume.</li>
-          <li>Pin the location as accurately as possible.</li>
-          <li>A clear photo helps officers prioritise faster.</li>
-          <li>You will receive a tracking code after submission.</li>
+        <ul class="mb-0 ps-3">
+          <li class="mb-2">Name the waste type and roughly how much there is.</li>
+          <li class="mb-2">Pin as close to the pile or bin as you can.</li>
+          <li class="mb-2">A clear photo speeds verification.</li>
+          <li>You’ll get a tracking code after submit.</li>
         </ul>
       </div>
     </div>

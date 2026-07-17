@@ -2,21 +2,25 @@
 {% from "macros.html" import status_badge, urgency_badge, empty %}
 {% block title %}Officer Dashboard — WasteTrack{% endblock %}
 {% block content %}
-<div class="mb-4">
-  <h1 class="h3 mb-1">Collection tasks</h1>
-  <p class="text-secondary mb-0">You have <strong>{{ active_count }}</strong> active task{{ 's' if active_count != 1 else '' }}.</p>
+<div class="page-head">
+  <div>
+    <h1>Today’s runs</h1>
+    <p>You have <strong>{{ active_count }}</strong> active task{{ 's' if active_count != 1 else '' }}.</p>
+  </div>
+  <div class="page-actions">
+    <a href="{{ url_for('officer.tasks') }}" class="btn btn-outline-wm">All tasks</a>
+  </div>
 </div>
 
 <div class="panel mb-4">
   <div class="panel-header">
     <h2>Active tasks</h2>
-    <a href="{{ url_for('officer.tasks') }}" class="btn btn-sm btn-outline-wm">All tasks</a>
   </div>
   <div class="panel-body p-0">
     {% if tasks %}
     <div class="table-responsive">
-      <table class="table table-hover mb-0">
-        <thead class="table-light">
+      <table class="table table-mobile mb-0">
+        <thead>
           <tr>
             <th>Code</th>
             <th>Category</th>
@@ -30,13 +34,13 @@
         <tbody>
           {% for t in tasks %}
           <tr>
-            <td><code>{{ t.tracking_code }}</code></td>
-            <td>{{ t.category_label() }}</td>
-            <td>{{ urgency_badge(t.urgency) }}</td>
-            <td>{{ status_badge(t.status) }}</td>
-            <td>{{ t.scheduled_date.strftime('%d %b %Y') if t.scheduled_date else '—' }}</td>
-            <td>{{ t.collection_order or '—' }}</td>
-            <td><a class="btn btn-sm btn-wm" href="{{ url_for('officer.task_detail', report_id=t.id) }}">Open</a></td>
+            <td data-label="Code"><code>{{ t.tracking_code }}</code></td>
+            <td data-label="Category">{{ t.category_label() }}</td>
+            <td data-label="Urgency">{{ urgency_badge(t.urgency) }}</td>
+            <td data-label="Status">{{ status_badge(t.status) }}</td>
+            <td data-label="Scheduled">{{ t.scheduled_date.strftime('%d %b %Y') if t.scheduled_date else '—' }}</td>
+            <td data-label="Stop #">{{ t.collection_order or '—' }}</td>
+            <td class="td-actions"><a class="btn btn-sm btn-amber" href="{{ url_for('officer.task_detail', report_id=t.id) }}">Open</a></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -54,7 +58,7 @@
   <div class="panel-body p-0">
     <ul class="list-group list-group-flush">
       {% for t in completed %}
-      <li class="list-group-item d-flex justify-content-between">
+      <li class="list-group-item d-flex justify-content-between gap-2 flex-wrap">
         <span><code>{{ t.tracking_code }}</code> · {{ t.category_label() }}</span>
         <span class="text-secondary small">{{ t.completed_at.strftime('%d %b %H:%M') if t.completed_at else '' }}</span>
       </li>

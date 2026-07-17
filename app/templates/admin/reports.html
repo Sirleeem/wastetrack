@@ -2,45 +2,49 @@
 {% from "macros.html" import status_badge, urgency_badge, empty %}
 {% block title %}All Reports — WasteTrack{% endblock %}
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h3 mb-0">Reports</h1>
+<div class="page-head">
+  <div>
+    <h1>Reports</h1>
+    <p>Filter, open a case, assign and schedule.</p>
+  </div>
 </div>
 
-<form class="filter-bar row g-2 align-items-end" method="get">
-  <div class="col-md-3">
-    <label class="form-label">Search</label>
-    <input type="text" class="form-control" name="q" value="{{ filters.q or '' }}" placeholder="Code, description, address">
-  </div>
-  <div class="col-md-2">
-    <label class="form-label">Status</label>
-    <select class="form-select" name="status">
-      <option value="">All</option>
-      {% for s in statuses %}
-      <option value="{{ s }}" {% if filters.status==s %}selected{% endif %}>{{ s.replace('_',' ')|title }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div class="col-md-2">
-    <label class="form-label">Category</label>
-    <select class="form-select" name="category">
-      <option value="">All</option>
-      {% for c in categories %}
-      <option value="{{ c }}" {% if filters.category==c %}selected{% endif %}>{{ c.replace('_',' ')|title }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div class="col-md-2">
-    <label class="form-label">Urgency</label>
-    <select class="form-select" name="urgency">
-      <option value="">All</option>
-      {% for u in urgencies %}
-      <option value="{{ u }}" {% if filters.urgency==u %}selected{% endif %}>{{ u|title }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div class="col-md-3 d-flex gap-2">
-    <button class="btn btn-wm" type="submit">Filter</button>
-    <a class="btn btn-outline-secondary" href="{{ url_for('admin.reports') }}">Reset</a>
+<form class="filter-bar" method="get">
+  <div class="row g-2 align-items-end">
+    <div class="col-12 col-md-4">
+      <label class="form-label">Search</label>
+      <input type="text" class="form-control" name="q" value="{{ filters.q or '' }}" placeholder="Code, description, address">
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label">Status</label>
+      <select class="form-select" name="status">
+        <option value="">All</option>
+        {% for s in statuses %}
+        <option value="{{ s }}" {% if filters.status==s %}selected{% endif %}>{{ s.replace('_',' ')|title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label">Category</label>
+      <select class="form-select" name="category">
+        <option value="">All</option>
+        {% for c in categories %}
+        <option value="{{ c }}" {% if filters.category==c %}selected{% endif %}>{{ c.replace('_',' ')|title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label">Urgency</label>
+      <select class="form-select" name="urgency">
+        <option value="">All</option>
+        {% for u in urgencies %}
+        <option value="{{ u }}" {% if filters.urgency==u %}selected{% endif %}>{{ u|title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-2 d-grid gap-2">
+      <button class="btn btn-wm" type="submit">Filter</button>
+    </div>
   </div>
 </form>
 
@@ -48,8 +52,8 @@
   <div class="panel-body p-0">
     {% if reports %}
     <div class="table-responsive">
-      <table class="table table-hover mb-0">
-        <thead class="table-light">
+      <table class="table table-mobile mb-0">
+        <thead>
           <tr>
             <th>Code</th>
             <th>Category</th>
@@ -64,14 +68,14 @@
         <tbody>
           {% for r in reports %}
           <tr>
-            <td><code>{{ r.tracking_code }}</code></td>
-            <td>{{ r.category_label() }}</td>
-            <td class="small">{{ r.reporter.name if r.reporter else '—' }}</td>
-            <td>{{ urgency_badge(r.urgency) }}</td>
-            <td>{{ status_badge(r.status) }}</td>
-            <td class="small">{{ r.officer.name if r.officer else '—' }}</td>
-            <td class="small text-secondary">{{ r.created_at.strftime('%d %b %Y') if r.created_at else '—' }}</td>
-            <td><a class="btn btn-sm btn-outline-wm" href="{{ url_for('admin.report_detail', report_id=r.id) }}">Manage</a></td>
+            <td data-label="Code"><code>{{ r.tracking_code }}</code></td>
+            <td data-label="Category">{{ r.category_label() }}</td>
+            <td data-label="Reporter" class="small">{{ r.reporter.name if r.reporter else '—' }}</td>
+            <td data-label="Urgency">{{ urgency_badge(r.urgency) }}</td>
+            <td data-label="Status">{{ status_badge(r.status) }}</td>
+            <td data-label="Officer" class="small">{{ r.officer.name if r.officer else '—' }}</td>
+            <td data-label="Date" class="small text-secondary">{{ r.created_at.strftime('%d %b %Y') if r.created_at else '—' }}</td>
+            <td class="td-actions"><a class="btn btn-sm btn-wm" href="{{ url_for('admin.report_detail', report_id=r.id) }}">Manage</a></td>
           </tr>
           {% endfor %}
         </tbody>

@@ -1,43 +1,39 @@
 {% extends "base.html" %}
-{% block title %}WasteTrack — Report & Optimize Waste Collection{% endblock %}
+{% block title %}WasteTrack — Report waste, track collection{% endblock %}
 
 {% block hero %}
 <section class="hero">
   <div class="container">
-    <div class="row align-items-center g-4">
+    <div class="row g-4 align-items-stretch">
       <div class="col-lg-7">
-        <p class="text-uppercase small fw-semibold mb-2" style="letter-spacing:.08em;color:#5eead4;">
-          Community waste intelligence
+        <span class="hero-kicker"><i class="bi bi-geo-alt-fill"></i> Community · Authority · Field crew</span>
+        <h1>Pin the problem. Get collection moving.</h1>
+        <p class="lead">
+          Residents report waste on a map. Officers get ordered stops.
+          Authorities see the full trail from complaint to cleared site.
         </p>
-        <h1 class="display-5 mb-3">Report waste. Track response. Optimize collection.</h1>
-        <p class="lead mb-4">
-          A web system for residents to report waste issues, for authorities to manage cases,
-          and for collection teams to follow an efficient pickup order.
-        </p>
-        <div class="d-flex flex-wrap gap-2">
-          <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg fw-semibold">Report Waste</a>
-          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">Login</a>
+        <div class="hero-cta">
+          <a href="{{ url_for('auth.register') }}" class="btn btn-amber btn-lg">Report waste</a>
+          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">Sign in</a>
         </div>
       </div>
       <div class="col-lg-5">
         {% if show_demo_credentials %}
-        <div class="panel" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#ecfdf5;">
-          <div class="panel-body">
-            <h3 class="h5 mb-3">Demo accounts</h3>
-            <ul class="mb-0 small" style="line-height:1.8;">
-              <li><strong>Admin:</strong> admin@waste.local / admin123</li>
-              <li><strong>Officer:</strong> officer@waste.local / officer123</li>
-              <li><strong>Resident:</strong> resident@waste.local / resident123</li>
-            </ul>
-          </div>
+        <div class="hero-card h-100">
+          <h3>Demo sign-in</h3>
+          <ul>
+            <li><strong>Admin</strong> — admin@waste.local / admin123</li>
+            <li><strong>Officer</strong> — officer@waste.local / officer123</li>
+            <li><strong>Resident</strong> — resident@waste.local / resident123</li>
+          </ul>
         </div>
         {% else %}
-        <div class="panel" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#ecfdf5;">
-          <div class="panel-body">
-            <h3 class="h5 mb-3">For residents & authorities</h3>
-            <p class="small mb-2">Submit waste reports with map location, track response, and manage collection with optimized pickup order.</p>
-            <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-light fw-semibold">Sign in to continue</a>
-          </div>
+        <div class="hero-card h-100">
+          <h3>Built for the street, not the boardroom</h3>
+          <p class="mb-2" style="color:rgba(247,242,232,.88);font-size:.95rem;">
+            Submit a pin, attach a photo, and follow status until the crew closes the case.
+          </p>
+          <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-amber">Continue to sign in</a>
         </div>
         {% endif %}
       </div>
@@ -49,44 +45,42 @@
 {% block main_class %}container pb-4{% endblock %}
 
 {% block content %}
-<div class="row g-4 mb-5">
+<div class="row g-3 g-md-4 mb-4">
   <div class="col-md-4">
-    <div class="step-card">
+    <article class="step-card">
       <div class="step-num">1</div>
-      <h3 class="h5">Residents report</h3>
-      <p class="text-secondary mb-0">Submit category, description, map location and optional photo evidence in under a minute.</p>
-    </div>
+      <h3>Report on the map</h3>
+      <p class="text-secondary mb-0">Category, note, optional photo, and a pin where the waste actually is — from a phone on the roadside.</p>
+    </article>
   </div>
   <div class="col-md-4">
-    <div class="step-card">
+    <article class="step-card">
       <div class="step-num">2</div>
-      <h3 class="h5">Authority manages</h3>
-      <p class="text-secondary mb-0">Admins verify, prioritize, assign officers and schedule pickups from one dashboard.</p>
-    </div>
+      <h3>Authority takes the case</h3>
+      <p class="text-secondary mb-0">Verify, set urgency, assign a collection officer, and schedule a pickup day from one console.</p>
+    </article>
   </div>
   <div class="col-md-4">
-    <div class="step-card">
+    <article class="step-card">
       <div class="step-num">3</div>
-      <h3 class="h5">Optimized collection</h3>
-      <p class="text-secondary mb-0">A lightweight route module groups nearby reports and recommends collection order.</p>
-    </div>
+      <h3>Smarter stop order</h3>
+      <p class="text-secondary mb-0">Nearby reports are grouped into a practical collection sequence — not a random list of tickets.</p>
+    </article>
   </div>
 </div>
 
-<div class="panel mb-4">
-  <div class="panel-body">
-    <div class="row g-4 align-items-center">
-      <div class="col-lg-8">
-        <h2 class="h4">Built for final-year evaluation</h2>
-        <p class="text-secondary mb-0">
-          Role-based workflows, database-backed status history, Leaflet maps, and Haversine nearest-neighbour
-          optimization — aligned with the Waste Management Reporting and Collection Optimization proposal (ATBU).
-        </p>
-      </div>
-      <div class="col-lg-4 text-lg-end">
-        <a href="{{ url_for('main.about') }}" class="btn btn-outline-wm">Learn more</a>
-      </div>
+<section class="cite-strip">
+  <div class="row g-3 align-items-center">
+    <div class="col-lg-8">
+      <h2 class="h4 mb-2 display-font">Academic prototype · ATBU Bauchi</h2>
+      <p class="text-secondary mb-0">
+        Role-based workflows, status history, Leaflet maps, and Haversine nearest-neighbour
+        optimization — matching the final-year waste management reporting proposal.
+      </p>
+    </div>
+    <div class="col-lg-4 d-grid">
+      <a href="{{ url_for('main.about') }}" class="btn btn-outline-wm">Project background</a>
     </div>
   </div>
-</div>
+</section>
 {% endblock %}

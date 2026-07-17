@@ -1,5 +1,15 @@
 /* Shared helpers for WasteTrack maps and UI */
 
+function _invalidateLater(map) {
+  [100, 300, 600].forEach(function (ms) {
+    setTimeout(function () {
+      try {
+        map.invalidateSize();
+      } catch (e) { /* ignore */ }
+    }, ms);
+  });
+}
+
 function initReportPickerMap(mapId, latInputId, lngInputId, defaultLat, defaultLng, zoom) {
   const el = document.getElementById(mapId);
   if (!el || typeof L === "undefined") return null;
@@ -55,9 +65,7 @@ function initReportPickerMap(mapId, latInputId, lngInputId, defaultLat, defaultL
     });
   }
 
-  setTimeout(function () {
-    map.invalidateSize();
-  }, 200);
+  _invalidateLater(map);
   return map;
 }
 
@@ -72,9 +80,7 @@ function initViewMap(mapId, lat, lng, popupText, zoom) {
   }).addTo(map);
   const m = L.marker([lat, lng]).addTo(map);
   if (popupText) m.bindPopup(popupText).openPopup();
-  setTimeout(function () {
-    map.invalidateSize();
-  }, 200);
+  _invalidateLater(map);
   return map;
 }
 
@@ -115,9 +121,7 @@ function initMultiMarkerMap(mapId, points, drawOrder) {
     L.polyline(latlngs, { color: "#0f766e", weight: 3, opacity: 0.8 }).addTo(map);
   }
 
-  map.fitBounds(bounds, { padding: [40, 40] });
-  setTimeout(function () {
-    map.invalidateSize();
-  }, 200);
+  map.fitBounds(bounds, { padding: [28, 28] });
+  _invalidateLater(map);
   return map;
 }
