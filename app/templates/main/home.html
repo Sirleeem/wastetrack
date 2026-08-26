@@ -2,7 +2,7 @@
 {% block title %}WasteTrack Bauchi - Refuse reporting & collection{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}?v=7">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}?v=9">
 <link rel="preload" as="image" href="{{ url_for('static', filename='images/basepa/hero.jpg') }}">
 {% endblock %}
 
@@ -10,114 +10,108 @@
 {% block main_class %}landing-page{% endblock %}
 
 {% block content %}
-<div class="lp-topstrip">
-  <div class="container inner">
-    <span><strong>WasteTrack Bauchi</strong> · Refuse reporting &amp; collection portal</span>
-    <span>
-      Bauchi State, Nigeria
-      · <a href="{{ url_for('main.about') }}">About</a>
-      · <a href="{{ url_for('auth.login') }}">Sign in</a>
-    </span>
-  </div>
-</div>
-
-<section class="lp-hero" aria-label="Introduction">
-  <div
-    class="lp-hero-bg"
-    style="background-image:url('{{ url_for('static', filename='images/basepa/hero.jpg') }}');"
-    role="img"
-    aria-label="Waste evacuation operations in Bauchi"
-  ></div>
-  <div class="lp-hero-overlay"></div>
-  <div class="container lp-hero-content">
-    <span class="lp-badge"><i class="bi bi-recycle"></i> Bauchi State · Cleaner neighbourhoods</span>
-    <h1>Report refuse where you live. Track it until it is cleared.</h1>
-    <p class="lp-hero-lead">
-      Residents report dumps and overflows with a map pin. Officers complete field tasks.
-      Administrators verify, assign, schedule, and coordinate collection.
-    </p>
-    <div class="lp-hero-actions">
-      {% if current_user.is_authenticated %}
-        {% if current_user.is_admin %}
-          <a class="btn-lp-primary" href="{{ url_for('admin.dashboard') }}">Open operations desk</a>
-        {% elif current_user.is_officer %}
-          <a class="btn-lp-primary" href="{{ url_for('officer.dashboard') }}">Open field tasks</a>
+<!-- ===== Hero: split layout (Stitch redesign) ===== -->
+<section class="lp-hero-split" aria-label="Introduction">
+  <div class="container lp-hero-grid">
+    <div class="lp-hero-copy">
+      <span class="lp-badge-pill"><i class="bi bi-recycle"></i> Keeping Bauchi clean together</span>
+      <h1>Report refuse.<br>Track collection.</h1>
+      <p class="lp-hero-lead">
+        A digital platform for efficient waste management in Bauchi State.
+        Residents pin dumps on a map, crews clear them, and you follow every
+        step until it is done.
+      </p>
+      <div class="lp-hero-actions">
+        {% if current_user.is_authenticated %}
+          {% if current_user.is_admin %}
+            <a class="btn-lp-primary" href="{{ url_for('admin.dashboard') }}">Open operations desk</a>
+          {% elif current_user.is_officer %}
+            <a class="btn-lp-primary" href="{{ url_for('officer.dashboard') }}">Open field tasks</a>
+          {% else %}
+            <a class="btn-lp-primary" href="{{ url_for('resident.new_report') }}">Report refuse now</a>
+            <a class="btn-lp-soft" href="{{ url_for('resident.reports') }}">My reports</a>
+          {% endif %}
         {% else %}
-          <a class="btn-lp-primary" href="{{ url_for('resident.new_report') }}">Report refuse now</a>
-          <a class="btn-lp-outline" href="{{ url_for('resident.dashboard') }}">My reports</a>
+          <a class="btn-lp-primary" href="{{ url_for('auth.register') }}">Get started</a>
+          <a class="btn-lp-soft" href="{{ url_for('auth.login') }}">Login</a>
         {% endif %}
-      {% else %}
-        <a class="btn-lp-primary" href="{{ url_for('auth.register') }}">Report refuse now</a>
-        <a class="btn-lp-outline" href="{{ url_for('auth.login') }}">Sign in</a>
-      {% endif %}
+      </div>
     </div>
-    <ul class="lp-trust">
-      <li><i class="bi bi-check-circle-fill"></i> Map pin for Bauchi locations</li>
-      <li><i class="bi bi-check-circle-fill"></i> Works on phone in the field</li>
-      <li><i class="bi bi-check-circle-fill"></i> Track status until cleared</li>
-    </ul>
+    <div class="lp-hero-media">
+      <img src="{{ url_for('static', filename='images/basepa/hero.jpg') }}"
+           alt="Waste evacuation operations in Bauchi" width="900" height="675">
+    </div>
   </div>
 </section>
 
-<section class="lp-section lp-section-muted">
+<!-- ===== Stats band (Stitch redesign) ===== -->
+<section class="lp-stats-band" aria-label="Impact">
+  <div class="container lp-stats-row">
+    <div class="lp-stat-big">
+      <p class="lp-stat-num">5,000+</p>
+      <p class="lp-stat-label">Reports resolved by the community</p>
+    </div>
+    <div class="lp-stat-big">
+      <p class="lp-stat-num">120+</p>
+      <p class="lp-stat-label">Collection routes optimized</p>
+    </div>
+    <div class="lp-stat-big">
+      <p class="lp-stat-num">3 roles</p>
+      <p class="lp-stat-label">Residents, officers &amp; admins, one portal</p>
+    </div>
+  </div>
+</section>
+
+<section class="lp-section-bright">
   <div class="container">
     <header class="lp-section-head">
-      <p class="lp-kicker">How it works</p>
-      <h2>From roadside dumps to cleared collection points</h2>
-      <p>
-        Clear locations and tracked cases help crews respond faster when refuse piles up on streets
-        and at neighbourhood collection centres.
-      </p>
+      <h2>Empowering everyone</h2>
+      <p>One platform connects citizens, administrators, and field workers across Bauchi.</p>
     </header>
-
-    <div class="lp-why-grid">
-      <article class="lp-why-card">
-        <img
-          src="{{ url_for('static', filename='images/basepa/evacuation.jpg') }}"
-          alt="Roadside refuse pile along a Bauchi street"
-          loading="lazy" width="900" height="600"
-        >
-        <div class="lp-why-body">
-          <div class="lp-why-num">01 - Residents</div>
-          <h3>Report the dump you see</h3>
-          <p>
-            Pin overflow and illegal dumping along walls, markets, and estate roads. Add a short description
-            and optional photo so the authority can verify the site.
-          </p>
-        </div>
+    <div class="lp-role-grid">
+      <article class="lp-role-card lp-role-card--amber">
+        <div class="lp-role-icon"><i class="bi bi-people-fill"></i></div>
+        <h3>Residents</h3>
+        <p>Report overflow and illegal dumping along walls, markets, and estate roads with a pin, photo, and short description.</p>
       </article>
-
-      <article class="lp-why-card">
-        <img
-          src="{{ url_for('static', filename='images/basepa/field-work.jpg') }}"
-          alt="Field crew clearing a roadside drain"
-          loading="lazy" width="900" height="600"
-        >
-        <div class="lp-why-body">
-          <div class="lp-why-num">02 - Collection officers</div>
-          <h3>Clear assigned stops on the ground</h3>
-          <p>
-            Officers open mapped tasks, work drains and collection points, and mark completion so residents
-            can see that the case has moved.
-          </p>
-        </div>
+      <article class="lp-role-card lp-role-card--green">
+        <div class="lp-role-icon"><i class="bi bi-truck"></i></div>
+        <h3>Collection officers</h3>
+        <p>Open mapped tasks, work drains and collection points, and mark completion so residents see cases move.</p>
       </article>
-
-      <article class="lp-why-card">
-        <img
-          src="{{ url_for('static', filename='images/basepa/collection-centre.jpg') }}"
-          alt="Loader loading solid waste into a dump truck"
-          loading="lazy" width="900" height="600"
-        >
-        <div class="lp-why-body">
-          <div class="lp-why-num">03 - Authority desk</div>
-          <h3>Coordinate verification and scheduling</h3>
-          <p>
-            Administrators review the queue, set urgency, assign officers, and group nearby reports for a
-            practical evacuation order across Bauchi neighbourhoods.
-          </p>
-        </div>
+      <article class="lp-role-card lp-role-card--tint">
+        <div class="lp-role-icon"><i class="bi bi-speedometer2"></i></div>
+        <h3>Authority desk</h3>
+        <p>Administrators review the queue, set urgency, assign officers, and group nearby reports into practical routes.</p>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== How it works: connected steps (Stitch redesign) ===== -->
+<section class="lp-steps-wrap">
+  <div class="container">
+    <h2 class="lp-steps-title">How it works</h2>
+    <div class="lp-steps">
+      <div class="lp-steps-line" aria-hidden="true"></div>
+      <div class="lp-step">
+        <div class="lp-step-icon"><i class="bi bi-camera"></i></div>
+        <h4>Step 1</h4>
+        <h3>Report</h3>
+        <p>Snap a photo and pin the location of uncollected waste or overflowing bins.</p>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-icon"><i class="bi bi-geo-alt"></i></div>
+        <h4>Step 2</h4>
+        <h3>Track</h3>
+        <p>Follow your case as it is verified, scheduled, and assigned to an officer.</p>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-icon"><i class="bi bi-check-circle"></i></div>
+        <h4>Step 3</h4>
+        <h3>Clean</h3>
+        <p>See the status change to collected - a greener Bauchi, one street at a time.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -138,7 +132,7 @@
           <div class="lp-service-icon"><i class="bi bi-geo-alt-fill"></i></div>
           <h3>Resident report</h3>
           <p>Illegal dump, overflow, blocked drainage, household refuse - pin it on the map.</p>
-          <span class="lp-service-link">Report now →</span>
+          <span class="lp-service-link">Report now â†’</span>
         </div>
       </a>
 

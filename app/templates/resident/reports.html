@@ -1,6 +1,9 @@
 {% extends "base.html" %}
-{% from "macros.html" import status_badge, urgency_badge, empty %}
+{% from "macros.html" import urgency_badge, empty %}
 {% block title %}My Reports - WasteTrack{% endblock %}
+
+{% set step_map = {'submitted': 0, 'verified': 1, 'assigned': 2, 'scheduled': 2, 'in_progress': 2, 'completed': 3} %}
+
 {% block content %}
 <div class="page-head">
   <div>
@@ -11,40 +14,55 @@
     <a href="{{ url_for('resident.new_report') }}" class="btn btn-wm">New report</a>
   </div>
 </div>
-<div class="panel">
-  <div class="panel-body p-0">
-    {% if reports %}
-    <div class="table-responsive">
-      <table class="table table-mobile mb-0">
-        <thead>
-          <tr>
-            <th>Tracking</th>
-            <th>Category</th>
-            <th>Location</th>
-            <th>Urgency</th>
-            <th>Status</th>
-            <th>Submitted</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for r in reports %}
-          <tr>
-            <td data-label="Tracking"><code>{{ r.tracking_code }}</code></td>
-            <td data-label="Category">{{ r.category_label() }}</td>
-            <td data-label="Location" class="small text-secondary">{{ r.address or (r.latitude|round(4)|string + ', ' + r.longitude|round(4)|string) }}</td>
-            <td data-label="Urgency">{{ urgency_badge(r.urgency) }}</td>
-            <td data-label="Status">{{ status_badge(r.status) }}</td>
-            <td data-label="Submitted" class="small">{{ r.created_at.strftime('%d %b %Y %H:%M') if r.created_at else '-' }}</td>
-            <td class="td-actions"><a class="btn btn-sm btn-outline-wm" href="{{ url_for('resident.report_detail', report_id=r.id) }}">Details</a></td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+
+{% if reports %}
+<div class="rpt-list">
+  {% for r in reports %}
+  {% set rejected = (r.status == 'rejected') %}
+  {% set current = step_map.get(r.status, 0) %}
+  <article class="rpt-card {% if rejected %}rpt-card--rejected{% endif %}">
+    <div class="rpt-card-top">
+      <div class="rpt-icon"><i class="bi bi-recycle"></i></div>
+      <div class="rpt-title">
+        <h3>{{ r.category_label() }}</h3>
+        <p class="rpt-loc">
+          <i class="bi bi-geo-alt"></i>
+          {{ r.address or ((r.latitude|round(4)|string) ~ ', ' ~ (r.longitude|round(4)|string)) }}
+        </p>
+      </div>
+      <div class="rpt-meta">
+        <span class="rpt-code">{{ r.tracking_code }}</span>
+        <time class="rpt-date">{{ r.created_at.strftime('%d %b %Y %H:%M') if r.created_at else '-' }}</time>
+        {{ urgency_badge(r.urgency) }}
+        {% if rejected %}<span class="badge bg-danger badge-status">rejected</span>{% endif %}
+      </div>
     </div>
-    {% else %}
-      {{ empty("You have not submitted any reports.") }}
+
+    {% if not rejected %}
+    <ol class="rpt-steps">
+      {% set labels = ['Submitted', 'Verified', 'Scheduled', 'Collected'] %}
+      {% for label in labels %}
+      <li class="rpt-step {% if loop.index0 < current %}is-done{% elif loop.index0 == current %}is-current{% else %}is-todo{% endif %}">
+        <span class="rpt-dot">
+          {% if loop.index0 < current or r.status == 'completed' %}
+          <i class="bi bi-check"></i>
+          {% endif %}
+        </span>
+        <span class="rpt-label">{{ label }}</span>
+      </li>
+      {% endfor %}
+    </ol>
     {% endif %}
-  </div>
+
+    <div class="rpt-actions">
+      <a class="btn btn-sm btn-outline-wm" href="{{ url_for('resident.report_detail', report_id=r.id) }}">
+        View details <i class="bi bi-arrow-right-short"></i>
+      </a>
+    </div>
+  </article>
+  {% endfor %}
 </div>
+{% else %}
+  {{ empty("You have not submitted any reports.") }}
+{% endif %}
 {% endblock %}

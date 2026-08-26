@@ -1,14 +1,14 @@
 /* ============================================================
    WasteTrack landing - inspired by LAWMA (authority) + Recorra (modern ops)
-   Green authority base · lime accent CTAs · photo-forward sections
+   Green authority base Â· lime accent CTAs Â· photo-forward sections
    ============================================================ */
 
 :root {
-  --wt-green: #0b6b3a;
-  --wt-green-deep: #064528;
-  --wt-green-mid: #128a4c;
-  --wt-lime: #c8e600;
-  --wt-lime-dark: #a8c200;
+  --wt-green: #2d4d3f;
+  --wt-green-deep: #143528;
+  --wt-green-mid: #446556;
+  --wt-lime: #feae2c;
+  --wt-lime-dark: #835500;
   --wt-ink: #0f1a14;
   --wt-muted: #4a5c52;
   --wt-line: #d8e0da;
@@ -16,8 +16,8 @@
   --wt-white: #ffffff;
   --wt-radius: 0;
   --wt-shadow: 0 12px 40px rgba(6, 69, 40, 0.1);
-  --wt-font: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
-  --wt-display: "Fraunces", Georgia, serif;
+  --wt-font: "Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  --wt-display: "Hanken Grotesk", Georgia, serif;
 }
 
 .landing-page {
@@ -515,7 +515,7 @@ div.lp-service-static:hover .lp-service-bg {
 }
 
 .lp-checklist li::before {
-  content: "✓";
+  content: "âœ“";
   position: absolute;
   left: 0;
   top: 0.45rem;
@@ -736,3 +736,195 @@ div.lp-service-static:hover .lp-service-bg {
 .landing-page canvas {
   display: none !important;
 }
+
+/* ============================================================
+   Stitch redesign additions v2 - split hero, stats band,
+   role cards, connected steps
+   ============================================================ */
+
+/* Hero: split layout */
+.lp-hero-split { background: var(--paper); }
+.lp-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+  padding-top: 56px;
+  padding-bottom: 64px;
+}
+@media (min-width: 992px) {
+  .lp-hero-grid { grid-template-columns: 1fr 1fr; gap: 64px; padding-top: 88px; padding-bottom: 96px; }
+}
+.lp-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ffddb4;
+  color: var(--amber-dark);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  margin-bottom: 1.25rem;
+}
+.lp-hero-copy h1 {
+  font-size: clamp(2.4rem, 5vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--forest-deep);
+  margin-bottom: 1rem;
+}
+.lp-hero-copy .lp-hero-lead {
+  font-size: 1.125rem;
+  color: var(--muted);
+  max-width: 34rem;
+  margin-bottom: 1.75rem;
+}
+.lp-hero-media img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lifted);
+}
+
+/* Soft secondary pill button */
+.btn-lp-soft {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8e8e4;
+  color: var(--forest-deep);
+  font-weight: 600;
+  padding: 0.9rem 1.9rem;
+  border-radius: 999px;
+  text-decoration: none !important;
+  transition: background 0.2s ease;
+}
+.btn-lp-soft:hover { background: #e2e3de; }
+
+/* Stats band */
+.lp-stats-band {
+  background: var(--forest-deep);
+  color: #f1f1ec;
+  border-radius: var(--radius);
+  margin: 0 16px;
+}
+@media (min-width: 992px) { .lp-stats-band { margin: 0 24px; } }
+.lp-stats-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+@media (min-width: 768px) { .lp-stats-row { grid-template-columns: repeat(3, 1fr); } }
+.lp-stat-num {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--amber);
+  margin-bottom: 0.25rem;
+}
+.lp-stat-label { opacity: 0.85; max-width: 22rem; }
+
+/* Bright alternating sections */
+.lp-section-bright { background: #f4f4ef; padding: 72px 0; }
+
+/* Role cards */
+.lp-role-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+@media (min-width: 768px) { .lp-role-grid { grid-template-columns: repeat(3, 1fr); } }
+.lp-role-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid #e2e3de;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.lp-role-card:hover { box-shadow: var(--shadow-lifted); transform: translateY(-3px); }
+.lp-role-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 4px;
+}
+.lp-role-card--amber::before { background: var(--amber); }
+.lp-role-card--green::before { background: var(--forest-deep); }
+.lp-role-card--tint::before { background: var(--forest); }
+.lp-role-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+}
+.lp-role-card--amber .lp-role-icon { background: #c6ebd7; color: var(--forest-deep); }
+.lp-role-card--green .lp-role-icon { background: #e8e8e4; color: var(--forest-deep); }
+.lp-role-card--tint .lp-role-icon { background: #dde5d7; color: var(--forest-deep); }
+.lp-role-card h3 { color: var(--forest-deep); margin-bottom: 0.6rem; }
+.lp-role-card p { color: var(--muted); margin: 0; }
+
+/* Connected steps */
+.lp-steps-wrap { padding: 80px 0; }
+.lp-steps-title {
+  text-align: center;
+  color: var(--forest-deep);
+  margin-bottom: 56px;
+}
+.lp-steps {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  justify-content: center;
+  align-items: stretch;
+}
+@media (min-width: 992px) { .lp-steps { flex-direction: row; gap: 48px; } }
+.lp-steps-line { display: none; }
+@media (min-width: 992px) {
+  .lp-steps-line {
+    display: block;
+    position: absolute;
+    top: 48px;
+    left: 16%;
+    right: 16%;
+    height: 2px;
+    background: #e2e3de;
+  }
+}
+.lp-step {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  text-align: center;
+}
+.lp-step-icon {
+  width: 96px; height: 96px;
+  margin: 0 auto 24px;
+  background: var(--card);
+  border: 1px solid #c1c8c2;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lifted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  color: var(--amber-dark);
+}
+.lp-step h4 {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+.lp-step h3 { color: var(--forest-deep); margin-bottom: 0.6rem; }
+.lp-step p { color: var(--muted); max-width: 20rem; margin: 0 auto; }

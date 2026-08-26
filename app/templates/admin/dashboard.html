@@ -4,43 +4,44 @@
 {% block content %}
 <div class="page-head">
   <div>
-    <h1>Operations desk</h1>
-    <p>What needs action today - queue, urgency, and open pins.</p>
+    <h1>Overview</h1>
+    <p>Bauchi waste management operations desk</p>
   </div>
   <div class="page-actions">
-    <a href="{{ url_for('admin.optimize') }}" class="btn btn-outline-wm">Optimize routes</a>
-    <a href="{{ url_for('admin.reports', status='submitted') }}" class="btn btn-wm">Review queue</a>
+    <a href="{{ url_for('admin.optimize') }}" class="btn btn-outline-wm"><i class="bi bi-sign-turn-right"></i> Optimize routes</a>
+    <a href="{{ url_for('admin.reports', status='submitted') }}" class="btn btn-wm"><i class="bi bi-clipboard2-check"></i> Review queue</a>
   </div>
 </div>
 
-<div class="row g-2 g-md-3 mb-4">
-  <div class="col-6 col-xl">
-    <div class="stat-card"><div class="label">Total</div><div class="value">{{ total }}</div></div>
+<div class="ast-grid mb-4">
+  <div class="ast-card ast-card--amber">
+    <div class="ast-top"><span class="ast-label">Total reports</span><span class="ast-chip ast-chip--amber"><i class="bi bi-stack"></i></span></div>
+    <div class="ast-value">{{ total }}</div>
   </div>
-  <div class="col-6 col-xl">
-    <div class="stat-card"><div class="label">Pending review</div><div class="value">{{ submitted }}</div></div>
+  <div class="ast-card ast-card--info">
+    <div class="ast-top"><span class="ast-label">Pending review</span><span class="ast-chip ast-chip--info"><i class="bi bi-hourglass-split"></i></span></div>
+    <div class="ast-value">{{ submitted }}</div>
   </div>
-  <div class="col-6 col-xl">
-    <div class="stat-card"><div class="label">Open cases</div><div class="value">{{ open_reports }}</div></div>
+  <div class="ast-card ast-card--green">
+    <div class="ast-top"><span class="ast-label">Completed</span><span class="ast-chip ast-chip--green"><i class="bi bi-check-circle"></i></span></div>
+    <div class="ast-value">{{ completed }}</div>
   </div>
-  <div class="col-6 col-xl">
-    <div class="stat-card alert-edge"><div class="label">High urgency</div><div class="value">{{ high }}</div></div>
-  </div>
-  <div class="col-6 col-xl">
-    <div class="stat-card ok-edge"><div class="label">Completed</div><div class="value">{{ completed }}</div></div>
+  <div class="ast-card ast-card--red">
+    <div class="ast-top"><span class="ast-label">High urgency open</span><span class="ast-chip ast-chip--red"><i class="bi bi-exclamation-triangle"></i></span></div>
+    <div class="ast-value">{{ high }}</div>
   </div>
 </div>
 
 <div class="row g-3 g-lg-4">
   <div class="col-lg-7">
-    <div class="panel mb-0">
-      <div class="panel-header">
+    <div class="panel panel-flush mb-0">
+      <div class="panel-header panel-header-bar">
         <h2>Recent reports</h2>
-        <a href="{{ url_for('admin.reports') }}" class="btn btn-sm btn-outline-wm">All</a>
+        <a href="{{ url_for('admin.reports') }}" class="btn btn-sm btn-outline-wm">View all</a>
       </div>
       <div class="panel-body p-0">
         <div class="table-responsive">
-          <table class="table table-mobile mb-0">
+          <table class="table table-mobile table-admin mb-0">
             <thead>
               <tr>
                 <th>Code</th>
@@ -54,7 +55,7 @@
               {% for r in recent %}
               <tr>
                 <td data-label="Code"><code>{{ r.tracking_code }}</code></td>
-                <td data-label="Category">{{ r.category_label() }}</td>
+                <td data-label="Category" class="fw-semibold">{{ r.category_label() }}</td>
                 <td data-label="Urgency">{{ urgency_badge(r.urgency) }}</td>
                 <td data-label="Status">{{ status_badge(r.status) }}</td>
                 <td class="td-actions" data-label="">
@@ -71,9 +72,15 @@
     </div>
   </div>
   <div class="col-lg-5">
-    <div class="panel">
-      <div class="panel-header"><h2>Open reports map</h2></div>
-      <div class="panel-body">
+    <div class="panel panel-flush">
+      <div class="panel-header panel-header-bar">
+        <h2>Live report map - Bauchi</h2>
+      </div>
+      <div class="ast-legend d-flex gap-2 pb-2 px-3">
+        <span class="ast-leg"><span class="dot dot--high"></span> High urgency</span>
+        <span class="ast-leg"><span class="dot dot--open"></span> Open cases</span>
+      </div>
+      <div class="panel-body pt-0">
         <div id="dash-map" class="map-box map-box-sm"></div>
       </div>
     </div>
