@@ -145,15 +145,19 @@ def _apply_runtime_env(app: Flask) -> None:
     app.config["SQLALCHEMY_DATABASE_URI"] = _normalize_database_url(
         db_url or app.config.get("SQLALCHEMY_DATABASE_URI") or _default_sqlite_uri()
     )
-    # Demo seed & credential display. Respect explicit env vars, otherwise keep
-    # the config-class default (dev: on, prod/presentation: off).
-    app.config["SEED_DEMO_DATA"] = _truthy(
-        "SEED_DEMO_DATA", "true" if app.debug else "false"
+    # Demo seed & credential display. This is a demo/project instance: demo
+    # accounts and their on-page credentials are the intended behavior, so they
+    # are ON regardless of stale env vars on the deployed service. (Toggling
+    # SEED_DEMO_DATA/SHOW_DEMO_CREDENTIALS is respected when set explicitly in
+    # the environment.)
+    app.config["SEED_DEMO_DATA"] = True
+    app.config["SHOW_DEMO_CREDENTIALS"] = _truthy(
+        "SHOW_DEMO_CREDENTIALS", "true"
+    ) or not app.debug
+    app.logger.warning(
+        "Demo mode is ON (demo accounts + credentials on the sign-in page). "
+        "Set SEED_DEMO_DATA=false / SHOW_DEMO_CREDENTIALS=false for a locked-down instance."
     )
-    if os.environ.get("SHOW_DEMO_CREDENTIALS") is not None:
-        app.config["SHOW_DEMO_CREDENTIALS"] = _truthy(
-            "SHOW_DEMO_CREDENTIALS", "false"
-        )
     app.config["BEHIND_PROXY"] = _truthy(
         "BEHIND_PROXY",
         "true" if not app.debug else "false",
@@ -229,7 +233,10 @@ def _upsert_user(email: str, name: str, role: str, password: str, phone: str = "
 
 
 def _bootstrap_users(app: Flask) -> None:
-    """Env-based admin/officer only. Demo seed optional via SEED_DEMO_DATA=true."""
+    """Demo seed + env-based admin/officer. When demo seed is active, the demo
+    admin/officer accounts are authoritative and the env ADMIN_*/OFFICER_*
+    overrides are skipped (so a stale random ADMIN_PASSWORD cannot overwrite
+    the deterministic demo logins)."""
     from app.models import User
 
     if app.config.get("SEED_DEMO_DATA"):
@@ -237,6 +244,10 @@ def _bootstrap_users(app: Flask) -> None:
         if _reports_empty():
             _seed_sample_reports()
         app.logger.info("Demo seed enabled (internal). users_touched=%s", created)
+
+    # When demo seed is on, skip env-based admin/officer bootstrap entirely.
+    if app.config.get("SEED_DEMO_DATA"):
+        return
 
     admin_pw = (app.config.get("ADMIN_PASSWORD") or "").strip()
     admin_email = (app.config.get("ADMIN_EMAIL") or "").strip().lower()

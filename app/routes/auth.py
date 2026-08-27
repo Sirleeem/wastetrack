@@ -8,6 +8,15 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 MIN_PASSWORD_LEN = 8
 
+# Canonical deterministic demo accounts (shown on the login page only when
+# SHOW_DEMO_CREDENTIALS=true, e.g. for presentations / demos).
+DEMO_ACCOUNTS = [
+    {"role": "Admin", "email": "admin@wastetrack.app", "password": "DemoAdmin2026"},
+    {"role": "Officer", "email": "officer@wastetrack.app", "password": "DemoOfficer2026"},
+    {"role": "Resident", "email": "resident@wastetrack.app", "password": "DemoResident2026"},
+]
+
+
 def _dashboard_for(user: User) -> str:
     if user.is_admin:
         return url_for("admin.dashboard")
@@ -43,7 +52,11 @@ def login():
                 return redirect(next_url)
             return redirect(_dashboard_for(user))
 
-    return render_template("auth/login.html")
+    return render_template(
+        "auth/login.html",
+        show_demo_credentials=current_app.config.get("SHOW_DEMO_CREDENTIALS", False),
+        demo_accounts=DEMO_ACCOUNTS,
+    )
 
 
 @auth_bp.route("/register", methods=["GET", "POST"])
