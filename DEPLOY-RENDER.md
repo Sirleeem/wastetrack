@@ -103,9 +103,9 @@ With `SEED_DEMO_DATA=true`:
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | `admin@waste.local` | `admin123` |
-| Officer | `officer@waste.local` | `officer123` |
-| Resident | `resident@waste.local` | `resident123` |
+| Admin | `admin@wastetrack.app` | `DemoAdmin2026` |
+| Officer | `officer@wastetrack.app` | `DemoOfficer2026` |
+| Resident | `resident@wastetrack.app` | `DemoResident2026` |
 
 ---
 

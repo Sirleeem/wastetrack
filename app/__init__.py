@@ -145,9 +145,15 @@ def _apply_runtime_env(app: Flask) -> None:
     app.config["SQLALCHEMY_DATABASE_URI"] = _normalize_database_url(
         db_url or app.config.get("SQLALCHEMY_DATABASE_URI") or _default_sqlite_uri()
     )
-    # Presentation default: no public demo credentials
-    app.config["SEED_DEMO_DATA"] = _truthy("SEED_DEMO_DATA", "false")
-    app.config["SHOW_DEMO_CREDENTIALS"] = False
+    # Demo seed & credential display. Respect explicit env vars, otherwise keep
+    # the config-class default (dev: on, prod/presentation: off).
+    app.config["SEED_DEMO_DATA"] = _truthy(
+        "SEED_DEMO_DATA", "true" if app.debug else "false"
+    )
+    if os.environ.get("SHOW_DEMO_CREDENTIALS") is not None:
+        app.config["SHOW_DEMO_CREDENTIALS"] = _truthy(
+            "SHOW_DEMO_CREDENTIALS", "false"
+        )
     app.config["BEHIND_PROXY"] = _truthy(
         "BEHIND_PROXY",
         "true" if not app.debug else "false",
@@ -272,32 +278,32 @@ def _ensure_demo_users() -> int:
 
     specs = [
         {
-            "email": "admin@waste.local",
+            "email": "admin@wastetrack.app",
             "name": "System Admin",
             "role": "admin",
             "phone": "08010000001",
-            "password": "admin123",
+            "password": "DemoAdmin2026",
         },
         {
-            "email": "officer@waste.local",
+            "email": "officer@wastetrack.app",
             "name": "Musa Collection",
             "role": "officer",
             "phone": "08010000002",
-            "password": "officer123",
+            "password": "DemoOfficer2026",
         },
         {
-            "email": "officer2@waste.local",
+            "email": "officer2@wastetrack.app",
             "name": "Aisha Field",
             "role": "officer",
             "phone": "08010000003",
-            "password": "officer123",
+            "password": "DemoOfficer2026",
         },
         {
-            "email": "resident@waste.local",
+            "email": "resident@wastetrack.app",
             "name": "Ahmad Resident",
             "role": "resident",
             "phone": "08010000004",
-            "password": "resident123",
+            "password": "DemoResident2026",
         },
     ]
     touched = 0
@@ -331,10 +337,10 @@ def _seed_sample_reports() -> None:
     from app.models import Report, User, utcnow
     from app.utils import generate_tracking_code, transition_status
 
-    admin = User.query.filter_by(email="admin@waste.local").first()
-    officer1 = User.query.filter_by(email="officer@waste.local").first()
-    officer2 = User.query.filter_by(email="officer2@waste.local").first()
-    resident = User.query.filter_by(email="resident@waste.local").first()
+    admin = User.query.filter_by(email="admin@wastetrack.app").first()
+    officer1 = User.query.filter_by(email="officer@wastetrack.app").first()
+    officer2 = User.query.filter_by(email="officer2@wastetrack.app").first()
+    resident = User.query.filter_by(email="resident@wastetrack.app").first()
     if not all([admin, officer1, officer2, resident]):
         return
 

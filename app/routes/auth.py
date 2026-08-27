@@ -8,7 +8,6 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 MIN_PASSWORD_LEN = 8
 
-
 def _dashboard_for(user: User) -> str:
     if user.is_admin:
         return url_for("admin.dashboard")

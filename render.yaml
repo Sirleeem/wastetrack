@@ -26,11 +26,9 @@ services:
         value: https
       - key: SESSION_COOKIE_SECURE
         value: "true"
-      - key: SHOW_DEMO_CREDENTIALS
-        value: "false"
-      # Keep false for presentation (no public demo accounts)
+      # Demo seed enabled; credentials are NOT shown on the login page
       - key: SEED_DEMO_DATA
-        value: "false"
+        value: "true"
       - key: SHOW_DEMO_CREDENTIALS
         value: "false"
       # Optional: set these on Render to force-create your own admin/officer
@@ -47,11 +45,12 @@ services:
         generateValue: true
       - key: SECRET_KEY
         generateValue: true
-      # Used only when SEED_DEMO_DATA=false and DB is empty
-      - key: ADMIN_EMAIL
-        value: admin@wastetrack.app
-      - key: ADMIN_PASSWORD
-        generateValue: true
+      # Admin/officer created by the demo seed; no ADMIN_PASSWORD needed.
+      # Uncomment to force a separate admin instead of the demo seed:
+      # - key: ADMIN_EMAIL
+      #   value: admin@wastetrack.app
+      # - key: ADMIN_PASSWORD
+      #   generateValue: true
       # Optional: paste a Postgres URL (Neon free / Render Postgres).
       # If unset, the app uses SQLite (fine for demos; data can reset on redeploy).
       - key: DATABASE_URL

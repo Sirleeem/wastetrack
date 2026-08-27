@@ -1,6 +1,6 @@
 # WasteTrack
 
-**Waste Management Reporting & Collection Optimization System**
+**Design and Implementation of a Waste Management Reporting and Collection System**
 
 Final-year project prototype - Department of Computer Science, Abubakar Tafawa Balewa University Bauchi.
 
@@ -39,9 +39,9 @@ Open **http://127.0.0.1:5000**
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | `admin@waste.local` | `admin123` |
-| Officer | `officer@waste.local` | `officer123` |
-| Resident | `resident@waste.local` | `resident123` |
+| Admin | `admin@wastetrack.app` | `DemoAdmin2026` |
+| Officer | `officer@wastetrack.app` | `DemoOfficer2026` |
+| Resident | `resident@wastetrack.app` | `DemoResident2026` |
 
 ---
 
