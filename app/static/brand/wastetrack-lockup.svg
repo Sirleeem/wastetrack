@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 248 48" role="img" aria-label="WasteTrack">
+  <g transform="translate(2,2) scale(1.8333)">
+    <path d="M12 1.8c-4.7 0-8.5 3.8-8.5 8.5 0 5.7 8.5 12.9 8.5 12.9s8.5-7.2 8.5-12.9c0-4.7-3.8-8.5-8.5-8.5z" fill="#FEAE2C"/>
+    <path d="M8.2 12.3l2.6 2.6 5-5.7" fill="none" stroke="#143528" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="52" y="24" font-family="Archivo, 'Segoe UI', sans-serif" font-weight="800" font-size="21" letter-spacing="-0.5" fill="#143528">Waste<tspan fill="#D98A06">Track</tspan></text>
+  <text x="53" y="40" font-family="'IBM Plex Mono', monospace" font-size="9.5" letter-spacing="2.5" fill="#6B726B">BAUCHI · NG</text>
+</svg>

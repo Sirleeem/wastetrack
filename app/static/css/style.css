@@ -101,6 +101,7 @@ code { color: var(--forest-deep); }
 }
 .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
 .brand-text strong { font-weight: 800; letter-spacing: -0.01em; font-size: 1.02rem; }
+.brand-text .wm-accent { color: var(--amber); }
 .brand-text small { font-family: var(--mono); font-size: .66rem; letter-spacing: .18em; color: #b9c2b6; }
 
 .nav-desktop { display: none; align-items: center; gap: .25rem; }

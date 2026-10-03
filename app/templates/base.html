@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#143528">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <title>{% block title %}WasteTrack{% endblock %}</title>
@@ -18,9 +19,14 @@
   <header class="topbar">
     <div class="container">
       <a class="brand" href="{{ url_for('main.home') }}">
-        <span class="brand-mark" aria-hidden="true"><i class="bi bi-recycle"></i></span>
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+            <path d="M12 1.8c-4.7 0-8.5 3.8-8.5 8.5 0 5.7 8.5 12.9 8.5 12.9s8.5-7.2 8.5-12.9c0-4.7-3.8-8.5-8.5-8.5z" fill="#FEAE2C"/>
+            <path d="M8.2 12.3l2.6 2.6 5-5.7" fill="none" stroke="#143528" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
         <span class="brand-text">
-          <strong>WasteTrack</strong>
+          <strong>Waste<span class="wm-accent">Track</span></strong>
           <small>Bauchi · NG</small>
         </span>
       </a>
