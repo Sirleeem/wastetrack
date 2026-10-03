@@ -59,7 +59,7 @@
                 <td data-label="Urgency">{{ urgency_badge(r.urgency) }}</td>
                 <td data-label="Status">{{ status_badge(r.status) }}</td>
                 <td class="td-actions" data-label="">
-                  <a class="btn btn-sm btn-wm" href="{{ url_for('admin.report_detail', report_id=r.id) }}">Manage</a>
+                  <a class="btn btn-sm btn-outline-wm" href="{{ url_for('admin.report_detail', report_id=r.id) }}">Manage</a>
                 </td>
               </tr>
               {% else %}
