@@ -75,7 +75,7 @@
             <td data-label="Status">{{ status_badge(r.status) }}</td>
             <td data-label="Officer" class="small">{{ r.officer.name if r.officer else '-' }}</td>
             <td data-label="Date" class="small text-secondary">{{ r.created_at.strftime('%d %b %Y') if r.created_at else '-' }}</td>
-            <td class="td-actions"><a class="btn btn-sm btn-wm" href="{{ url_for('admin.report_detail', report_id=r.id) }}">Manage</a></td>
+            <td class="td-actions"><a class="btn btn-sm btn-outline-wm" href="{{ url_for('admin.report_detail', report_id=r.id) }}">Manage</a></td>
           </tr>
           {% endfor %}
         </tbody>

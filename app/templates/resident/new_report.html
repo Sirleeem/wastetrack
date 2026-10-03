@@ -32,19 +32,26 @@
             <label class="form-label" for="address">Landmark / area (optional)</label>
             <input type="text" class="form-control" id="address" name="address" placeholder="e.g. Wunti Market, Yelwa, Railway Quarters, ATBU gate…">
           </div>
-          <div class="row g-2 mb-3">
-            <div class="col-6">
-              <label class="form-label" for="urgency">Urgency</label>
-              <select class="form-select" id="urgency" name="urgency">
-                {% for u in urgencies %}
-                <option value="{{ u }}" {% if u == 'medium' %}selected{% endif %}>{{ u|title }}</option>
-                {% endfor %}
-              </select>
+          <div class="mb-3">
+            <span class="form-label d-block" id="urgency-label">Urgency</span>
+            <div class="seg" role="radiogroup" aria-labelledby="urgency-label">
+              {% for u in urgencies %}
+              <label>
+                <input type="radio" name="urgency" value="{{ u }}" {% if u == 'medium' %}checked{% endif %}>
+                {{ u|title }}
+              </label>
+              {% endfor %}
             </div>
-            <div class="col-6">
-              <label class="form-label" for="image">Photo</label>
-              <input type="file" class="form-control" id="image" name="image" accept="image/*" capture="environment">
+          </div>
+          <div class="mb-3">
+            <span class="form-label d-block" id="photo-label">Photo</span>
+            <div class="photo-pick" role="group" aria-labelledby="photo-label">
+              <button type="button" id="photo-camera"><i class="bi bi-camera"></i>Camera</button>
+              <button type="button" id="photo-gallery"><i class="bi bi-images"></i>Gallery</button>
             </div>
+            <input type="file" id="image" name="image" accept="image/*" hidden>
+            <div class="photo-preview" id="photo-preview"><img id="photo-preview-img" alt="Selected photo preview"></div>
+            <p class="form-text mt-2 mb-0">A clear photo helps the desk verify faster. Optional.</p>
           </div>
           <input type="hidden" name="latitude" id="latitude" value="10.3158">
           <input type="hidden" name="longitude" id="longitude" value="9.8442">
@@ -85,6 +92,26 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     initReportPickerMap("picker-map", "latitude", "longitude", 10.3158, 9.8442, 13);
+
+    // Photo choice: camera vs gallery (no forced capture attribute)
+    var fileInput = document.getElementById("image");
+    var preview = document.getElementById("photo-preview");
+    var previewImg = document.getElementById("photo-preview-img");
+    function pick(capture) {
+      if (capture) fileInput.setAttribute("capture", "environment");
+      else fileInput.removeAttribute("capture");
+      fileInput.click();
+    }
+    document.getElementById("photo-camera").addEventListener("click", function () { pick(true); });
+    document.getElementById("photo-gallery").addEventListener("click", function () { pick(false); });
+    fileInput.addEventListener("change", function () {
+      if (fileInput.files && fileInput.files[0]) {
+        previewImg.src = URL.createObjectURL(fileInput.files[0]);
+        preview.style.display = "block";
+      } else {
+        preview.style.display = "none";
+      }
+    });
   });
 </script>
 {% endblock %}
