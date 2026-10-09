@@ -82,8 +82,8 @@ def profile():
         current_user.phone = (request.form.get("phone") or "").strip()
         password = request.form.get("password") or ""
         if password:
-            if len(password) < 6:
-                flash("Password must be at least 6 characters.", "danger")
+            if len(password) < 8:
+                flash("Password must be at least 8 characters.", "danger")
                 return render_template("officer/profile.html")
             current_user.set_password(password)
         db.session.commit()

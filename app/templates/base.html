@@ -108,6 +108,7 @@
         <a class="drawer-logout" href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
       {% else %}
         <a href="{{ url_for('main.about') }}"><i class="bi bi-info-circle"></i> About</a>
+        <a href="{{ url_for('main.faq') }}"><i class="bi bi-question-circle"></i> Help &amp; FAQ</a>
         <a href="{{ url_for('auth.login') }}"><i class="bi bi-box-arrow-in-right"></i> Login</a>
         <a href="{{ url_for('auth.register') }}"><i class="bi bi-person-plus"></i> Register</a>
       {% endif %}
@@ -134,8 +135,20 @@
   </main>
 
   <footer class="footer-wm">
-    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
-      <div><strong>WasteTrack Bauchi</strong> · refuse reporting &amp; collection</div>
+    <div class="container">
+      <div class="footer-brand">
+        <div class="footer-title"><strong>WasteTrack Bauchi</strong> <span>· refuse reporting &amp; collection</span></div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="{{ url_for('main.about') }}">About</a>
+          <a href="{{ url_for('main.faq') }}">Help &amp; FAQ</a>
+          {% if current_user.is_authenticated %}
+            <a href="{{ url_for('resident.new_report') if current_user.is_resident else url_for('main.home') }}">Report waste</a>
+          {% else %}
+            <a href="{{ url_for('auth.login') }}">Sign in</a>
+            <a href="{{ url_for('auth.register') }}">Register</a>
+          {% endif %}
+        </nav>
+      </div>
       <div>Designed by Ahmad Abdulwahab Abdulrasheed · ATBU Bauchi · Bauchi State, Nigeria</div>
     </div>
   </footer>

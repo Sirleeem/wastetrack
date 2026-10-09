@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Help & FAQ - WasteTrack Bauchi{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="kicker">Help</p>
+    <h1>Questions, answered</h1>
+    <p>How reporting, tracking and collection work on WasteTrack.</p>
+  </div>
+</div>
+
+<div class="row g-3 g-lg-4">
+  <div class="col-lg-8">
+    <div class="panel">
+      <div class="panel-header"><h2>Reporting</h2></div>
+      <div class="panel-body">
+        <h3 class="h5">How do I report a waste problem?</h3>
+        <p class="text-secondary">Create a resident account, tap <strong>Report waste</strong>, choose a category, describe what you see, pin the location on the map and submit. A photo helps the desk verify faster but isn't required.</p>
+        <h3 class="h5 mt-4">What can I report?</h3>
+        <p class="text-secondary mb-0">Overflowing public bins, illegal dumps, blocked drains, missed household or commercial collection, and scattered refuse around markets, motor parks and roadsides.</p>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><h2>Tracking</h2></div>
+      <div class="panel-body">
+        <h3 class="h5">How do I follow my report?</h3>
+        <p class="text-secondary">Every report gets a tracking code (e.g. <code>WM-HE9U5TJ</code>). Open <strong>My reports</strong> to see each case move through the pipeline: Submitted → Verified → Scheduled → Collected.</p>
+        <h3 class="h5 mt-4">My report was rejected. Why?</h3>
+        <p class="text-secondary mb-0">Usually because the location couldn't be identified or the case was a duplicate. Check that the pin sits close to the site and add a landmark people in Bauchi will know, then submit again.</p>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><h2>Collection</h2></div>
+      <div class="panel-body">
+        <h3 class="h5">How long does collection take?</h3>
+        <p class="text-secondary">It depends on urgency and scheduling. High-urgency cases are prioritised; nearby verified reports are grouped into efficient collection runs. Your case's status always shows where it stands.</p>
+        <h3 class="h5 mt-4">Who collects the waste?</h3>
+        <p class="text-secondary mb-0">Collection officers working with the Bauchi State Environmental Protection Agency (BASEPA) handle scheduled runs across the metropolis.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel">
+      <div class="panel-header"><h2>Still stuck?</h2></div>
+      <div class="panel-body">
+        <p class="text-secondary">If the problem is urgent — a blocked drain during the rains, waste blocking a road — report it with <strong>High</strong> urgency so the desk sees it first.</p>
+        <a class="btn btn-amber w-100" href="{{ url_for('resident.new_report') if current_user.is_authenticated and current_user.is_resident else url_for('auth.register') }}">Report waste now</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
