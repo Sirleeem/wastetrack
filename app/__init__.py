@@ -1,7 +1,10 @@
 import logging
+import mimetypes
 import os
 import secrets
 from pathlib import Path
+
+mimetypes.add_type("application/manifest+json", ".webmanifest")
 
 from flask import Flask, jsonify, render_template
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -94,6 +97,14 @@ def create_app(config_class=None):
             ),
             status,
         )
+
+    @app.get("/sw.js")
+    def service_worker():
+        # Served from root so the worker's scope covers the whole site.
+        resp = app.send_static_file("sw.js")
+        resp.headers["Service-Worker-Allowed"] = "/"
+        resp.headers["Cache-Control"] = "no-cache"
+        return resp
 
     @app.after_request
     def security_headers(response):
