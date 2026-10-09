@@ -34,6 +34,7 @@
   --nav-h: 62px;
   --bottom-nav-h: 64px;
   --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
   --font: "Archivo", "Segoe UI", system-ui, sans-serif;
   --display: "Bricolage Grotesque", "Archivo", "Segoe UI", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
@@ -84,6 +85,7 @@ code { color: var(--forest-deep); }
 /* ---------- Top bar ---------- */
 .topbar {
   position: sticky; top: 0; z-index: 1060;
+  padding-top: var(--safe-t);
   min-height: var(--nav-h);
   background: var(--forest-deep); color: #f1f1ec;
   border-bottom: 2px solid var(--ink);
