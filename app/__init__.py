@@ -3,7 +3,7 @@ import os
 import secrets
 from pathlib import Path
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from app.config import ProductionConfig, get_config
@@ -54,6 +54,15 @@ def create_app(config_class=None):
     app.register_blueprint(resident_bp)
     app.register_blueprint(officer_bp)
     app.register_blueprint(admin_bp)
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return render_template("errors/404.html"), 404
+
+    @app.errorhandler(500)
+    def internal_error(error):
+        db.session.rollback()
+        return render_template("errors/500.html"), 500
 
     @app.context_processor
     def inject_helpers():

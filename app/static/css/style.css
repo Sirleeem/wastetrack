@@ -468,7 +468,20 @@ textarea.form-control { min-height: 110px; }
 
 .footer-wm { border-top: 2px solid var(--ink); background: var(--forest-deep); color: #b9c2b6; padding: 1.4rem 0 calc(1.4rem + var(--safe-b)); font-size: .85rem; margin-top: 3rem; }
 .footer-wm strong { color: #fff; }
-.footer-wm .container { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1.5rem; }
+.footer-wm .container { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem 1.5rem; align-items: flex-start; }
+.footer-brand { display: flex; flex-direction: column; gap: .5rem; }
+.footer-title { white-space: nowrap; }
+.footer-title span { color: #b9c2b6; font-size: .85rem; }
+@media (max-width: 575.98px) { .footer-title { white-space: normal; } }
+.footer-nav { display: flex; flex-wrap: wrap; gap: .25rem 1.1rem; }
+.footer-nav a { color: #b9c2b6 !important; text-decoration: none !important; font-size: .82rem; font-weight: 600; }
+.footer-nav a:hover { color: var(--amber) !important; }
+
+/* Framed figure (photo with caption, matches landing essay) */
+.fig-frame { margin: 0; border: 1.5px solid var(--ink); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-hard); background: #fff; }
+.fig-frame img { display: block; width: 100%; object-fit: cover; }
+.fig-frame figcaption { padding: .7rem 1rem; font-size: .82rem; color: var(--ink-soft); border-top: 1.5px solid var(--ink); display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+.fig-frame figcaption code { font-size: .72rem; }
 
 .alert { border: 1.5px solid var(--ink); border-radius: var(--radius-sm); font-size: .92rem; }
 .alert-success { background: #e4f3e9; color: #14532d; }

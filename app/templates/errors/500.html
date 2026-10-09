@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Something went wrong - WasteTrack{% endblock %}
+{% block content %}
+<div class="auth-wrap" style="max-width:560px">
+  <div class="panel">
+    <div class="panel-body text-center" style="padding:3rem 2rem">
+      <p class="kicker" style="justify-content:center">Error 500</p>
+      <h1 style="font-size:clamp(2rem,6vw,3rem);margin:.5rem 0 1rem">The truck stalled.</h1>
+      <p class="text-secondary mb-4">Something went wrong on our side. Your reports are safe — try again, or head back home.</p>
+      <div class="d-flex gap-2 justify-content-center flex-wrap">
+        <a class="btn btn-amber" href="{{ url_for('main.home') }}">Back to home</a>
+        <a class="btn btn-outline-wm" href="{{ url_for('main.faq') }}">Help &amp; FAQ</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
