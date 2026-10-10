@@ -1,8 +1,9 @@
 /* WasteTrack service worker: offline-first static assets, network-first pages. */
-const CACHE = "wastetrack-v1";
+const CACHE = "wastetrack-v2";
 const PRECACHE = [
   "/static/css/style.css?v=13",
   "/static/js/app.js?v=3",
+  "/static/js/pwa.js?v=1",
   "/static/brand/icon-192.png",
   "/static/brand/icon-512.png",
   "/static/offline.html",
@@ -53,5 +54,37 @@ self.addEventListener("fetch", (event) => {
           return res;
         })
     )
+  );
+});
+
+/* Web Push notifications */
+self.addEventListener("push", (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch (e) { /* ignore malformed payload */ }
+  const title = data.title || "WasteTrack";
+  const options = {
+    body: data.body || "",
+    icon: "/static/brand/icon-192.png",
+    badge: "/static/brand/icon-192.png",
+    data: { url: data.url || "/" },
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || "/";
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      for (const client of clients) {
+        if ("focus" in client) {
+          client.navigate(url);
+          return client.focus();
+        }
+      }
+      return self.clients.openWindow(url);
+    })
   );
 });

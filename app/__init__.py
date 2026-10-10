@@ -51,12 +51,14 @@ def create_app(config_class=None):
     from app.routes.resident import resident_bp
     from app.routes.officer import officer_bp
     from app.routes.admin import admin_bp
+    from app.routes.push import push_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(resident_bp)
     app.register_blueprint(officer_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(push_bp)
 
     @app.errorhandler(404)
     def not_found(error):

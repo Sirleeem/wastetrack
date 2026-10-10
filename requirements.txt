@@ -16,3 +16,6 @@ waitress==3.0.0
 
 # Optional PostgreSQL (install when DATABASE_URL uses postgres)
 psycopg[binary]==3.2.3
+
+# Web Push notifications (PWA)
+pywebpush==2.5.0
