@@ -18,7 +18,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   {% block head %}{% endblock %}
 </head>
-<body class="{% if not current_user.is_authenticated %}is-guest{% endif %}">
+<body class="{% if not current_user.is_authenticated %}is-guest{% endif %}" data-authenticated="{% if current_user.is_authenticated %}1{% else %}0{% endif %}">
   <header class="topbar">
     <div class="container">
       <a class="brand" href="{{ url_for('main.home') }}">
@@ -201,6 +201,15 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="{{ url_for('static', filename='js/app.js') }}?v=3"></script>
+  <script src="{{ url_for('static', filename='js/pwa.js') }}?v=1"></script>
+  <div id="pwa-banner" class="pwa-banner" hidden>
+    <div class="pwa-banner-text">
+      <strong id="pwa-banner-title"></strong>
+      <span id="pwa-banner-sub"></span>
+    </div>
+    <button id="pwa-banner-action" class="pwa-banner-btn" hidden></button>
+    <button id="pwa-banner-dismiss" class="pwa-banner-x" aria-label="Dismiss">&times;</button>
+  </div>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () {

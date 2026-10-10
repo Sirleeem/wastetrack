@@ -67,6 +67,11 @@ class Config:
     ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
     ADMIN_NAME = os.environ.get("ADMIN_NAME", "System Administrator")
 
+    # Web Push (PWA notifications)
+    VAPID_PUBLIC_KEY = os.environ.get("VAPID_PUBLIC_KEY", "")
+    VAPID_PRIVATE_KEY = os.environ.get("VAPID_PRIVATE_KEY", "")
+    VAPID_CLAIMS_SUB = os.environ.get("VAPID_CLAIMS_SUB", "mailto:admin@wastetrack.app")
+
 
 class DevelopmentConfig(Config):
     DEBUG = True

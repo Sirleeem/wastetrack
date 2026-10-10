@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, current_app, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import func, or_
 
@@ -93,6 +93,7 @@ def report_detail(report_id):
         urgency = request.form.get("urgency")
         officer_id = request.form.get("officer_id")
         scheduled_date = request.form.get("scheduled_date")
+        assigned_officer_id = None
 
         if urgency in Report.URGENCIES:
             report.urgency = urgency
@@ -117,6 +118,7 @@ def report_detail(report_id):
                         note=note or f"Assigned to officer #{officer_id}",
                     )
                 flash("Officer assigned.", "success")
+                assigned_officer_id = int(officer_id)
         elif action == "schedule":
             if scheduled_date:
                 try:
@@ -146,6 +148,15 @@ def report_detail(report_id):
             flash("No valid action applied.", "warning")
 
         db.session.commit()
+        if assigned_officer_id:
+            try:
+                from app.services.push import notify_officer_assignment
+
+                officer = User.query.get(assigned_officer_id)
+                if officer:
+                    notify_officer_assignment(report, officer)
+            except Exception:  # noqa: BLE001 - notifications never break the request
+                current_app.logger.exception("push notify failed")
         return redirect(url_for("admin.report_detail", report_id=report.id))
 
     return render_template("admin/report_detail.html", report=report, officers=officers)
